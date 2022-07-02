@@ -102,11 +102,11 @@
             </div>
           </template>
           <div class="body">
-            <img
-              src="h3.png"
-              alt="img"
-              style="width:100%"
-            />
+<!--            <img-->
+<!--              src="h3.png"-->
+<!--              alt="img"-->
+<!--              style="width:100%"-->
+<!--            />-->
             <br/>
             <span style="display: inline-block; height: 30px; line-height: 30px"
               >body</span
