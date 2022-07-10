@@ -270,10 +270,10 @@
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
         <template #tip>
           <div class="el-upload__tip text-center">
-            <div class="el-upload__tip">
+            <!-- <div class="el-upload__tip">
               <el-checkbox v-model="upload.updateSupport" />
               是否更新已经存在的数据
-            </div>
+            </div> -->
             <span>仅允许导入xls、xlsx格式文件。</span>
             <el-link
               type="primary"
@@ -303,6 +303,7 @@ import {
   addRemain,
   updateRemain,
 } from "@/api/archives/remain";
+import { getToken } from "@/utils/auth";
 
 const { proxy } = getCurrentInstance();
 const { data_status } = proxy.useDict("data_status");
@@ -478,7 +479,7 @@ function handleExport() {
 
 /** 导入按钮操作 */
 function handleImport() {
-  upload.title = "剩余档案导入";
+  upload.title = "导入剩余档案";
   upload.open = true;
 }
 
