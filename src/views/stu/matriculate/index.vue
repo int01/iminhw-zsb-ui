@@ -141,10 +141,20 @@
       <el-table-column label="姓名" align="center" prop="xm" />
       <el-table-column label="录取专业" align="center" prop="zy" />
       <el-table-column label="联系电话" align="center" prop="lxdh" />
-      <el-table-column label="地址" align="center" prop="dz" />
+      <!-- <el-table-column label="地址" align="center" prop="dz" /> -->
       <el-table-column label="数据状态" align="center" prop="status">
         <template #default="scope">
           <dict-tag :options="data_status" :value="scope.row.status" />
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="创建时间"
+        align="center"
+        prop="createTime"
+        width="180"
+      >
+        <template #default="scope">
+          <span>{{ parseTime(scope.row.createTime, "{y}-{m}-{d}") }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -188,7 +198,7 @@
         label-width="80px"
       >
         <el-form-item label="考生号" prop="ksh">
-          <el-input v-model="form.ksh" placeholder="请输入考生号" />
+          <el-input v-model="form.ksh" v-bind:disabled="!addFlag" placeholder="请输入考生号" />
         </el-form-item>
         <el-form-item label="身份证号" prop="sfzh">
           <el-input v-model="form.sfzh" placeholder="请输入身份证号" />
@@ -297,7 +307,7 @@ const { data_status } = proxy.useDict("data_status");
 
 const matriculateList = ref([]);
 const open = ref(false);
-const appData = ref(false);
+const addFlag = ref(false);
 const loading = ref(true);
 const showSearch = ref(true);
 const ids = ref([]);
@@ -408,7 +418,7 @@ function handleSelectionChange(selection) {
 
 /** 新增按钮操作 */
 function handleAdd() {
-  appData.value = true;
+  addFlag.value = true;
   reset();
   open.value = true;
   title.value = "添加录取数据";
@@ -416,7 +426,7 @@ function handleAdd() {
 
 /** 修改按钮操作 */
 function handleUpdate(row) {
-  appData.value = false;
+  addFlag.value = false;
   reset();
   const ksh = row.ksh || ids.value;
   getMatriculate(ksh).then((response) => {
@@ -430,7 +440,7 @@ function handleUpdate(row) {
 function submitForm() {
   proxy.$refs["matriculateRef"].validate((valid) => {
     if (valid) {
-      if (!appData && form.value.ksh != null) {
+      if (!addFlag.value) {
         updateMatriculate(form.value).then((response) => {
           proxy.$modal.msgSuccess("修改成功");
           open.value = false;

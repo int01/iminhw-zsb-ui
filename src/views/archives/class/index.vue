@@ -191,7 +191,7 @@
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
       <el-form ref="classRef" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="学号" prop="xuehao">
-          <el-input v-model="form.xuehao" placeholder="请输入学号" />
+          <el-input v-model="form.xuehao" v-bind:disabled="!addFlag" placeholder="请输入学号" />
         </el-form-item>
         <el-form-item label="序号" prop="xh">
           <el-input v-model="form.xh" placeholder="请输入序号" />
@@ -267,7 +267,7 @@ const multiple = ref(true);
 const total = ref(0);
 const title = ref("");
 
-const addFlag = ref("");
+const addFlag = ref(false);
 
 const data = reactive({
   form: {},
@@ -351,14 +351,14 @@ function handleSelectionChange(selection) {
 function handleAdd() {
   reset();
   open.value = true;
-  addFlag.value = "add";
+  addFlag.value = true;
   title.value = "添加档案收集";
 }
 
 /** 修改按钮操作 */
 function handleUpdate(row) {
   reset();
-  addFlag.value = "";
+  addFlag.value = false;
   const xuehao = row.xuehao || ids.value;
   getClass(xuehao).then((response) => {
     form.value = response.data;
@@ -371,8 +371,7 @@ function handleUpdate(row) {
 function submitForm() {
   proxy.$refs["classRef"].validate((valid) => {
     if (valid) {
-      console.log(addFlag);
-      if (form.value.xuehao != null && addFlag.value != "add") {
+      if (!addFlag.value) {
         updateClass(form.value).then((response) => {
           proxy.$modal.msgSuccess("修改成功");
           open.value = false;
