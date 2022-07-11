@@ -109,19 +109,19 @@
 
     <el-table v-loading="loading" :data="classtempList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="id" align="center" prop="id" />
+      <!-- <el-table-column label="id" align="center" prop="id" /> -->
       <el-table-column label="学号" align="center" prop="xuehao" />
       <el-table-column label="序号" align="center" prop="xh" />
       <el-table-column label="班级" align="center" prop="bj" />
       <el-table-column label="姓名" align="center" prop="xm" />
       <el-table-column label="考生号" align="center" prop="ksh" />
-      <el-table-column label="身份证号" align="center" prop="sfzh" />
+      <!-- <el-table-column label="身份证号" align="center" prop="sfzh" /> -->
       <el-table-column label="数据状态" align="center" prop="status">
         <template #default="scope">
           <dict-tag :options="data_status" :value="scope.row.status"/>
         </template>
       </el-table-column>
-      <el-table-column label="备注" align="center" prop="remark" />
+      <!-- <el-table-column label="备注" align="center" prop="remark" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
           <el-button
