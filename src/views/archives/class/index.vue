@@ -284,6 +284,9 @@ const data = reactive({
   },
   rules: {
     xuehao: [{ required: true, message: "学号不能为空", trigger: "blur" }],
+    xh: [{ required: true, message: "序号不能为空", trigger: "blur" }],
+    xm: [{ required: true, message: "姓名不能为空", trigger: "blur" }],
+    bj: [{ required: true, message: "班级不能为空", trigger: "blur" }],
   },
 });
 

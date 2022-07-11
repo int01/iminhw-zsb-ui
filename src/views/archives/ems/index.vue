@@ -593,11 +593,11 @@ function submitForm() {
 
 /** 删除按钮操作 */
 function handleDelete(row) {
-  const ids = row.id || ids.value;
+  const emsIds = row.id || ids.value;
   proxy.$modal
-    .confirm('是否确认删除邮寄档案编号为"' + ids + '"的数据项？')
+    .confirm('是否确认删除邮寄档案序号为"' + emsIds + '"的数据项？')
     .then(function () {
-      return delEms(ids);
+      return delEms(emsIds);
     })
     .then(() => {
       getList();

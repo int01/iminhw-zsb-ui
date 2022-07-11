@@ -327,9 +327,9 @@ function submitForm() {
 
 /** 删除按钮操作 */
 function handleDelete(row) {
-  const ids = row.id || ids.value;
-  proxy.$modal.confirm('是否确认删除档案收录缓存编号为"' + ids + '"的数据项？').then(function() {
-    return delClasstemp(ids);
+  const tempIds = row.id || ids.value;
+  proxy.$modal.confirm('是否确认删除档案收录缓存编号为"' + tempIds + '"的数据项？').then(function() {
+    return delClasstemp(tempIds);
   }).then(() => {
     getList();
     proxy.$modal.msgSuccess("删除成功");

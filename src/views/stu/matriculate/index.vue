@@ -7,22 +7,6 @@
       v-show="showSearch"
       label-width="68px"
     >
-      <el-form-item label="姓名" prop="xm">
-        <el-input
-          v-model="queryParams.xm"
-          placeholder="请输入姓名"
-          clearable
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="学年" prop="nf">
-        <el-input
-          v-model="queryParams.nf"
-          placeholder="请输入学年"
-          clearable
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="考生号" prop="ksh">
         <el-input
           v-model="queryParams.ksh"
@@ -39,10 +23,18 @@
           @keyup.enter="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="班级" prop="bj">
+      <el-form-item label="姓名" prop="xm">
         <el-input
-          v-model="queryParams.bj"
-          placeholder="请输入班级"
+          v-model="queryParams.xm"
+          placeholder="请输入姓名"
+          clearable
+          @keyup.enter="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="录取专业" prop="zy">
+        <el-input
+          v-model="queryParams.zy"
+          placeholder="请输入录取专业"
           clearable
           @keyup.enter="handleQuery"
         />
@@ -61,6 +53,16 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item label="创建时间" style="width: 308px">
+        <el-date-picker
+          v-model="daterangeCreateTime"
+          value-format="YYYY-MM-DD"
+          type="daterange"
+          range-separator="-"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+        ></el-date-picker>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery"
           >搜索</el-button
@@ -76,7 +78,7 @@
           plain
           icon="Plus"
           @click="handleAdd"
-          v-hasPermi="['archives:remain:add']"
+          v-hasPermi="['stu:matriculate:add']"
           >新增</el-button
         >
       </el-col>
@@ -87,7 +89,7 @@
           icon="Edit"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['archives:remain:edit']"
+          v-hasPermi="['stu:matriculate:edit']"
           >修改</el-button
         >
       </el-col>
@@ -98,7 +100,7 @@
           icon="Delete"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['archives:remain:remove']"
+          v-hasPermi="['stu:matriculate:remove']"
           >删除</el-button
         >
       </el-col>
@@ -108,17 +110,17 @@
           plain
           icon="Download"
           @click="handleExport"
-          v-hasPermi="['archives:remain:export']"
+          v-hasPermi="['stu:matriculate:export']"
           >导出</el-button
         >
       </el-col>
-        <el-col :span="1.5">
+      <el-col :span="1.5">
         <el-button
           type="info"
           plain
           icon="Upload"
           @click="handleImport"
-          v-hasPermi="['archives:remain:import']"
+          v-hasPermi="['stu:matriculate:import']"
           >导入
         </el-button>
       </el-col>
@@ -130,40 +132,19 @@
 
     <el-table
       v-loading="loading"
-      :data="remainList"
+      :data="matriculateList"
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="55" align="center" />
-      <!-- <el-table-column label="id" align="center" prop="id" /> -->
-      <el-table-column label="序号" align="center" prop="xh" />
+      <el-table-column label="考生号" align="center" prop="ksh" />
+      <el-table-column label="身份证号" align="center" prop="sfzh" />
       <el-table-column label="姓名" align="center" prop="xm" />
-      <el-table-column label="学年" align="center" prop="nf" />
+      <el-table-column label="录取专业" align="center" prop="zy" />
+      <el-table-column label="联系电话" align="center" prop="lxdh" />
+      <el-table-column label="地址" align="center" prop="dz" />
       <el-table-column label="数据状态" align="center" prop="status">
         <template #default="scope">
           <dict-tag :options="data_status" :value="scope.row.status" />
-        </template>
-      </el-table-column>
-      <el-table-column label="创建人" align="center" prop="createBy" />
-      <el-table-column label="修改人" align="center" prop="updateBy" />
-      <!-- <el-table-column label="备注" align="center" prop="remark" /> -->
-      <el-table-column
-        label="更新时间"
-        align="center"
-        prop="updateTime"
-        width="180"
-      >
-        <template #default="scope">
-          <span>{{ parseTime(scope.row.updateTime, "{y}-{m}-{d}") }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="创建时间"
-        align="center"
-        prop="createTime"
-        width="180"
-      >
-        <template #default="scope">
-          <span>{{ parseTime(scope.row.createTime, "{y}-{m}-{d}") }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -176,14 +157,14 @@
             type="text"
             icon="Edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['archives:remain:edit']"
+            v-hasPermi="['stu:matriculate:edit']"
             >修改</el-button
           >
           <el-button
             type="text"
             icon="Delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['archives:remain:remove']"
+            v-hasPermi="['stu:matriculate:remove']"
             >删除</el-button
           >
         </template>
@@ -198,26 +179,31 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改剩余档案对话框 -->
+    <!-- 添加或修改录取数据对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
-      <el-form ref="remainRef" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="序号" prop="xh">
-          <el-input v-model="form.xh" placeholder="请输入序号" />
-        </el-form-item>
-        <el-form-item label="姓名" prop="xm">
-          <el-input v-model="form.xm" placeholder="请输入姓名" />
-        </el-form-item>
-        <el-form-item label="学年" prop="nf">
-          <el-input v-model="form.nf" placeholder="请输入学年" />
-        </el-form-item>
+      <el-form
+        ref="matriculateRef"
+        :model="form"
+        :rules="rules"
+        label-width="80px"
+      >
         <el-form-item label="考生号" prop="ksh">
           <el-input v-model="form.ksh" placeholder="请输入考生号" />
         </el-form-item>
         <el-form-item label="身份证号" prop="sfzh">
           <el-input v-model="form.sfzh" placeholder="请输入身份证号" />
         </el-form-item>
-        <el-form-item label="班级" prop="bj">
-          <el-input v-model="form.bj" placeholder="请输入班级" />
+        <el-form-item label="姓名" prop="xm">
+          <el-input v-model="form.xm" placeholder="请输入姓名" />
+        </el-form-item>
+        <el-form-item label="录取专业" prop="zy">
+          <el-input v-model="form.zy" placeholder="请输入录取专业" />
+        </el-form-item>
+        <el-form-item label="联系电话" prop="lxdh">
+          <el-input v-model="form.lxdh" placeholder="请输入联系电话" />
+        </el-form-item>
+        <el-form-item label="地址" prop="dz">
+          <el-input v-model="form.dz" placeholder="请输入地址" />
         </el-form-item>
         <el-form-item label="数据状态" prop="status">
           <el-select v-model="form.status" placeholder="请选择数据状态">
@@ -245,7 +231,7 @@
       </template>
     </el-dialog>
 
-    <!-- 导入对话框 -->
+    <!-- 数据导入对话框 -->
     <el-dialog
       :title="upload.title"
       v-model="upload.open"
@@ -270,10 +256,10 @@
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
         <template #tip>
           <div class="el-upload__tip text-center">
-            <!-- <div class="el-upload__tip">
+            <div class="el-upload__tip">
               <el-checkbox v-model="upload.updateSupport" />
               是否更新已经存在的数据
-            </div> -->
+            </div>
             <span>仅允许导入xls、xlsx格式文件。</span>
             <el-link
               type="primary"
@@ -295,21 +281,23 @@
   </div>
 </template>
 
-<script setup name="Remain">
+<script setup name="Matriculate">
 import {
-  listRemain,
-  getRemain,
-  delRemain,
-  addRemain,
-  updateRemain,
-} from "@/api/archives/remain";
+  listMatriculate,
+  getMatriculate,
+  delMatriculate,
+  addMatriculate,
+  updateMatriculate,
+} from "@/api/stu/matriculate";
+
 import { getToken } from "@/utils/auth";
 
 const { proxy } = getCurrentInstance();
 const { data_status } = proxy.useDict("data_status");
 
-const remainList = ref([]);
+const matriculateList = ref([]);
 const open = ref(false);
+const appData = ref(false);
 const loading = ref(true);
 const showSearch = ref(true);
 const ids = ref([]);
@@ -317,26 +305,30 @@ const single = ref(true);
 const multiple = ref(true);
 const total = ref(0);
 const title = ref("");
+const daterangeCreateTime = ref([]);
 
 const data = reactive({
   form: {},
   queryParams: {
     pageNum: 1,
     pageSize: 10,
-    xm: null,
-    nf: null,
     ksh: null,
     sfzh: null,
-    bj: null,
+    xm: null,
+    zy: null,
     status: null,
-    remark: null,
+    createTime: null,
   },
   rules: {
-    xh: { required: true, trigger: "blur", message: "请输入序号" },
-    xm: { required: true, trigger: "blur", message: "请输入姓名" },
-    nf: { required: true, trigger: "blur", message: "请输入年份" },
+    ksh: [{ required: true, message: "考生号不能为空", trigger: "blur" }],
+    sfzh: [{ required: true, message: "身份证号不能为空", trigger: "blur" }],
+    xm: [{ required: true, message: "姓名不能为空", trigger: "blur" }],
+    zy: [{ required: true, message: "录取专业不能为空", trigger: "blur" }],
+    lxdh: [{ required: true, message: "联系电话不能为空", trigger: "blur" }],
   },
 });
+
+const { queryParams, form, rules } = toRefs(data);
 
 /*** 导入参数 */
 const upload = reactive({
@@ -351,16 +343,19 @@ const upload = reactive({
   // 设置上传的请求头部
   headers: { Authorization: "Bearer " + getToken() },
   // 上传的地址
-  url: import.meta.env.VITE_APP_BASE_API + "/archives/remain/importData",
+  url: import.meta.env.VITE_APP_BASE_API + "/stu/matriculate/importData",
 });
 
-const { queryParams, form, rules } = toRefs(data);
-
-/** 查询剩余档案列表 */
+/** 查询录取数据列表 */
 function getList() {
   loading.value = true;
-  listRemain(queryParams.value).then((response) => {
-    remainList.value = response.rows;
+  queryParams.value.params = {};
+  if (null != daterangeCreateTime && "" != daterangeCreateTime) {
+    queryParams.value.params["beginCreateTime"] = daterangeCreateTime.value[0];
+    queryParams.value.params["endCreateTime"] = daterangeCreateTime.value[1];
+  }
+  listMatriculate(queryParams.value).then((response) => {
+    matriculateList.value = response.rows;
     total.value = response.total;
     loading.value = false;
   });
@@ -375,13 +370,12 @@ function cancel() {
 // 表单重置
 function reset() {
   form.value = {
-    id: null,
-    xh: null,
-    xm: null,
-    nf: null,
     ksh: null,
     sfzh: null,
-    bj: null,
+    xm: null,
+    zy: null,
+    lxdh: null,
+    dz: null,
     status: null,
     createBy: null,
     updateBy: null,
@@ -389,7 +383,7 @@ function reset() {
     updateTime: null,
     createTime: null,
   };
-  proxy.resetForm("remainRef");
+  proxy.resetForm("matriculateRef");
 }
 
 /** 搜索按钮操作 */
@@ -400,47 +394,50 @@ function handleQuery() {
 
 /** 重置按钮操作 */
 function resetQuery() {
+  daterangeCreateTime.value = [];
   proxy.resetForm("queryRef");
   handleQuery();
 }
 
 // 多选框选中数据
 function handleSelectionChange(selection) {
-  ids.value = selection.map((item) => item.id);
+  ids.value = selection.map((item) => item.ksh);
   single.value = selection.length != 1;
   multiple.value = !selection.length;
 }
 
 /** 新增按钮操作 */
 function handleAdd() {
+  appData.value = true;
   reset();
   open.value = true;
-  title.value = "添加剩余档案";
+  title.value = "添加录取数据";
 }
 
 /** 修改按钮操作 */
 function handleUpdate(row) {
+  appData.value = false;
   reset();
-  const id = row.id || ids.value;
-  getRemain(id).then((response) => {
+  const ksh = row.ksh || ids.value;
+  getMatriculate(ksh).then((response) => {
     form.value = response.data;
     open.value = true;
-    title.value = "修改剩余档案";
+    title.value = "修改录取数据";
   });
 }
 
 /** 提交按钮 */
 function submitForm() {
-  proxy.$refs["remainRef"].validate((valid) => {
+  proxy.$refs["matriculateRef"].validate((valid) => {
     if (valid) {
-      if (form.value.id != null) {
-        updateRemain(form.value).then((response) => {
+      if (!appData && form.value.ksh != null) {
+        updateMatriculate(form.value).then((response) => {
           proxy.$modal.msgSuccess("修改成功");
           open.value = false;
           getList();
         });
       } else {
-        addRemain(form.value).then((response) => {
+        addMatriculate(form.value).then((response) => {
           proxy.$modal.msgSuccess("新增成功");
           open.value = false;
           getList();
@@ -452,11 +449,11 @@ function submitForm() {
 
 /** 删除按钮操作 */
 function handleDelete(row) {
-  const remainIds = row.id || ids.value;
+  const kshs = row.ksh || ids.value;
   proxy.$modal
-    .confirm('是否确认删除剩余档案编号为"' + remainIds + '"的数据项？')
+    .confirm('是否确认删除录取数据考生号为"' + kshs + '"的数据项？')
     .then(function () {
-      return delRemain(remainIds);
+      return delMatriculate(kshs);
     })
     .then(() => {
       getList();
@@ -468,27 +465,26 @@ function handleDelete(row) {
 /** 导出按钮操作 */
 function handleExport() {
   proxy.download(
-    "archives/remain/export",
+    "stu/matriculate/export",
     {
       ...queryParams.value,
     },
-    `remain_${new Date().getTime()}.xlsx`
+    `matriculate_${new Date().getTime()}.xlsx`
   );
 }
 
-
 /** 导入按钮操作 */
 function handleImport() {
-  upload.title = "导入剩余档案";
+  upload.title = "录取数据导入";
   upload.open = true;
 }
 
 /** 下载模板操作 */
 function importTemplate() {
   proxy.download(
-    "archives/remain/importTemplate",
+    "stu/matriculate/importTemplate",
     {},
-    `remain_archives_${new Date().getTime()}.xlsx`
+    `stu_matriculate_${new Date().getTime()}.xlsx`
   );
 }
 
@@ -515,7 +511,6 @@ const handleFileSuccess = (response, file, fileList) => {
 function submitFileForm() {
   proxy.$refs["uploadRef"].submit();
 }
-
 
 getList();
 </script>
