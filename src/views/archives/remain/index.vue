@@ -114,7 +114,7 @@
       </el-col>
         <el-col :span="1.5">
         <el-button
-          type="info"
+          type="danger"
           plain
           icon="Upload"
           @click="handleImport"
@@ -134,7 +134,7 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="55" align="center" />
-      <!-- <el-table-column label="id" align="center" prop="id" /> -->
+      <el-table-column label="编号" align="center" prop="id" />
       <el-table-column label="序号" align="center" prop="xh" />
       <el-table-column label="姓名" align="center" prop="xm" />
       <el-table-column label="学年" align="center" prop="nf" />

@@ -116,7 +116,7 @@
       </el-col>
       <el-col :span="1.5">
         <el-button
-          type="info"
+          type="danger"
           plain
           icon="Upload"
           @click="handleImport"

@@ -1,10 +1,10 @@
 <template>
    <div class="app-container">
       <el-form :model="queryParams" ref="queryRef" :inline="true" label-width="68px">
-         <el-form-item label="登录地址" prop="ipaddr">
+         <el-form-item label="登录IP" prop="ipaddr">
             <el-input
                v-model="queryParams.ipaddr"
-               placeholder="请输入登录地址"
+               placeholder="请输入登录ip地址"
                clearable
                @keyup.enter="handleQuery"
             />
@@ -101,7 +101,7 @@ function handleForceLogout(row) {
   return forceLogout(row.tokenId);
   }).then(() => {
     getList();
-    proxy.$modal.msgSuccess("删除成功");
+    proxy.$modal.msgSuccess("强退成功");
   }).catch(() => {});
 }
 
