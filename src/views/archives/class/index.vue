@@ -126,6 +126,8 @@
           >导出</el-button
         >
       </el-col>
+      <!-- 导入数据（主要导入分班数据） -->
+
       <right-toolbar
         v-model:showSearch="showSearch"
         @queryTable="getList"
@@ -191,7 +193,11 @@
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
       <el-form ref="classRef" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="学号" prop="xuehao">
-          <el-input v-model="form.xuehao" v-bind:disabled="!addFlag" placeholder="请输入学号" />
+          <el-input
+            v-model="form.xuehao"
+            v-bind:disabled="!addFlag"
+            placeholder="请输入学号"
+          />
         </el-form-item>
         <el-form-item label="序号" prop="xh">
           <el-input v-model="form.xh" placeholder="请输入序号" />
@@ -202,6 +208,9 @@
         <el-form-item label="姓名" prop="xm">
           <el-input v-model="form.xm" placeholder="请输入姓名" />
         </el-form-item>
+        <el-form-item label="考生号" prop="ksh">
+          <el-input v-model="form.ksh" placeholder="请输入考生号" />
+        </el-form-item>
         <el-form-item label="档案状态">
           <el-radio-group v-model="form.dazt">
             <el-radio
@@ -211,9 +220,6 @@
               >{{ dict.label }}</el-radio
             >
           </el-radio-group>
-        </el-form-item>
-        <el-form-item label="考生号" prop="ksh">
-          <el-input v-model="form.ksh" placeholder="请输入考生号" />
         </el-form-item>
         <el-form-item label="身份证号" prop="sfzh">
           <el-input v-model="form.sfzh" placeholder="请输入身份证号" />
@@ -229,7 +235,11 @@
           </el-select>
         </el-form-item>
         <el-form-item label="备注">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入备注" />
+          <el-input
+            v-model="form.remark"
+            type="textarea"
+            placeholder="请输入备注"
+          />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -287,6 +297,7 @@ const data = reactive({
     xh: [{ required: true, message: "序号不能为空", trigger: "blur" }],
     xm: [{ required: true, message: "姓名不能为空", trigger: "blur" }],
     bj: [{ required: true, message: "班级不能为空", trigger: "blur" }],
+    ksh: [{ required: true, message: "考生号不能为空", trigger: "blur" }],
   },
 });
 
