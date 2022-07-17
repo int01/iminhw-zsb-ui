@@ -124,6 +124,14 @@
           >导入
         </el-button>
       </el-col>
+      <el-col :span="1.5">
+        <el-button
+          plain
+          @click="handleDwoMatExcl"
+          v-hasPermi="['stu:matview:list']"
+          >导出通知书数据
+        </el-button>
+      </el-col>
       <right-toolbar
         v-model:showSearch="showSearch"
         @queryTable="getList"
@@ -138,8 +146,8 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="考生号" align="center" prop="ksh" />
       <el-table-column label="身份证号" align="center" prop="sfzh" />
-      <el-table-column label="姓名" align="center" prop="xm" />
-      <el-table-column label="录取专业" align="center" prop="zy" />
+      <el-table-column label="姓名" sortable align="center" prop="xm" />
+      <el-table-column label="录取专业" sortable align="center" prop="zy" />
       <el-table-column label="联系电话" align="center" prop="lxdh" />
       <!-- <el-table-column label="地址" align="center" prop="dz" /> -->
       <el-table-column label="数据状态" align="center" prop="status">
@@ -151,10 +159,12 @@
         label="创建时间"
         align="center"
         prop="createTime"
-        width="180"
+        sortable
+        width="120"
+        :show-overflow-tooltip="true"
       >
         <template #default="scope">
-          <span>{{ parseTime(scope.row.createTime, "{y}-{m}-{d}") }}</span>
+          <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -299,7 +309,8 @@ import {
   addMatriculate,
   updateMatriculate,
 } from "@/api/stu/matriculate";
-
+import { ElMessage, ElMessageBox } from 'element-plus'
+import router from '@/router'
 import { getToken } from "@/utils/auth";
 
 const { proxy } = getCurrentInstance();
@@ -520,6 +531,28 @@ const handleFileSuccess = (response, file, fileList) => {
 /** 提交上传文件 */
 function submitFileForm() {
   proxy.$refs["uploadRef"].submit();
+}
+
+function handleDwoMatExcl(){
+ const obj = { path: "/stu/matview" };
+  ElMessageBox.confirm(
+    '即将进入“通知书数据”。输入查询条件点击查询，点击导出即可导出指定数据（默认导出全部数据），你会了吗？',
+    '温馨提示',
+    {
+      confirmButtonText: '知道了',
+      cancelButtonText: '我不行',
+      type: 'info',
+    }
+  )
+    .then(() => {
+      router.push(obj);
+    })
+    .catch(() => {
+      // ElMessage({
+      //   type: 'info',
+      //   message: 'Delete canceled',
+      // })
+    })
 }
 
 getList();

@@ -112,7 +112,7 @@
           >导出</el-button
         >
       </el-col>
-        <el-col :span="1.5">
+      <el-col :span="1.5">
         <el-button
           type="danger"
           plain
@@ -150,20 +150,24 @@
         label="更新时间"
         align="center"
         prop="updateTime"
-        width="180"
+        sortable
+        width="120"
+        :show-overflow-tooltip="true"
       >
         <template #default="scope">
-          <span>{{ parseTime(scope.row.updateTime, "{y}-{m}-{d}") }}</span>
+          <span>{{ parseTime(scope.row.updateTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column
         label="创建时间"
         align="center"
         prop="createTime"
-        width="180"
+        sortable
+        width="120"
+        :show-overflow-tooltip="true"
       >
         <template #default="scope">
-          <span>{{ parseTime(scope.row.createTime, "{y}-{m}-{d}") }}</span>
+          <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -476,7 +480,6 @@ function handleExport() {
   );
 }
 
-
 /** 导入按钮操作 */
 function handleImport() {
   upload.title = "导入剩余档案";
@@ -515,7 +518,6 @@ const handleFileSuccess = (response, file, fileList) => {
 function submitFileForm() {
   proxy.$refs["uploadRef"].submit();
 }
-
 
 getList();
 </script>

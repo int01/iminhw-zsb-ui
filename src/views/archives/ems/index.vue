@@ -195,6 +195,30 @@
       </el-table-column>
       <!-- <el-table-column label="备注" align="center" prop="remark" /> -->
       <el-table-column
+        label="更新时间"
+        align="center"
+        prop="updateTime"
+        sortable
+        width="120"
+        :show-overflow-tooltip="true"
+      >
+        <template #default="scope">
+          <span>{{ parseTime(scope.row.updateTime) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="创建时间"
+        align="center"
+        prop="createTime"
+        sortable
+        width="120"
+        :show-overflow-tooltip="true"
+      >
+        <template #default="scope">
+          <span>{{ parseTime(scope.row.createTime) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
         label="操作"
         align="center"
         class-name="small-padding fixed-width"
@@ -380,7 +404,12 @@
         <!--        </el-form-item>-->
       </el-form>
       <!--      <el-divider />-->
-      <el-alert :closable="false" :title="verify.msg" :type="verify.msgType" center />
+      <el-alert
+        :closable="false"
+        :title="verify.msg"
+        :type="verify.msgType"
+        center
+      />
       <template #footer>
         <div class="dialog-footer">
           <el-button type="primary" @click="submitVerifyForm">确 定</el-button>
@@ -397,10 +426,10 @@
       append-to-body
       draggable
     >
-    1.要求必填考生号或身份证号其中之一<br/>
-    2.是否同时查询班级数据<br/>
-    3.是否同时更新班级上档案的状态<br/>
-    4.是否补全其他基本数据<br/>
+      1.要求必填考生号(不填没法和考生关联)<br />
+      2.是否同时查询班级数据<br />
+      3.是否同时更新班级上档案的状态<br />
+      4.是否补全其他基本数据<br />
       <template #footer>
         <div class="dialog-footer">
           <el-button type="primary" @click="submitUnpackForm">确 定</el-button>
@@ -675,11 +704,15 @@ function submitVerifyForm() {
       verifyKddh(verifyFrom.value).then((response) => {
         console.log(response);
         if (response.data.id != null) {
-          verify.msgType = "success"
-          verify.msg="单号 " +response.data.kddh + " 操作成功, 序号ID "+response.data.id
+          verify.msgType = "success";
+          verify.msg =
+            "单号 " +
+            response.data.kddh +
+            " 操作成功, 序号ID " +
+            response.data.id;
         } else {
-           verify.msgType = "error"
-          verify.msg="单号 " +response.data.kddh + " 不存在"
+          verify.msgType = "error";
+          verify.msg = "单号 " + response.data.kddh + " 不存在";
         }
         verifyFrom.value.kddh = null;
       });

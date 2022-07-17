@@ -149,7 +149,7 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="考生号" align="center" prop="ksh" />
       <el-table-column label="快递单号" align="center" prop="kddh" />
-      <el-table-column label="姓名" align="center" prop="xm" />
+      <el-table-column label="姓名"  sortable align="center" prop="xm" />
       <!-- <el-table-column label="邮政编码" align="center" prop="yzbh" /> -->
       <el-table-column label="联系电话" align="center" prop="lxdh" />
       <!-- <el-table-column label="邮寄地址" align="center" prop="yjdz" /> -->
@@ -163,10 +163,12 @@
         label="创建时间"
         align="center"
         prop="createTime"
-        width="180"
+        sortable
+        width="120"
+        :show-overflow-tooltip="true"
       >
         <template #default="scope">
-          <span>{{ parseTime(scope.row.createTime, "{y}-{m}-{d}") }}</span>
+          <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column

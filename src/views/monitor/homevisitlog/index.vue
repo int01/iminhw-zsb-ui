@@ -98,7 +98,8 @@
             </template>
          </el-table-column>
          <el-table-column label="请求方式" align="center" prop="requestMethod" />
-         <el-table-column label="主机" align="center" prop="visitIp" width="130" :show-overflow-tooltip="true" />
+         <el-table-column label="访问主机" align="center" prop="visitIp" width="130" :show-overflow-tooltip="true" />
+         <el-table-column label="主机地址" align="center" prop="visitLocation" width="140" :show-overflow-tooltip="true" />
          <el-table-column label="访问状态" align="center" prop="status">
             <template #default="scope">
                <dict-tag :options="sys_common_status" :value="scope.row.status" />
@@ -135,15 +136,11 @@
             <el-row>
                <el-col :span="12">
                   <el-form-item label="访问模块：">{{ form.title }} / {{ typeFormat(form) }}</el-form-item>
-                  <!-- <el-form-item
-                    label="登录信息："
-                  >{{ form.operName }} / {{ form.operIp }} / {{ form.operLocation }}</el-form-item> -->
-            
-                  <el-form-item label="请求地址：">{{ form.visitUrl }}</el-form-item>
+                  <el-form-item label="主机地址：">{{ form.visitLocation }}</el-form-item>
               </el-col>
                <el-col :span="12">
-                  <!-- <el-form-item label="请求地址：">{{ form.visitUrl }}</el-form-item> -->
-                  <el-form-item label="请求方式：">{{ form.requestMethod }}</el-form-item>
+                  <el-form-item label="访问主机：">{{ form.visitIp }}</el-form-item>
+                  <el-form-item label="请求地址：">{{ form.requestMethod }} {{ form.visitUrl }}</el-form-item>
                </el-col>
                <el-col :span="24">
                   <el-form-item label="请求方法：">{{ form.method }}</el-form-item>
@@ -155,7 +152,7 @@
                   <el-form-item label="返回参数：">{{ form.jsonResult }}</el-form-item>
                </el-col>
                <el-col :span="12">
-                  <el-form-item label="操作状态：">
+                  <el-form-item label="访问状态：">
                      <div v-if="form.status === 0">正常</div>
                      <div v-else-if="form.status === 1">失败</div>
                   </el-form-item>
