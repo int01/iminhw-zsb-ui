@@ -39,6 +39,14 @@
           @keyup.enter="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="学籍地区" prop="dq">
+        <el-input
+          v-model="queryParams.zy"
+          placeholder="请输入学籍地区"
+          clearable
+          @keyup.enter="handleQuery"
+        />
+      </el-form-item>
       <el-form-item label="数据状态" prop="status">
         <el-select
           v-model="queryParams.status"
@@ -149,7 +157,7 @@
       <el-table-column label="姓名" sortable align="center" prop="xm" />
       <el-table-column label="录取专业" sortable align="center" prop="zy" />
       <el-table-column label="联系电话" align="center" prop="lxdh" />
-      <!-- <el-table-column label="地址" align="center" prop="dz" /> -->
+      <el-table-column label="学籍地区" align="center" prop="dq" />
       <el-table-column label="数据状态" align="center" prop="status">
         <template #default="scope">
           <dict-tag :options="data_status" :value="scope.row.status" />
@@ -208,7 +216,11 @@
         label-width="80px"
       >
         <el-form-item label="考生号" prop="ksh">
-          <el-input v-model="form.ksh" v-bind:disabled="!addFlag" placeholder="请输入考生号" />
+          <el-input
+            v-model="form.ksh"
+            v-bind:disabled="!addFlag"
+            placeholder="请输入考生号"
+          />
         </el-form-item>
         <el-form-item label="身份证号" prop="sfzh">
           <el-input v-model="form.sfzh" placeholder="请输入身份证号" />
@@ -222,7 +234,10 @@
         <el-form-item label="联系电话" prop="lxdh">
           <el-input v-model="form.lxdh" placeholder="请输入联系电话" />
         </el-form-item>
-        <el-form-item label="地址" prop="dz">
+        <el-form-item label="地区" prop="dq">
+          <el-input v-model="form.dz" placeholder="请输入考生学籍地区" />
+        </el-form-item>
+        <el-form-item label="邮寄地址" prop="dz">
           <el-input v-model="form.dz" placeholder="请输入地址" />
         </el-form-item>
         <el-form-item label="数据状态" prop="status">
@@ -309,8 +324,8 @@ import {
   addMatriculate,
   updateMatriculate,
 } from "@/api/stu/matriculate";
-import { ElMessage, ElMessageBox } from 'element-plus'
-import router from '@/router'
+import { ElMessage, ElMessageBox } from "element-plus";
+import router from "@/router";
 import { getToken } from "@/utils/auth";
 
 const { proxy } = getCurrentInstance();
@@ -337,6 +352,7 @@ const data = reactive({
     sfzh: null,
     xm: null,
     zy: null,
+    dq: null,
     status: null,
     createTime: null,
   },
@@ -397,6 +413,7 @@ function reset() {
     zy: null,
     lxdh: null,
     dz: null,
+    dq: null,
     status: null,
     createBy: null,
     updateBy: null,
@@ -533,15 +550,15 @@ function submitFileForm() {
   proxy.$refs["uploadRef"].submit();
 }
 
-function handleDwoMatExcl(){
- const obj = { path: "/stu/matview" };
+function handleDwoMatExcl() {
+  const obj = { path: "/stu/matview" };
   ElMessageBox.confirm(
-    '即将进入“通知书数据”。输入查询条件点击查询，点击导出即可导出指定数据（默认导出全部数据），你会了吗？',
-    '温馨提示',
+    "即将进入“通知书数据”。输入查询条件点击查询，点击导出即可导出指定数据（默认导出全部数据），你会了吗？",
+    "温馨提示",
     {
-      confirmButtonText: '知道了',
-      cancelButtonText: '我不行',
-      type: 'info',
+      confirmButtonText: "知道了",
+      cancelButtonText: "我不行",
+      type: "info",
     }
   )
     .then(() => {
@@ -552,7 +569,7 @@ function handleDwoMatExcl(){
       //   type: 'info',
       //   message: 'Delete canceled',
       // })
-    })
+    });
 }
 
 getList();

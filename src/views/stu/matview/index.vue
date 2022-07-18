@@ -55,6 +55,14 @@
           @keyup.enter="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="学籍地区" prop="xy">
+        <el-input
+          v-model="queryParams.dq"
+          placeholder="请输入学籍地区"
+          clearable
+          @keyup.enter="handleQuery"
+        />
+      </el-form-item>
       <el-form-item label="创建时间" style="width: 308px">
         <!-- <el-date-picker
           v-model="daterangeCreateTime"
@@ -111,6 +119,7 @@
       <el-table-column label="姓名" sortable align="center" prop="xm" />
       <el-table-column label="录取专业" sortable align="center" prop="zy" />
       <el-table-column label="学院" sortable align="center" prop="xy" />
+      <el-table-column label="地区" sortable align="center" prop="dq" />
       <el-table-column
         label="创建时间"
         align="center"
@@ -155,6 +164,7 @@ const data = reactive({
     xm: null,
     zy: null,
     xy: null,
+    dq: null,
     createTime: null,
   },
   rules: {},
