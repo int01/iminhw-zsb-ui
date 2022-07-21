@@ -51,3 +51,11 @@ export function verifyKddh(data){
     data: data
   })
 }
+
+// 查询邮寄档案详细
+export function getMaxXhEms(dateStr) {
+  return request({
+    url: '/archives/ems/datemaxxh/' + dateStr,
+    method: 'get'
+  })
+}
