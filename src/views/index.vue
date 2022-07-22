@@ -30,7 +30,7 @@
           <el-button
             icon="HomeFilled"
             plain
-            @click="goTarget('/localhost')"
+            @click="goTarget('localhost/')"
             >访问</el-button
           >
         </p>
@@ -86,9 +86,25 @@
       <el-col :xs="24" :sm="24" :md="12" :lg="8">
         <el-card class="update-log">
           <el-collapse>
-            <el-collapse-item title="v1.0 - 2022-06-23">
+             <el-collapse-item title="v2.0 - 2022-07-22">
               <ol>
-                <li>asd</li>
+                <li>修复个性化设置（布局设置）主题色不能控制页面颜色的问题</li>
+                <li>调整登陆页样式</li>
+              </ol>
+              </el-collapse-item>
+            <el-collapse-item title="v2.0 - 2022-07-20">
+              <ol>
+                <li>新增学院专业映射配置</li>
+                <li>录取数据新增考生学籍地区</li>
+                <li>新增按录取数据专业匹配学院导出通知书打印数据</li>
+                <li>修改邮寄档案快速验证方式为按年验证</li>
+                <li>修改邮寄档案快速验证里面自定义序号，不指定序号更加快捷</li>
+                <li>新增前台用户查询数据日志记录管理</li>
+                <li>修改读取用户IP地址方式</li>
+                <li>去掉后台用户手机号和邮箱不能重复验证</li>
+                <li>修改通知书快递单号打印方式，按打印机模版提供不同导入数据入口</li>
+                <li>修正用户权限验证问题</li>
+                <li>修正以考生号为主键，修改添加问题。</li>
               </ol>
             </el-collapse-item>
           </el-collapse>
@@ -119,7 +135,7 @@
 </template>
 
 <script setup name="Index">
-const version = ref('1.0')
+const version = ref('2.0')
 
 function goTarget(url) {
   window.open(url, '__blank')

@@ -173,7 +173,7 @@
         @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column label="ID" width="40" align="center" prop="id"/>
+      <el-table-column label="ID" align="center" prop="id"/>
       <el-table-column label="序号" sortable align="center" prop="xh"/>
       <el-table-column label="快递单号" align="center" prop="kddh"/>
       <el-table-column label="签收验证" align="center" prop="qsyz">
