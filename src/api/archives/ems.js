@@ -52,10 +52,19 @@ export function verifyKddh(data){
   })
 }
 
-// 查询邮寄档案详细
-export function getMaxXhEms(dateStr) {
+// 更新插袋实体记录
+export function unpackEms(data){
   return request({
-    url: '/archives/ems/datemaxxh/' + dateStr,
+    url: '/archives/ems/unpack',
+    method: 'put',
+    data: data
+  })
+}
+
+// 查询邮寄档案详细
+export function getMaxXhEms(yearStr) {
+  return request({
+    url: '/archives/ems/datemaxxh/' + yearStr,
     method: 'get'
   })
 }

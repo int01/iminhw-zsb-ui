@@ -1,89 +1,89 @@
 <template>
   <div class="app-container">
     <el-form
-        :model="queryParams"
-        ref="queryRef"
-        :inline="true"
-        v-show="showSearch"
-        label-width="68px"
+      :model="queryParams"
+      ref="queryRef"
+      :inline="true"
+      v-show="showSearch"
+      label-width="68px"
     >
       <el-form-item label="快递单号" prop="kddh">
         <el-input
-            v-model="queryParams.kddh"
-            placeholder="请输入快递单号"
-            clearable
-            @keyup.enter="handleQuery"
+          v-model="queryParams.kddh"
+          placeholder="请输入快递单号"
+          clearable
+          @keyup.enter="handleQuery"
         />
       </el-form-item>
       <el-form-item label="签收验证" prop="qsyz">
         <el-select
-            v-model="queryParams.qsyz"
-            placeholder="请选择签收验证"
-            clearable
+          v-model="queryParams.qsyz"
+          placeholder="请选择签收验证"
+          clearable
         >
           <el-option
-              v-for="dict in ems_validated"
-              :key="dict.value"
-              :label="dict.label"
-              :value="dict.value"
+            v-for="dict in ems_validated"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
           />
         </el-select>
       </el-form-item>
       <el-form-item label="是否档案" prop="sfda">
         <el-select
-            v-model="queryParams.sfda"
-            placeholder="请选择是否档案"
-            clearable
+          v-model="queryParams.sfda"
+          placeholder="请选择是否档案"
+          clearable
         >
           <el-option
-              v-for="dict in in_archives_ems_danan"
-              :key="dict.value"
-              :label="dict.label"
-              :value="dict.value"
+            v-for="dict in in_archives_ems_danan"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
           />
         </el-select>
       </el-form-item>
       <el-form-item label="姓名" prop="xm">
         <el-input
-            v-model="queryParams.xm"
-            placeholder="请输入姓名"
-            clearable
-            @keyup.enter="handleQuery"
+          v-model="queryParams.xm"
+          placeholder="请输入姓名"
+          clearable
+          @keyup.enter="handleQuery"
         />
       </el-form-item>
       <el-form-item label="考生号" prop="ksh">
         <el-input
-            v-model="queryParams.ksh"
-            placeholder="请输入考生号"
-            clearable
-            @keyup.enter="handleQuery"
+          v-model="queryParams.ksh"
+          placeholder="请输入考生号"
+          clearable
+          @keyup.enter="handleQuery"
         />
       </el-form-item>
       <el-form-item label="身份证号" prop="sfzh">
         <el-input
-            v-model="queryParams.sfzh"
-            placeholder="请输入身份证号"
-            clearable
-            @keyup.enter="handleQuery"
+          v-model="queryParams.sfzh"
+          placeholder="请输入身份证号"
+          clearable
+          @keyup.enter="handleQuery"
         />
       </el-form-item>
       <el-form-item label="数据状态" prop="status">
         <el-select
-            v-model="queryParams.status"
-            placeholder="请选择数据状态"
-            clearable
+          v-model="queryParams.status"
+          placeholder="请选择数据状态"
+          clearable
         >
           <el-option
-              v-for="dict in data_status"
-              :key="dict.value"
-              :label="dict.label"
-              :value="dict.value"
+            v-for="dict in data_status"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
           />
         </el-select>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery"
-        >搜索
+          >搜索
         </el-button>
         <el-button icon="Refresh" @click="resetQuery">重置</el-button>
       </el-form-item>
@@ -92,223 +92,223 @@
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
-            type="primary"
-            plain
-            icon="Plus"
-            @click="handleAdd"
-            v-hasPermi="['archives:ems:add']"
-        >新增
+          type="primary"
+          plain
+          icon="Plus"
+          @click="handleAdd"
+          v-hasPermi="['archives:ems:add']"
+          >新增
         </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
-            type="success"
-            plain
-            icon="Edit"
-            :disabled="single"
-            @click="handleUpdate"
-            v-hasPermi="['archives:ems:edit']"
-        >修改
+          type="success"
+          plain
+          icon="Edit"
+          :disabled="single"
+          @click="handleUpdate"
+          v-hasPermi="['archives:ems:edit']"
+          >修改
         </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
-            type="danger"
-            plain
-            icon="Delete"
-            :disabled="multiple"
-            @click="handleDelete"
-            v-hasPermi="['archives:ems:remove']"
-        >删除
+          type="danger"
+          plain
+          icon="Delete"
+          :disabled="multiple"
+          @click="handleDelete"
+          v-hasPermi="['archives:ems:remove']"
+          >删除
         </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
-            type="warning"
-            plain
-            icon="Download"
-            @click="handleExport"
-            v-hasPermi="['archives:ems:export']"
-        >导出
+          type="warning"
+          plain
+          icon="Download"
+          @click="handleExport"
+          v-hasPermi="['archives:ems:export']"
+          >导出
         </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
-            type="danger"
-            plain
-            icon="Upload"
-            @click="handleImport"
-            v-hasPermi="['archives:ems:import']"
-        >导入
+          type="danger"
+          plain
+          icon="Upload"
+          @click="handleImport"
+          v-hasPermi="['archives:ems:import']"
+          >导入
         </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
-            plain
-            icon="Flag"
-            @click="handleVerify"
-            v-hasPermi="['archives:ems:verify']"
-        >签收验证
+          plain
+          icon="Flag"
+          @click="handleVerify"
+          v-hasPermi="['archives:ems:verify']"
+          >签收验证
         </el-button>
       </el-col>
       <!-- handleUnpack -->
       <el-col :span="1.5">
         <el-button
-            plain
-            icon="Orange"
-            @click="handleUnpack"
-            v-hasPermi="['archives:ems:unpack']"
-        >拆袋录入
+          plain
+          icon="Orange"
+          @click="handleUnpack"
+          v-hasPermi="['archives:ems:unpack']"
+          >拆袋录入
         </el-button>
       </el-col>
       <right-toolbar
-          v-model:showSearch="showSearch"
-          @queryTable="getList"
+        v-model:showSearch="showSearch"
+        @queryTable="getList"
       ></right-toolbar>
     </el-row>
 
     <el-table
-        v-loading="loading"
-        :data="emsList"
-        @selection-change="handleSelectionChange"
+      v-loading="loading"
+      :data="emsList"
+      @selection-change="handleSelectionChange"
     >
-      <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column label="ID" align="center" prop="id"/>
-      <el-table-column label="序号" sortable align="center" prop="xh"/>
-      <el-table-column label="快递单号" align="center" prop="kddh"/>
+      <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="ID" align="center" prop="id" />
+      <el-table-column label="序号" sortable align="center" prop="xh" />
+      <el-table-column label="快递单号" align="center" prop="kddh" />
       <el-table-column label="签收验证" align="center" prop="qsyz">
         <template #default="scope">
-          <dict-tag :options="ems_validated" :value="scope.row.qsyz"/>
+          <dict-tag :options="ems_validated" :value="scope.row.qsyz" />
         </template>
       </el-table-column>
       <el-table-column label="是否档案" align="center" prop="sfda">
         <template #default="scope">
-          <dict-tag :options="in_archives_ems_danan" :value="scope.row.sfda"/>
+          <dict-tag :options="in_archives_ems_danan" :value="scope.row.sfda" />
         </template>
       </el-table-column>
-      <el-table-column label="姓名" align="center" prop="xm"/>
-      <el-table-column label="考生号" align="center" prop="ksh"/>
+      <el-table-column label="姓名" align="center" prop="xm" />
+      <el-table-column label="考生号" align="center" prop="ksh" />
       <!-- <el-table-column label="身份证号" align="center" prop="sfzh" /> -->
       <el-table-column label="数据状态" align="center" prop="status">
         <template #default="scope">
-          <dict-tag :options="data_status" :value="scope.row.status"/>
+          <dict-tag :options="data_status" :value="scope.row.status" />
         </template>
       </el-table-column>
       <!-- <el-table-column label="备注" align="center" prop="remark" /> -->
       <el-table-column
-          label="更新时间"
-          align="center"
-          prop="updateTime"
-          sortable
-          width="120"
-          :show-overflow-tooltip="true"
+        label="更新时间"
+        align="center"
+        prop="updateTime"
+        sortable
+        width="120"
+        :show-overflow-tooltip="true"
       >
         <template #default="scope">
           <span>{{ parseTime(scope.row.updateTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column
-          label="创建时间"
-          align="center"
-          prop="createTime"
-          sortable
-          width="120"
-          :show-overflow-tooltip="true"
+        label="创建时间"
+        align="center"
+        prop="createTime"
+        sortable
+        width="120"
+        :show-overflow-tooltip="true"
       >
         <template #default="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column
-          label="操作"
-          align="center"
-          class-name="small-padding fixed-width"
+        label="操作"
+        align="center"
+        class-name="small-padding fixed-width"
       >
         <template #default="scope">
           <el-button
-              type="text"
-              icon="Edit"
-              @click="handleUpdate(scope.row)"
-              v-hasPermi="['archives:ems:edit']"
-          >修改
+            type="text"
+            icon="Edit"
+            @click="handleUpdate(scope.row)"
+            v-hasPermi="['archives:ems:edit']"
+            >修改
           </el-button>
           <el-button
-              type="text"
-              icon="Delete"
-              @click="handleDelete(scope.row)"
-              v-hasPermi="['archives:ems:remove']"
-          >删除
+            type="text"
+            icon="Delete"
+            @click="handleDelete(scope.row)"
+            v-hasPermi="['archives:ems:remove']"
+            >删除
           </el-button>
         </template>
       </el-table-column>
     </el-table>
 
     <pagination
-        v-show="total > 0"
-        :total="total"
-        v-model:page="queryParams.pageNum"
-        v-model:limit="queryParams.pageSize"
-        @pagination="getList"
+      v-show="total > 0"
+      :total="total"
+      v-model:page="queryParams.pageNum"
+      v-model:limit="queryParams.pageSize"
+      @pagination="getList"
     />
 
     <!-- 添加或修改邮寄档案对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
       <el-form ref="emsRef" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="快递单号" prop="kddh">
-          <el-input v-model="form.kddh" placeholder="请输入快递单号"/>
+          <el-input v-model="form.kddh" placeholder="请输入快递单号" />
         </el-form-item>
         <el-form-item label="序号" prop="xh">
           <el-input-number
-              controls-position="right"
-              :min="0"
-              v-model="form.xh"
-              placeholder="请输入序号"
+            controls-position="right"
+            :min="0"
+            v-model="form.xh"
+            placeholder="请输入序号"
           />
         </el-form-item>
-        <el-form-item label="签收验证">
+        <el-form-item label="签收验证" prop="qsyz">
           <el-radio-group v-model="form.qsyz">
             <el-radio
-                v-for="dict in ems_validated"
-                :key="dict.value"
-                :label="parseInt(dict.value)"
-            >{{ dict.label }}
+              v-for="dict in ems_validated"
+              :key="dict.value"
+              :label="parseInt(dict.value)"
+              >{{ dict.label }}
             </el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="是否档案">
+        <el-form-item label="是否档案" prop="sfda">
           <el-radio-group v-model="form.sfda">
             <el-radio
-                v-for="dict in in_archives_ems_danan"
-                :key="dict.value"
-                :label="parseInt(dict.value)"
-            >{{ dict.label }}
+              v-for="dict in in_archives_ems_danan"
+              :key="dict.value"
+              :label="parseInt(dict.value)"
+              >{{ dict.label }}
             </el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="姓名" prop="xm">
-          <el-input v-model="form.xm" placeholder="请输入姓名"/>
+          <el-input v-model="form.xm" placeholder="请输入姓名" />
         </el-form-item>
         <el-form-item label="考生号" prop="ksh">
-          <el-input v-model="form.ksh" placeholder="请输入考生号"/>
+          <el-input v-model="form.ksh" placeholder="请输入考生号" />
         </el-form-item>
         <el-form-item label="身份证号" prop="sfzh">
-          <el-input v-model="form.sfzh" placeholder="请输入身份证号"/>
+          <el-input v-model="form.sfzh" placeholder="请输入身份证号" />
         </el-form-item>
         <el-form-item label="数据状态" prop="status">
           <el-select v-model="form.status" placeholder="请选择数据状态">
             <el-option
-                v-for="dict in data_status"
-                :key="dict.value"
-                :label="dict.label"
-                :value="parseInt(dict.value)"
+              v-for="dict in data_status"
+              :key="dict.value"
+              :label="dict.label"
+              :value="parseInt(dict.value)"
             ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-input
-              v-model="form.remark"
-              type="textarea"
-              placeholder="请输入备注"
+            v-model="form.remark"
+            type="textarea"
+            placeholder="请输入备注"
           />
         </el-form-item>
       </el-form>
@@ -322,40 +322,40 @@
 
     <!-- ems单号导入对话框 -->
     <el-dialog
-        :title="upload.title"
-        v-model="upload.open"
-        width="400px"
-        append-to-body
+      :title="upload.title"
+      v-model="upload.open"
+      width="400px"
+      append-to-body
     >
       <el-upload
-          ref="uploadRef"
-          :limit="1"
-          accept=".xlsx, .xls"
-          :headers="upload.headers"
-          :action="upload.url + '?updateSupport=' + upload.updateSupport"
-          :disabled="upload.isUploading"
-          :on-progress="handleFileUploadProgress"
-          :on-success="handleFileSuccess"
-          :auto-upload="false"
-          drag
+        ref="uploadRef"
+        :limit="1"
+        accept=".xlsx, .xls"
+        :headers="upload.headers"
+        :action="upload.url + '?updateSupport=' + upload.updateSupport"
+        :disabled="upload.isUploading"
+        :on-progress="handleFileUploadProgress"
+        :on-success="handleFileSuccess"
+        :auto-upload="false"
+        drag
       >
         <el-icon class="el-icon--upload">
-          <upload-filled/>
+          <upload-filled />
         </el-icon>
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
         <template #tip>
           <div class="el-upload__tip text-center">
             <div class="el-upload__tip">
-              <el-checkbox v-model="upload.updateSupport"/>
+              <el-checkbox v-model="upload.updateSupport" />
               是否更新已经存在的数据
             </div>
             <span>仅允许导入xls、xlsx格式文件。</span>
             <el-link
-                type="primary"
-                :underline="false"
-                style="font-size: 12px; vertical-align: baseline"
-                @click="importTemplate"
-            >下载模板
+              type="primary"
+              :underline="false"
+              style="font-size: 12px; vertical-align: baseline"
+              @click="importTemplate"
+              >下载模板
             </el-link>
           </div>
         </template>
@@ -369,66 +369,66 @@
     </el-dialog>
     <!-- 签收单号验证 -->
     <el-dialog
-        :title="verify.title"
-        v-model="verify.open"
-        width="400px"
-        @close="handleModelClass"
-        append-to-body
-        draggable
+      :title="verify.title"
+      v-model="verify.open"
+      width="400px"
+      @close="handleModelClass"
+      append-to-body
+      draggable
     >
       <el-form
-          ref="verifyRef"
-          :inline="true"
-          :model="verifyFrom"
-          :rules="rules"
-          label-width="100px"
+        ref="verifyRef"
+        :inline="true"
+        :model="verifyFrom"
+        :rules="rules"
+        label-width="100px"
       >
         <el-form-item label="数据导入年">
           <el-date-picker
-              v-model="year"
-              type="year"
-              placeholder="请选择数据导入年"
-              clearable
-              readonly
-              disabled
-              format="YYYY"
+            v-model="year"
+            type="year"
+            placeholder="请选择数据导入年"
+            clearable
+            readonly
+            disabled
+            format="YYYY"
           />
         </el-form-item>
         <el-form-item label="签收验证" prop="qsyz">
           <el-select
-              v-model="verifyFrom.qsyz"
-              placeholder="请选择验证后的状态"
-              clearable
+            v-model="verifyFrom.qsyz"
+            placeholder="请选择验证后的状态"
+            clearable
           >
             <el-option
-                v-for="dict in ems_validated"
-                :key="dict.value"
-                :label="dict.label"
-                :value="dict.value"
+              v-for="dict in ems_validated"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
             />
           </el-select>
         </el-form-item>
         <el-form-item label="序号" prop="xh">
           <el-tooltip
-              class="box-item"
-              effect="dark"
-              content="默认值（当年序号最大值+1），如需调整则输入，每次验证成功都会自动+1"
-              placement="top"
+            class="box-item"
+            effect="dark"
+            content="默认值（当年序号最大值+1），如需调整则输入，每次验证成功都会自动+1"
+            placement="top"
           >
-          <el-input-number
+            <el-input-number
               placeholder="请输入序号(流水号)"
               v-model="verifyFrom.xh"
               controls-position="right"
               :min="0"
-          />
+            />
           </el-tooltip>
         </el-form-item>
         <el-form-item label="快递单号" prop="kddh">
           <el-input
-              placeholder="请输入快递单号"
-              v-model="verifyFrom.kddh"
-              clearable
-              @keyup.enter="submitVerifyForm"
+            placeholder="请输入快递单号"
+            v-model="verifyFrom.kddh"
+            clearable
+            @keyup.enter="submitVerifyForm"
           />
         </el-form-item>
         <!--        单个输入框防止回车刷新-->
@@ -440,10 +440,10 @@
       </el-form>
       <!--      <el-divider />-->
       <el-alert
-          :closable="false"
-          :title="verify.msg"
-          :type="verify.msgType"
-          center
+        :closable="false"
+        :title="verify.msg"
+        :type="verify.msgType"
+        center
       />
       <template #footer>
         <div class="dialog-footer">
@@ -454,42 +454,89 @@
     </el-dialog>
     <!-- 快速拆袋 -->
     <el-dialog
-        :title="unpack.title"
-        v-model="unpack.open"
-        width="400px"
-        @close="handleModelClass"
-        append-to-body
-        draggable
+      :title="unpack.title"
+      v-model="unpack.open"
+      width="400px"
+      @close="handleModelClass"
+      append-to-body
+      draggable
     >
-      1.要求必填考生号(不填没法和考生关联)<br/>
-      2.是否同时查询班级数据<br/>
-      3.是否同时更新班级上档案的状态<br/>
-      4.是否补全其他基本数据<br/>
       <el-form
-          ref="openRef"
-          :inline="true"
-          :model="verifyFrom"
-          :rules="rules"
-          label-width="100px"
+        ref="unpackRef"
+        :inline="true"
+        :model="unpackForm"
+        :rules="unpackRules"
       >
         <el-form-item label="快递单号" prop="kddh">
-          <el-input v-model="form.kddh" placeholder="请输入快递单号"/>
+          <el-input
+            v-model="unpackForm.kddh"
+            clearable
+            placeholder="请输入快递单号"
+          />
         </el-form-item>
-        <!--        单个输入框防止回车刷新-->
-        <!--        <el-form-item style="display: none">-->
-        <!--          <el-input-->
-        <!--              v-model="verifyFrom.kddh"-->
-        <!--          />-->
-        <!--        </el-form-item>-->
-        <el-form-item label="是否档案">
-          <el-radio-group v-model="form.sfda">
+        <el-form-item label="是否档案" prop="sfda">
+          <el-radio-group @change="handleRadioChange" v-model="unpackForm.sfda">
             <el-radio
-                v-for="dict in in_archives_ems_danan"
-                :key="dict.value"
-                :label="parseInt(dict.value)"
-            >{{ dict.label }}
+              v-for="dict in in_archives_ems_danan"
+              :key="dict.value"
+              :label="parseInt(dict.value)"
+              >{{ dict.label }}
             </el-radio>
           </el-radio-group>
+        </el-form-item>
+        <el-form-item
+          label="是否按录取数据更新其他基本信息？"
+          :style="`display: ${unpack.showSwitch ? '' : 'none'};`"
+        >
+          <el-switch
+            v-model="unpack.getMatUpDateEmsSwitch"
+            inline-prompt
+            active-text="是"
+            inactive-text="否"
+          />
+        </el-form-item>
+        <el-form-item
+          label="是否更新班级档案的档案状态？"
+          :style="`display: ${unpack.showSwitch ? '' : 'none'};`"
+        >
+          <el-switch
+            v-model="unpack.updateClassSwitch"
+            inline-prompt
+            active-text="是"
+            inactive-text="否"
+          />
+        </el-form-item>
+        <el-form-item
+          label="是否查询出班级等信息？"
+          :style="`display: ${unpack.showSwitch ? '' : 'none'};`"
+        >
+          <el-switch
+            v-model="unpack.getClassShow"
+            inline-prompt
+            active-text="是"
+            inactive-text="否"
+          />
+        </el-form-item>
+        <el-alert
+          :closable="false"
+          :title="unpack.classMsg"
+          :type="unpack.classMsgType"
+          center
+          :style="`margin-bottom: 16px; display: ${
+            !unpack.getClassShow ? 'none' : ''
+          };`"
+        />
+        <el-form-item
+          label="考生号"
+          prop="ksh"
+          :style="`display: ${unpack.showSwitch ? '' : 'none'};`"
+        >
+          <el-input
+            v-model="unpackForm.ksh"
+            placeholder="请输入考生号"
+            @keyup.enter="submitUnpackForm"
+            clearable
+          />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -511,14 +558,16 @@ import {
   updateEms,
   verifyKddh,
   getMaxXhEms,
+  unpackEms,
 } from "@/api/archives/ems";
-import {getToken} from "@/utils/auth";
+import { getToken } from "@/utils/auth";
+import { ElMessage } from "element-plus";
 
-const {proxy} = getCurrentInstance();
-const {data_status, in_archives_ems_danan, ems_validated} = proxy.useDict(
-    "data_status",
-    "in_archives_ems_danan",
-    "ems_validated"
+const { proxy } = getCurrentInstance();
+const { data_status, in_archives_ems_danan, ems_validated } = proxy.useDict(
+  "data_status",
+  "in_archives_ems_danan",
+  "ems_validated"
 );
 
 const emsList = ref([]);
@@ -543,7 +592,7 @@ const upload = reactive({
   // 是否更新已经存在的用户数据
   updateSupport: 0,
   // 设置上传的请求头部
-  headers: {Authorization: "Bearer " + getToken()},
+  headers: { Authorization: "Bearer " + getToken() },
   // 上传的地址
   url: import.meta.env.VITE_APP_BASE_API + "/archives/ems/importData",
 });
@@ -564,12 +613,18 @@ const unpack = reactive({
   open: false,
   // 弹出层标题
   title: "",
-  // 设置请求头部
-  // headers: {Authorization: "Bearer " + getToken()},
+  showSwitch: true,
+  classMsg: "等待操作...",
+  classMsgType: "info",
+  getMatUpDateEmsSwitch: true,
+  updateClassSwitch: true,
+  getClassShow: true,
 });
 
 const data = reactive({
   form: {},
+  verifyFrom: {},
+  unpackForm: {},
   queryParams: {
     pageNum: 1,
     pageSize: 10,
@@ -582,16 +637,22 @@ const data = reactive({
     status: null,
   },
   rules: {
-    kddh: {required: true, trigger: "blur", message: "请输入快递单号"},
-    qsyz: {required: true, trigger: "blur", message: "请选择签收验证"},
-    xh: {required: true, trigger: "blur", message: "请输入流水号"},
-    year: {required: true, trigger: "blur", message: "请选择验证数据年份"},
+    kddh: { required: true, trigger: "blur", message: "请输入快递单号" },
+    sfda: { required: true, trigger: "change", message: "请选择是否存在档案" },
+    qsyz: { required: true, trigger: "change", message: "请选择签收验证" },
+    xh: { required: true, trigger: "blur", message: "请输入流水号" },
+    year: { required: true, trigger: "change", message: "请选择验证数据年份" },
   },
-  verifyFrom: {},
+  unpackRules: {
+    kddh: { required: true, trigger: "blur", message: "请输入快递单号" },
+    // year: { required: true, trigger: "change", message: "请选择验证数据年份" },
+    sfda: { required: true, trigger: "change", message: "请选择是否存在档案" },
+    ksh: { required: true, trigger: "blur", message: "请输入考生号" },
+  },
 });
 
-const {queryParams, form, rules, verifyFrom} = toRefs(data);
-
+const { queryParams, form, verifyFrom, unpackForm, rules, unpackRules } =
+  toRefs(data);
 
 /** 查询邮寄档案列表 */
 function getList() {
@@ -615,7 +676,7 @@ function reset() {
     id: null,
     kddh: null,
     qsyz: 0,
-    sfda: 0,
+    sfda: 1,
     xm: null,
     ksh: null,
     sfzh: null,
@@ -652,7 +713,7 @@ function handleSelectionChange(selection) {
 function handleAdd() {
   reset();
   open.value = true;
-  title.value = "添加邮寄档案";
+  title.value = "添加邮寄档案快递记录";
 }
 
 /** 修改按钮操作 */
@@ -662,7 +723,7 @@ function handleUpdate(row) {
   getEms(id).then((response) => {
     form.value = response.data;
     open.value = true;
-    title.value = "修改邮寄档案";
+    title.value = "修改邮寄档案快递记录";
   });
 }
 
@@ -691,35 +752,34 @@ function submitForm() {
 function handleDelete(row) {
   const emsIds = row.id || ids.value;
   proxy.$modal
-      .confirm('是否确认删除邮寄档案ID为"' + emsIds + '"的数据项？')
-      .then(function () {
-        return delEms(emsIds);
-      })
-      .then(() => {
-        getList();
-        proxy.$modal.msgSuccess("删除成功");
-      })
-      .catch(() => {
-      });
+    .confirm('是否确认删除邮寄档案ID为"' + emsIds + '"的数据项？')
+    .then(function () {
+      return delEms(emsIds);
+    })
+    .then(() => {
+      getList();
+      proxy.$modal.msgSuccess("删除成功");
+    })
+    .catch(() => {});
 }
 
 /** 导出按钮操作 */
 function handleExport() {
   proxy.download(
-      "archives/ems/export",
-      {
-        ...queryParams.value,
-      },
-      `ems_${new Date().getTime()}.xlsx`
+    "archives/ems/export",
+    {
+      ...queryParams.value,
+    },
+    `ems_${new Date().getTime()}.xlsx`
   );
 }
 
 function getMaxXhEmsElm() {
   // console.log(year.value)
   // const year = !verifyFrom.value.year ? new Date().getFullYear() : verifyFrom.value.year;
-  const _year =  new Date().getFullYear();
-    getMaxXhEms(_year).then((response) => {
-      verifyFrom.value = {xh: ++response.data};
+  const _year = new Date().getFullYear();
+  getMaxXhEms(_year).then((response) => {
+    verifyFrom.value = { xh: ++response.data };
   });
 }
 
@@ -730,6 +790,7 @@ function handleVerify() {
 }
 
 function handleUnpack() {
+  unpackForm.value.sfda = 1;
   unpack.title = "拆袋录入辅助";
   unpack.open = true;
 }
@@ -743,9 +804,9 @@ function handleImport() {
 /** 下载模板操作 */
 function importTemplate() {
   proxy.download(
-      "archives/ems/importTemplate",
-      {},
-      `archives_ems_${new Date().getTime()}.xlsx`
+    "archives/ems/importTemplate",
+    {},
+    `archives_ems_${new Date().getTime()}.xlsx`
   );
 }
 
@@ -759,11 +820,11 @@ const handleFileSuccess = (response, file, fileList) => {
   upload.isUploading = false;
   proxy.$refs["uploadRef"].handleRemove(file);
   proxy.$alert(
-      "<div style='overflow: auto;overflow-x: hidden;max-height: 70vh;padding: 10px 20px 0;'>" +
+    "<div style='overflow: auto;overflow-x: hidden;max-height: 70vh;padding: 10px 20px 0;'>" +
       response.msg +
       "</div>",
-      "导入结果",
-      {dangerouslyUseHTMLString: true}
+    "导入结果",
+    { dangerouslyUseHTMLString: true }
   );
   getList();
 };
@@ -778,24 +839,157 @@ function submitVerifyForm() {
   proxy.$refs["verifyRef"].validate((valid) => {
     if (valid) {
       // console.log(verifyFrom.value.year);
-      const nowYear = new Date().getFullYear();
-      console.log(nowYear)
-      const params = { beginCreateTime: nowYear+"-01-01 00:00:00", endCreateTime: nowYear+"-12-31 23:59:59" };
-      verifyKddh({...verifyFrom.value, params}).then((response) => {
-        // console.log(response);
+      const yearStr = new Date().getFullYear();
+      const params = { yearStr };
+      verifyKddh({ ...verifyFrom.value, params }).then((response) => {
         if (response.data.id != null) {
           verify.msgType = "success";
           verify.msg =
-              "单号 " +
-              response.data.kddh +
-              " 操作成功, ID " +
-              response.data.id;
+            "单号 " + response.data.kddh + " 操作成功, ID " + response.data.id;
           ++verifyFrom.value.xh;
         } else {
           verify.msgType = "error";
           verify.msg = "单号 " + response.data.kddh + " 不存在";
         }
         verifyFrom.value.kddh = null;
+      });
+    }
+  });
+}
+
+function handleRadioChange(e) {
+  // console.log(e);
+  if (e != 1) {
+    unpackForm.value.ksh = "1";
+    unpack.showSwitch = false;
+    unpack.getMatUpDateEmsSwitch = false;
+    unpack.updateClassSwitch = false;
+    unpack.getClassShow = false;
+  } else {
+    unpack.showSwitch = true;
+    unpackForm.value.ksh = null;
+    unpack.getMatUpDateEmsSwitch = true;
+    unpack.updateClassSwitch = true;
+    unpack.getClassShow = true;
+  }
+}
+
+// function handleGetMatEntity() {
+//     console.log("handleGetMatEntity "+unpackSubmitvt)
+//   if (unpackSubmitvt) {
+//     return false;
+//   }
+//   /** 按考生号得到录取信息  */
+//   getMatriculate(unpackForm.value.ksh).then((response) => {
+//     const data = response.data;
+//     if (!data) {
+//       if (unpack.getMatUpDateEmsSwitch) {
+//         unpackForm.value = {
+//           ...unpackForm.value,
+//           xm: data.xm,
+//           sfzh: data.sfzh,
+//         };
+//       } else {
+//         unpackForm.value = { ...unpackForm.value };
+//       }
+//     } else {
+//       unpackSubmitvt = false;
+//       ElMessage.error("该考生录取信息存在异常！");
+//     }
+//   });
+// }
+/** 得到档案收集里的班级数据 */
+// function handleGetClassEntity() {
+//   console.log("handleGetClassEntity "+unpackSubmitvt)
+//   if (unpackSubmitvt) {
+//     return false;
+//   }
+//   getClassByKsh(unpackForm.value.ksh).then((response) => {
+//     // console.log("handleGetClassEntity")
+//     // console.log(response);
+//     if (response.data != null) {
+//       if (unpack.getClassShow) {
+//         unpack.classMsgType = "success";
+//         unpack.classMsg =
+//           "学号 " +
+//           response.data.xuehao +
+//           ", 姓名 " +
+//           response.data.xm +
+//           ", 班级 " +
+//           response.data.bj +
+//           ", 序号 " +
+//           response.data.xh;
+//       }
+//     } else {
+//       unpack.classMsgType = "error";
+//       unpack.classMsg = "该考生班级信息异常";
+//       unpackSubmitvt = false;
+//       ElMessage.error("该考生班级信息异常");
+//     }
+//   });
+// }
+
+// /** 更新档案收集里的档案状态 */
+// function handleUpdateClass() {
+//   if (unpack.updateClassSwitch) {
+//     const p = { ksh: unpackForm.value.ksh, dazt: 1 };
+//     console.log(unpackSubmitvt)
+//     if (unpackSubmitvt) {
+//       updateClassByKsh(p).then((response) => {
+//         if (response.code != "200") {
+//           ElMessage.success("更新班级考生档案状态成功");
+//         } else {
+//           unpackSubmitvt = false;
+//           ElMessage.error("更新班级考生档案状态失败，该考生班级信息异常");
+//         }
+//       });
+//     }
+//   }
+// }
+
+function submitUnpackForm() {
+  proxy.$refs["unpackRef"].validate((valid) => {
+    console.log(valid);
+    if (valid) {
+      console.log(unpackForm.value);
+      let formPm = {};
+      // 如果直接 unpackForm.value.ksh = null; 触发表单验证！
+      if (!unpack.showSwitch) {
+        formPm = { ...unpackForm.value, ksh: "" };
+      } else {
+        formPm = unpackForm.value;
+      }
+      formPm.params = {};
+      formPm.params["getMatUpDateEmsSwitch"] = unpack.getMatUpDateEmsSwitch;
+      formPm.params["updateClassSwitch"] = unpack.updateClassSwitch;
+      //  formPm.params["getClass"] =  unpack.getClassShow ;
+      console.log(formPm);
+      unpackEms(formPm).then((response) => {
+        console.log(response);
+        const resData = response.data;
+        // classEntity
+        if (unpack.getClassShow) {
+          unpack.classMsgType = "success";
+          unpack.classMsg =
+            "学号 " +
+            resData.classEntity.xuehao +
+            ", 姓名 " +
+            resData.classEntity.xm +
+            ", 班级 " +
+            resData.classEntity.bj +
+            ", 序号 " +
+            resData.classEntity.xh;
+        }
+        if (unpack.updateClassSwitch) {
+          resData.updateClassState > 0
+            ? ElMessage.success("更新档案提交情况成功")
+            : ElMessage.error("更新档案提交情况失败");
+        }
+        setTimeout(() => {
+          resData.unpackState > 0
+            ? ElMessage.success("更新EMS邮寄档案数据成功")
+            : ElMessage.error("更新EMS邮寄档案数据失败");
+        }, 100);
       });
     }
   });
