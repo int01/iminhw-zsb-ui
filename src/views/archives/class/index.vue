@@ -127,7 +127,33 @@
         >
       </el-col>
       <!-- 导入数据（主要导入分班数据） -->
-
+      <el-col :span="1.5">
+        <el-tooltip
+          class="box-item"
+          effect="dark"
+          content="主要使用场景是导入分班数据"
+          placement="top"
+        >
+          <el-button
+            type="danger"
+            plain
+            icon="Upload"
+            @click="handleImport"
+            v-hasPermi="['archives:class:import']"
+            >导入
+          </el-button>
+        </el-tooltip>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="warning"
+          plain
+          icon="Postcard"
+          @click="handleCollect"
+          v-hasPermi="['archives:class:']"
+          >现场收集</el-button
+        >
+      </el-col>
       <right-toolbar
         v-model:showSearch="showSearch"
         @queryTable="getList"
@@ -141,7 +167,7 @@
     >
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="学号" align="center" prop="xuehao" />
-      <el-table-column label="序号" align="center" prop="xh" />
+      <el-table-column label="档案序号" sortable align="center" prop="xh" />
       <el-table-column label="班级" align="center" prop="bj" />
       <el-table-column label="姓名" align="center" prop="xm" />
       <el-table-column label="档案状态" align="center" prop="dazt">
@@ -199,8 +225,8 @@
             placeholder="请输入学号"
           />
         </el-form-item>
-        <el-form-item label="序号" prop="xh">
-          <el-input v-model="form.xh" placeholder="请输入序号" />
+        <el-form-item label="档案序号" prop="xh">
+          <el-input v-model="form.xh" placeholder="请输入档案序号" />
         </el-form-item>
         <el-form-item label="班级" prop="bj">
           <el-input v-model="form.bj" placeholder="请输入班级" />
@@ -249,6 +275,73 @@
         </div>
       </template>
     </el-dialog>
+
+    <!-- 数据导入对话框 -->
+    <el-dialog
+      :title="upload.title"
+      v-model="upload.open"
+      width="400px"
+      append-to-body
+    >
+      <el-upload
+        ref="uploadRef"
+        :limit="1"
+        accept=".xlsx, .xls"
+        :headers="upload.headers"
+        :action="upload.url + '?updateSupport=' + upload.updateSupport"
+        :disabled="upload.isUploading"
+        :on-progress="handleFileUploadProgress"
+        :on-success="handleFileSuccess"
+        :auto-upload="false"
+        drag
+      >
+        <el-icon class="el-icon--upload">
+          <upload-filled />
+        </el-icon>
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        <template #tip>
+          <div class="el-upload__tip text-center">
+            <div class="el-upload__tip">
+              <el-checkbox v-model="upload.updateSupport" />
+              是否更新已经存在的数据
+            </div>
+            <span>仅允许导入xls、xlsx格式文件。</span>
+            <el-link
+              type="primary"
+              :underline="false"
+              style="font-size: 12px; vertical-align: baseline"
+              @click="importTemplate"
+              >下载模板
+            </el-link>
+          </div>
+        </template>
+      </el-upload>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="submitFileForm">确 定</el-button>
+          <el-button @click="upload.open = false">取 消</el-button>
+        </div>
+      </template>
+    </el-dialog>
+
+    <el-dialog
+      :title="collect.title"
+      v-model="collect.open"
+      width="40%"
+      append-to-body
+      show-close
+      center
+    >
+      学号：
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="">确 定</el-button>
+          <el-button type="warning" @click="">暂 缓</el-button>
+          <el-button @click="collect.open = false">关 闭</el-button>
+        </div>
+      </template>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -260,6 +353,8 @@ import {
   addClass,
   updateClass,
 } from "@/api/archives/class";
+
+import { getToken } from "@/utils/auth";
 
 const { proxy } = getCurrentInstance();
 const { data_status, archives_class_status } = proxy.useDict(
@@ -294,7 +389,7 @@ const data = reactive({
   },
   rules: {
     xuehao: [{ required: true, message: "学号不能为空", trigger: "blur" }],
-    xh: [{ required: true, message: "序号不能为空", trigger: "blur" }],
+    xh: [{ required: true, message: "档案序号不能为空", trigger: "blur" }],
     xm: [{ required: true, message: "姓名不能为空", trigger: "blur" }],
     bj: [{ required: true, message: "班级不能为空", trigger: "blur" }],
     ksh: [{ required: true, message: "考生号不能为空", trigger: "blur" }],
@@ -303,6 +398,27 @@ const data = reactive({
 });
 
 const { queryParams, form, rules } = toRefs(data);
+
+/*** 导入参数 */
+const upload = reactive({
+  // 是否显示弹出层（导入）
+  open: false,
+  // 弹出层标题（导入）
+  title: "",
+  // 是否禁用上传
+  isUploading: false,
+  // 是否更新已经存在的用户数据
+  updateSupport: 0,
+  // 设置上传的请求头部
+  headers: { Authorization: "Bearer " + getToken() },
+  // 上传的地址
+  url: import.meta.env.VITE_APP_BASE_API + "/archives/class/importData",
+});
+
+const collect = reactive({
+  open: false,
+  title: "",
+});
 
 /** 查询档案收集列表 */
 function getList() {
@@ -425,6 +541,52 @@ function handleExport() {
     `class_${new Date().getTime()}.xlsx`
   );
 }
+
+
+/** 导入按钮操作 */
+function handleImport() {
+  upload.title = "档案收集情况导入";
+  upload.open = true;
+}
+
+/** 下载模板操作 */
+function importTemplate() {
+  proxy.download(
+    "/archives/class/importTemplate",
+    {},
+    `class_${new Date().getTime()}.xlsx`
+  );
+}
+
+/**文件上传中处理 */
+const handleFileUploadProgress = (event, file, fileList) => {
+  upload.isUploading = true;
+};
+/** 文件上传成功处理 */
+const handleFileSuccess = (response, file, fileList) => {
+  upload.open = false;
+  upload.isUploading = false;
+  proxy.$refs["uploadRef"].handleRemove(file);
+  proxy.$alert(
+    "<div style='overflow: auto;overflow-x: hidden;max-height: 70vh;padding: 10px 20px 0;'>" +
+      response.msg +
+      "</div>",
+    "导入结果",
+    { dangerouslyUseHTMLString: true }
+  );
+  getList();
+};
+
+/** 提交上传文件 */
+function submitFileForm() {
+  proxy.$refs["uploadRef"].submit();
+}
+
+/** 打开档案收集框 */
+function handleCollect(){
+  collect.open = true;
+}
+
 
 getList();
 </script>
