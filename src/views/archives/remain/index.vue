@@ -386,7 +386,7 @@ function reset() {
     ksh: null,
     sfzh: null,
     bj: null,
-    status: null,
+    status: 0,
     createBy: null,
     updateBy: null,
     remark: null,

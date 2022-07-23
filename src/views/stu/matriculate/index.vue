@@ -353,7 +353,7 @@ const data = reactive({
     xm: null,
     zy: null,
     dq: null,
-    status: null,
+    status: 0,
     createTime: null,
   },
   rules: {

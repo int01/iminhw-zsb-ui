@@ -253,7 +253,7 @@ function reset() {
   form.value = {
     zy: null,
     xy: null,
-    status: null,
+    status: 0,
     createBy: null,
     updateBy: null,
     remark: null,

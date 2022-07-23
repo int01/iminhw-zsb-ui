@@ -211,7 +211,7 @@
         <el-form-item label="考生号" prop="ksh">
           <el-input v-model="form.ksh" placeholder="请输入考生号" />
         </el-form-item>
-        <el-form-item label="档案状态">
+        <el-form-item label="档案状态" prop="dazt">
           <el-radio-group v-model="form.dazt">
             <el-radio
               v-for="dict in archives_class_status"
@@ -298,6 +298,7 @@ const data = reactive({
     xm: [{ required: true, message: "姓名不能为空", trigger: "blur" }],
     bj: [{ required: true, message: "班级不能为空", trigger: "blur" }],
     ksh: [{ required: true, message: "考生号不能为空", trigger: "blur" }],
+    dazt: { required: true, trigger: "change", message: "请选择档案状态" },
   },
 });
 
@@ -326,7 +327,7 @@ function reset() {
     xh: null,
     bj: null,
     xm: null,
-    dazt: 1,
+    dazt: null,
     ksh: null,
     sfzh: null,
     status: 0,

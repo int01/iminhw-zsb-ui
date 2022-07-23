@@ -86,10 +86,12 @@
       <el-col :xs="24" :sm="24" :md="12" :lg="8">
         <el-card class="update-log">
           <el-collapse>
-             <el-collapse-item title="v2.0 - 2022-07-22">
+             <el-collapse-item title="v2.0 - 2022-07-23">
               <ol>
                 <li>修复个性化设置（布局设置）主题色不能控制页面颜色的问题</li>
                 <li>调整登陆页样式</li>
+                <li>修正录取数据和通知书邮寄记录导入数据的返回方式；新增邮寄档案验证更新方法
+,修改默认查询排序问题</li>
               </ol>
               </el-collapse-item>
             <el-collapse-item title="v2.0 - 2022-07-20">

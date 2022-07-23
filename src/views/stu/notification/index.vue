@@ -465,7 +465,7 @@ function reset() {
     yzbh: null,
     lxdh: null,
     yjdz: null,
-    status: null,
+    status: 0,
     createBy: null,
     updateBy: null,
     remark: null,
