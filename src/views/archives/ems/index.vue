@@ -609,16 +609,14 @@ const verify = reactive({
 });
 
 const unpack = reactive({
-  // 是否显示弹出层
   open: false,
-  // 弹出层标题
   title: "",
-  showSwitch: true,
+  showSwitch: false,
   classMsg: "等待操作...",
   classMsgType: "info",
-  getMatUpDateEmsSwitch: true,
-  updateClassSwitch: true,
-  getClassShow: true,
+  getMatUpDateEmsSwitch: false,
+  updateClassSwitch: false,
+  getClassShow: false,
 });
 
 const data = reactive({
@@ -790,7 +788,6 @@ function handleVerify() {
 }
 
 function handleUnpack() {
-  unpackForm.value.sfda = 1;
   unpack.title = "拆袋录入辅助";
   unpack.open = true;
 }
@@ -874,79 +871,6 @@ function handleRadioChange(e) {
   }
 }
 
-// function handleGetMatEntity() {
-//     console.log("handleGetMatEntity "+unpackSubmitvt)
-//   if (unpackSubmitvt) {
-//     return false;
-//   }
-//   /** 按考生号得到录取信息  */
-//   getMatriculate(unpackForm.value.ksh).then((response) => {
-//     const data = response.data;
-//     if (!data) {
-//       if (unpack.getMatUpDateEmsSwitch) {
-//         unpackForm.value = {
-//           ...unpackForm.value,
-//           xm: data.xm,
-//           sfzh: data.sfzh,
-//         };
-//       } else {
-//         unpackForm.value = { ...unpackForm.value };
-//       }
-//     } else {
-//       unpackSubmitvt = false;
-//       ElMessage.error("该考生录取信息存在异常！");
-//     }
-//   });
-// }
-/** 得到档案收集里的班级数据 */
-// function handleGetClassEntity() {
-//   console.log("handleGetClassEntity "+unpackSubmitvt)
-//   if (unpackSubmitvt) {
-//     return false;
-//   }
-//   getClassByKsh(unpackForm.value.ksh).then((response) => {
-//     // console.log("handleGetClassEntity")
-//     // console.log(response);
-//     if (response.data != null) {
-//       if (unpack.getClassShow) {
-//         unpack.classMsgType = "success";
-//         unpack.classMsg =
-//           "学号 " +
-//           response.data.xuehao +
-//           ", 姓名 " +
-//           response.data.xm +
-//           ", 班级 " +
-//           response.data.bj +
-//           ", 序号 " +
-//           response.data.xh;
-//       }
-//     } else {
-//       unpack.classMsgType = "error";
-//       unpack.classMsg = "该考生班级信息异常";
-//       unpackSubmitvt = false;
-//       ElMessage.error("该考生班级信息异常");
-//     }
-//   });
-// }
-
-// /** 更新档案收集里的档案状态 */
-// function handleUpdateClass() {
-//   if (unpack.updateClassSwitch) {
-//     const p = { ksh: unpackForm.value.ksh, dazt: 1 };
-//     console.log(unpackSubmitvt)
-//     if (unpackSubmitvt) {
-//       updateClassByKsh(p).then((response) => {
-//         if (response.code != "200") {
-//           ElMessage.success("更新班级考生档案状态成功");
-//         } else {
-//           unpackSubmitvt = false;
-//           ElMessage.error("更新班级考生档案状态失败，该考生班级信息异常");
-//         }
-//       });
-//     }
-//   }
-// }
-
 function submitUnpackForm() {
   proxy.$refs["unpackRef"].validate((valid) => {
     console.log(valid);
@@ -962,11 +886,12 @@ function submitUnpackForm() {
       formPm.params = {};
       formPm.params["getMatUpDateEmsSwitch"] = unpack.getMatUpDateEmsSwitch;
       formPm.params["updateClassSwitch"] = unpack.updateClassSwitch;
-      //  formPm.params["getClass"] =  unpack.getClassShow ;
+      formPm.params["showSwitch"] = unpack.showSwitch;
       console.log(formPm);
       unpackEms(formPm).then((response) => {
         console.log(response);
         const resData = response.data;
+        if(unpack.showSwitch){
         // classEntity
         if (unpack.getClassShow) {
           unpack.classMsgType = "success";
@@ -984,6 +909,7 @@ function submitUnpackForm() {
           resData.updateClassState > 0
             ? ElMessage.success("更新档案提交情况成功")
             : ElMessage.error("更新档案提交情况失败");
+        }
         }
         setTimeout(() => {
           resData.unpackState > 0
