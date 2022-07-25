@@ -328,11 +328,23 @@
       :title="collect.title"
       v-model="collect.open"
       width="40%"
+      fullscreen
       append-to-body
       show-close
       center
     >
+    
       学号：
+      <el-button type="primary" @click="innerVisible = true"
+          >open the inner Dialog</el-button
+        >
+       <el-dialog
+        draggable
+        v-model="innerVisible"
+        width="30%"
+        title="Inner Dialog"
+        append-to-body
+      />
       <template #footer>
         <div class="dialog-footer">
           <el-button type="primary" @click="">确 定</el-button>
@@ -371,8 +383,9 @@ const single = ref(true);
 const multiple = ref(true);
 const total = ref(0);
 const title = ref("");
-
 const addFlag = ref(false);
+
+const innerVisible = ref(false)
 
 const data = reactive({
   form: {},

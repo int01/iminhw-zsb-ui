@@ -234,11 +234,14 @@
         <el-form-item label="联系电话" prop="lxdh">
           <el-input v-model="form.lxdh" placeholder="请输入联系电话" />
         </el-form-item>
-        <el-form-item label="地区" prop="dq">
-          <el-input v-model="form.dz" placeholder="请输入考生学籍地区" />
+        <el-form-item label="学籍地区" prop="dq">
+          <el-input v-model="form.dq" placeholder="请输入考生学籍地区" />
         </el-form-item>
         <el-form-item label="邮寄地址" prop="dz">
           <el-input v-model="form.dz" placeholder="请输入地址" />
+        </el-form-item>
+        <el-form-item label="序号" prop="xh">
+          <el-input v-model="form.xh" placeholder="请输入录取流水号" />
         </el-form-item>
         <el-form-item label="数据状态" prop="status">
           <el-select v-model="form.status" placeholder="请选择数据状态">

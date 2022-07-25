@@ -456,10 +456,11 @@
     <el-dialog
       :title="unpack.title"
       v-model="unpack.open"
-      width="400px"
+      width="420px"
       @close="handleModelClass"
       append-to-body
       draggable
+      center
     >
       <el-form
         ref="unpackRef"
@@ -891,31 +892,36 @@ function submitUnpackForm() {
       unpackEms(formPm).then((response) => {
         console.log(response);
         const resData = response.data;
-        if(unpack.showSwitch){
-        // classEntity
-        if (unpack.getClassShow) {
-          unpack.classMsgType = "success";
-          unpack.classMsg =
-            "学号 " +
-            resData.classEntity.xuehao +
-            ", 姓名 " +
-            resData.classEntity.xm +
-            ", 班级 " +
-            resData.classEntity.bj +
-            ", 序号 " +
-            resData.classEntity.xh;
-        }
-        if (unpack.updateClassSwitch) {
-          resData.updateClassState > 0
-            ? ElMessage.success("更新档案提交情况成功")
-            : ElMessage.error("更新档案提交情况失败");
-        }
+        if (unpack.showSwitch) {
+          // classEntity
+          if (unpack.getClassShow) {
+            if (resData.classEntity) {
+              unpack.classMsgType = "success";
+              unpack.classMsg =
+                "学号 " +
+                resData.classEntity.xuehao +
+                ", 姓名 " +
+                resData.classEntity.xm +
+                ", 班级 " +
+                resData.classEntity.bj +
+                ", 档案序号 " +
+                resData.classEntity.xh;
+            } else {
+              unpack.classMsgType = "error";
+              unpack.classMsg = "找不到该考生号对应的分班数据";
+            }
+          }
+          if (unpack.updateClassSwitch) {
+            resData.updateClassState > 0
+              ? ElMessage.success("更新档案提交情况成功")
+              : ElMessage.error("更新档案提交情况失败");
+          }
         }
         setTimeout(() => {
           resData.unpackState > 0
             ? ElMessage.success("更新EMS邮寄档案数据成功")
             : ElMessage.error("更新EMS邮寄档案数据失败");
-        }, 100);
+        }, 500);
       });
     }
   });
