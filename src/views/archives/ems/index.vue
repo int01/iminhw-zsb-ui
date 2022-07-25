@@ -174,7 +174,7 @@
     >
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="ID" align="center" prop="id" />
-      <el-table-column label="序号" sortable align="center" prop="xh" />
+      <el-table-column label="快递序号" sortable align="center" prop="xh" />
       <el-table-column label="快递单号" align="center" prop="kddh" />
       <el-table-column label="签收验证" align="center" prop="qsyz">
         <template #default="scope">
@@ -257,12 +257,12 @@
         <el-form-item label="快递单号" prop="kddh">
           <el-input v-model="form.kddh" placeholder="请输入快递单号" />
         </el-form-item>
-        <el-form-item label="序号" prop="xh">
+        <el-form-item label="快递序号" prop="xh">
           <el-input-number
             controls-position="right"
             :min="0"
             v-model="form.xh"
-            placeholder="请输入序号"
+            placeholder="请输入未拆袋快递流水号"
           />
         </el-form-item>
         <el-form-item label="签收验证" prop="qsyz">
@@ -408,15 +408,15 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="序号" prop="xh">
+        <el-form-item label="快递序号" prop="xh">
           <el-tooltip
             class="box-item"
             effect="dark"
-            content="默认值（当年序号最大值+1），如需调整则输入，每次验证成功都会自动+1"
+            content="默认值（当年快递序号最大值+1），如需调整则输入，每次验证成功都会自动+1"
             placement="top"
           >
             <el-input-number
-              placeholder="请输入序号(流水号)"
+              placeholder="请输入未拆袋快递流水号"
               v-model="verifyFrom.xh"
               controls-position="right"
               :min="0"

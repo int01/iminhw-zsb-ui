@@ -237,7 +237,7 @@
         <el-form-item label="学籍地区" prop="dq">
           <el-input v-model="form.dq" placeholder="请输入考生学籍地区" />
         </el-form-item>
-        <el-form-item label="邮寄地址" prop="dz">
+        <el-form-item label="地址" prop="dz">
           <el-input v-model="form.dz" placeholder="请输入地址" />
         </el-form-item>
         <el-form-item label="序号" prop="xh">
