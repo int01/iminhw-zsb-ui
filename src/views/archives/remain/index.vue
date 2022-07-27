@@ -135,9 +135,9 @@
     >
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="编号" align="center" prop="id" />
-      <el-table-column label="序号" align="center" prop="xh" />
-      <el-table-column label="姓名" align="center" prop="xm" />
-      <el-table-column label="学年" align="center" prop="nf" />
+      <el-table-column label="档案序号" min-width="100" sortable align="center" prop="xh" />
+      <el-table-column label="姓名" min-width="100" align="center" prop="xm" />
+      <el-table-column label="学年" min-width="80" align="center" prop="nf" />
       <el-table-column label="数据状态" align="center" prop="status">
         <template #default="scope">
           <dict-tag :options="data_status" :value="scope.row.status" />
@@ -151,7 +151,7 @@
         align="center"
         prop="updateTime"
         sortable
-        width="120"
+        min-width="120"
         :show-overflow-tooltip="true"
       >
         <template #default="scope">
@@ -163,7 +163,7 @@
         align="center"
         prop="createTime"
         sortable
-        width="120"
+        min-width="120"
         :show-overflow-tooltip="true"
       >
         <template #default="scope">
@@ -172,6 +172,8 @@
       </el-table-column>
       <el-table-column
         label="操作"
+        fixed="right"
+        min-width="140"
         align="center"
         class-name="small-padding fixed-width"
       >

@@ -166,16 +166,16 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="学号" align="center" prop="xuehao" />
-      <el-table-column label="档案序号" sortable align="center" prop="xh" />
+      <el-table-column label="学号" min-width="100" fixed align="center" prop="xuehao" />
+      <el-table-column label="档案序号" min-width="100" fixed sortable align="center" prop="xh" />
       <el-table-column label="班级" align="center" prop="bj" />
-      <el-table-column label="姓名" align="center" prop="xm" />
+      <el-table-column label="姓名" min-width="100" align="center" prop="xm" />
       <el-table-column label="档案状态" align="center" prop="dazt">
         <template #default="scope">
           <dict-tag :options="archives_class_status" :value="scope.row.dazt" />
         </template>
       </el-table-column>
-      <el-table-column label="考生号" align="center" prop="ksh" />
+      <el-table-column label="考生号" min-width="135" align="center" prop="ksh" />
       <!-- <el-table-column label="身份证号" align="center" prop="sfzh" /> -->
       <el-table-column label="数据状态" align="center" prop="status">
         <template #default="scope">
@@ -185,6 +185,8 @@
       <!-- <el-table-column label="备注" align="center" prop="remark" /> -->
       <el-table-column
         label="操作"
+        fixed="right"
+        min-width="140"
         align="center"
         class-name="small-padding fixed-width"
       >

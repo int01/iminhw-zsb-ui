@@ -174,8 +174,8 @@
     >
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="ID" align="center" prop="id" />
-      <el-table-column label="快递序号" sortable align="center" prop="xh" />
-      <el-table-column label="快递单号" align="center" prop="kddh" />
+      <el-table-column label="快递序号" min-width="100" sortable align="center" prop="xh" />
+      <el-table-column label="快递单号" min-width="130" align="center" prop="kddh" />
       <el-table-column label="签收验证" align="center" prop="qsyz">
         <template #default="scope">
           <dict-tag :options="ems_validated" :value="scope.row.qsyz" />
@@ -186,8 +186,8 @@
           <dict-tag :options="in_archives_ems_danan" :value="scope.row.sfda" />
         </template>
       </el-table-column>
-      <el-table-column label="姓名" align="center" prop="xm" />
-      <el-table-column label="考生号" align="center" prop="ksh" />
+      <el-table-column label="姓名" min-width="100" align="center" prop="xm" />
+      <el-table-column label="考生号" min-width="135" align="center" prop="ksh" />
       <!-- <el-table-column label="身份证号" align="center" prop="sfzh" /> -->
       <el-table-column label="数据状态" align="center" prop="status">
         <template #default="scope">
@@ -200,7 +200,7 @@
         align="center"
         prop="updateTime"
         sortable
-        width="120"
+        min-width="120"
         :show-overflow-tooltip="true"
       >
         <template #default="scope">
@@ -212,7 +212,7 @@
         align="center"
         prop="createTime"
         sortable
-        width="120"
+        min-width="120"
         :show-overflow-tooltip="true"
       >
         <template #default="scope">
@@ -221,6 +221,8 @@
       </el-table-column>
       <el-table-column
         label="操作"
+        fixed="right"
+        min-width="140"
         align="center"
         class-name="small-padding fixed-width"
       >

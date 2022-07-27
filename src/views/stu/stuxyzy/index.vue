@@ -100,8 +100,8 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="专业" align="center" prop="zy" />
-      <el-table-column label="学院" sortable align="center" prop="xy" />
+      <el-table-column label="专业" min-width="160" align="center" prop="zy" />
+      <el-table-column label="学院" min-width="130" sortable align="center" prop="xy" />
       <el-table-column label="数据状态" align="center" prop="status">
         <template #default="scope">
           <dict-tag :options="data_status" :value="scope.row.status" />
@@ -113,7 +113,7 @@
         align="center"
         prop="createTime"
         sortable
-        width="120"
+        min-width="120"
         :show-overflow-tooltip="true"
       >
         <template #default="scope">
@@ -124,6 +124,8 @@
       </el-table-column>
       <el-table-column
         label="操作"
+        fixed="right"
+        min-width="140"
         align="center"
         class-name="small-padding fixed-width"
       >

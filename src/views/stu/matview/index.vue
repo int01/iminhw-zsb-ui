@@ -101,9 +101,7 @@
         >
       </el-col>
       <el-col :span="1.5">
-        <el-button plain icon="Close" @click="handleClose"
-          >关闭</el-button
-        >
+        <el-button plain icon="Close" @click="handleClose">关闭</el-button>
       </el-col>
       <right-toolbar
         v-model:showSearch="showSearch"
@@ -113,18 +111,60 @@
 
     <el-table v-loading="loading" :data="matviewList">
       <!-- <el-table-column type="selection" width="55" align="center" /> -->
-      <el-table-column label="序号" sortable align="center" prop="xh" />
-      <el-table-column label="考生号" align="center" prop="ksh" />
-      <el-table-column label="身份证号" align="center" prop="sfzh" />
-      <el-table-column label="姓名" sortable align="center" prop="xm" />
-      <el-table-column label="录取专业" sortable align="center" prop="zy" />
-      <el-table-column label="学院" sortable align="center" prop="xy" />
-      <el-table-column label="地区" sortable align="center" prop="dq" />
+      <el-table-column
+        label="序号"
+        fixed
+        min-width="105"
+        sortable
+        align="center"
+        prop="xh"
+      />
+      <el-table-column
+        label="姓名"
+        min-width="100"
+        fixed
+        sortable
+        align="center"
+        prop="xm"
+      />
+      <el-table-column
+        label="考生号"
+        min-width="135"
+        align="center"
+        prop="ksh"
+      />
+      <el-table-column
+        label="身份证号"
+        min-width="165"
+        align="center"
+        prop="sfzh"
+      />
+      <el-table-column
+        label="录取专业"
+        min-width="160"
+        sortable
+        align="center"
+        prop="zy"
+      />
+      <el-table-column
+        label="学院"
+        min-width="130"
+        sortable
+        align="center"
+        prop="xy"
+      />
+      <el-table-column
+        label="地区"
+        min-width="90"
+        sortable
+        align="center"
+        prop="dq"
+      />
       <el-table-column
         label="创建时间"
         align="center"
         prop="createTime"
-        width="180"
+        min-width="180"
       >
         <template #default="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>

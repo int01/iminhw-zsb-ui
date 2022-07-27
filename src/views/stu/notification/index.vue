@@ -147,11 +147,12 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="考生号" align="center" prop="ksh" />
-      <el-table-column label="快递单号" align="center" prop="kddh" />
-      <el-table-column label="姓名"  sortable align="center" prop="xm" />
+      <el-table-column label="考生号" fixed
+        min-width="135" align="center" prop="ksh" />
+      <el-table-column label="姓名" min-width="100" fixed sortable align="center" prop="xm" />
+      <el-table-column label="快递单号" min-width="130"  align="center" prop="kddh" />
+      <el-table-column label="联系电话" min-width="110" align="center" prop="lxdh" />
       <!-- <el-table-column label="邮政编码" align="center" prop="yzbh" /> -->
-      <el-table-column label="联系电话" align="center" prop="lxdh" />
       <!-- <el-table-column label="邮寄地址" align="center" prop="yjdz" /> -->
       <el-table-column label="数据状态" align="center" prop="status">
         <template #default="scope">
@@ -164,7 +165,7 @@
         align="center"
         prop="createTime"
         sortable
-        width="120"
+        min-width="120"
         :show-overflow-tooltip="true"
       >
         <template #default="scope">
@@ -173,6 +174,8 @@
       </el-table-column>
       <el-table-column
         label="操作"
+        fixed="right"
+        min-width="140"
         align="center"
         class-name="small-padding fixed-width"
       >

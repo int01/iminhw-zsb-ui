@@ -152,11 +152,40 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="考生号" align="center" prop="ksh" />
-      <el-table-column label="身份证号" align="center" prop="sfzh" />
-      <el-table-column label="姓名" sortable align="center" prop="xm" />
-      <el-table-column label="录取专业" sortable align="center" prop="zy" />
-      <el-table-column label="联系电话" align="center" prop="lxdh" />
+      <el-table-column
+        label="考生号"
+        fixed
+        min-width="135"
+        align="center"
+        prop="ksh"
+      />
+      <el-table-column
+        label="姓名"
+        fixed
+        min-width="100"
+        sortable
+        align="center"
+        prop="xm"
+      />
+      <el-table-column
+        label="身份证号"
+        min-width="165"
+        align="center"
+        prop="sfzh"
+      />
+      <el-table-column
+        label="录取专业"
+        min-width="160"
+        sortable
+        align="center"
+        prop="zy"
+      />
+      <el-table-column
+        label="联系电话"
+        min-width="110"
+        align="center"
+        prop="lxdh"
+      />
       <el-table-column label="学籍地区" align="center" prop="dq" />
       <el-table-column label="数据状态" align="center" prop="status">
         <template #default="scope">
@@ -168,7 +197,7 @@
         align="center"
         prop="createTime"
         sortable
-        width="120"
+        min-width="120"
         :show-overflow-tooltip="true"
       >
         <template #default="scope">
@@ -177,6 +206,8 @@
       </el-table-column>
       <el-table-column
         label="操作"
+        fixed="right"
+        min-width="140"
         align="center"
         class-name="small-padding fixed-width"
       >
