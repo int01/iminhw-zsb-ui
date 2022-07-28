@@ -98,10 +98,11 @@
       v-loading="loading"
       :data="stuxyzyList"
       @selection-change="handleSelectionChange"
+      @sort-change="handleSortChange"
     >
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="专业" min-width="160" align="center" prop="zy" />
-      <el-table-column label="学院" min-width="130" sortable align="center" prop="xy" />
+      <el-table-column label="专业" min-width="160" sortable='custom' align="center" prop="zy" />
+      <el-table-column label="学院" min-width="130" sortable='custom' align="center" prop="xy" />
       <el-table-column label="数据状态" align="center" prop="status">
         <template #default="scope">
           <dict-tag :options="data_status" :value="scope.row.status" />
@@ -112,7 +113,7 @@
         label="创建时间"
         align="center"
         prop="createTime"
-        sortable
+        sortable='custom'
         min-width="120"
         :show-overflow-tooltip="true"
       >
@@ -222,6 +223,8 @@ const data = reactive({
   queryParams: {
     pageNum: 1,
     pageSize: 10,
+    orderByColumn: "create_time",
+    isAsc: "desc",
     zy: null,
     xy: null,
     status: null,
@@ -282,6 +285,13 @@ function handleSelectionChange(selection) {
   rowIds.value = selection.map((item) => item.zy);
   single.value = selection.length != 1;
   multiple.value = !selection.length;
+}
+
+/** 排序触发事件 */
+function handleSortChange(column, prop, order) {
+  queryParams.value.orderByColumn = column.prop;
+  queryParams.value.isAsc = column.order;
+  getList();
 }
 
 /** 新增按钮操作 */

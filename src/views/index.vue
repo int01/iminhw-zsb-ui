@@ -1,6 +1,7 @@
 <template>
   <div class="app-container home">
-    <el-row :gutter="20">
+    <h1>等待开发中。。。</h1>
+    <!-- <el-row :gutter="20">
       <el-col :sm="24" :lg="24">
         <blockquote class="text-warning" style="font-size: 14px">
           1、
@@ -121,11 +122,6 @@
             </div>
           </template>
           <div class="body">
-<!--            <img-->
-<!--              src="h3.png"-->
-<!--              alt="img"-->
-<!--              style="width:100%"-->
-<!--            />-->
             <br/>
             <span style="display: inline-block; height: 30px; line-height: 30px"
               >body</span
@@ -133,7 +129,7 @@
           </div>
         </el-card>
       </el-col>
-    </el-row>
+    </el-row> -->
   </div>
 </template>
 

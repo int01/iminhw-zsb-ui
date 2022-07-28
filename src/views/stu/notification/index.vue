@@ -145,11 +145,12 @@
       v-loading="loading"
       :data="notificationList"
       @selection-change="handleSelectionChange"
+      @sort-change="handleSortChange"
     >
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="考生号" fixed
         min-width="135" align="center" prop="ksh" />
-      <el-table-column label="姓名" min-width="100" fixed sortable align="center" prop="xm" />
+      <el-table-column label="姓名" min-width="100" fixed sortable='custom' align="center" prop="xm" />
       <el-table-column label="快递单号" min-width="130"  align="center" prop="kddh" />
       <el-table-column label="联系电话" min-width="110" align="center" prop="lxdh" />
       <!-- <el-table-column label="邮政编码" align="center" prop="yzbh" /> -->
@@ -164,7 +165,7 @@
         label="创建时间"
         align="center"
         prop="createTime"
-        sortable
+        sortable='custom'
         min-width="120"
         :show-overflow-tooltip="true"
       >
@@ -391,6 +392,8 @@ const data = reactive({
   queryParams: {
     pageNum: 1,
     pageSize: 10,
+    orderByColumn: "create_time",
+    isAsc: "desc",
     ksh: null,
     kddh: null,
     xm: null,
@@ -496,6 +499,13 @@ function handleSelectionChange(selection) {
   rowIds.value = selection.map((item) => item.ksh);
   single.value = selection.length != 1;
   multiple.value = !selection.length;
+}
+
+/** 排序触发事件 */
+function handleSortChange(column, prop, order) {
+  queryParams.value.orderByColumn = column.prop;
+  queryParams.value.isAsc = column.order;
+  getList();
 }
 
 /** 新增按钮操作 */

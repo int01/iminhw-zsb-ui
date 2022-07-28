@@ -132,25 +132,26 @@
       v-loading="loading"
       :data="remainList"
       @selection-change="handleSelectionChange"
+      @sort-change="handleSortChange"
     >
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="编号" align="center" prop="id" />
       <el-table-column label="档案序号" min-width="100" sortable align="center" prop="xh" />
-      <el-table-column label="姓名" min-width="100" align="center" prop="xm" />
-      <el-table-column label="学年" min-width="80" align="center" prop="nf" />
+      <el-table-column label="姓名" min-width="100" sortable='custom' align="center" prop="xm" />
+      <el-table-column label="学年" min-width="90" sortable='custom' align="center" prop="nf" />
       <el-table-column label="数据状态" align="center" prop="status">
         <template #default="scope">
           <dict-tag :options="data_status" :value="scope.row.status" />
         </template>
       </el-table-column>
-      <el-table-column label="创建人" align="center" prop="createBy" />
-      <el-table-column label="修改人" align="center" prop="updateBy" />
+      <el-table-column label="创建人" align="center" sortable='custom' prop="createBy" />
+      <el-table-column label="修改人" align="center" sortable='custom' prop="updateBy" />
       <!-- <el-table-column label="备注" align="center" prop="remark" /> -->
       <el-table-column
         label="更新时间"
         align="center"
         prop="updateTime"
-        sortable
+        sortable='custom'
         min-width="120"
         :show-overflow-tooltip="true"
       >
@@ -162,7 +163,7 @@
         label="创建时间"
         align="center"
         prop="createTime"
-        sortable
+        sortable='custom'
         min-width="120"
         :show-overflow-tooltip="true"
       >
@@ -329,6 +330,8 @@ const data = reactive({
   queryParams: {
     pageNum: 1,
     pageSize: 10,
+    orderByColumn: "id",
+    isAsc: "desc",
     xm: null,
     nf: null,
     ksh: null,
@@ -415,6 +418,13 @@ function handleSelectionChange(selection) {
   ids.value = selection.map((item) => item.id);
   single.value = selection.length != 1;
   multiple.value = !selection.length;
+}
+
+/** 排序触发事件 */
+function handleSortChange(column, prop, order) {
+  queryParams.value.orderByColumn = column.prop;
+  queryParams.value.isAsc = column.order;
+  getList();
 }
 
 /** 新增按钮操作 */

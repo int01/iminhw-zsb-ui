@@ -130,6 +130,7 @@
       v-loading="loading"
       :data="classtempList"
       @selection-change="handleSelectionChange"
+      @sort-change="handleSortChange"
     >
       <el-table-column type="selection" width="55" align="center" />
       <!-- <el-table-column label="id" align="center" prop="id" /> -->
@@ -137,6 +138,7 @@
         label="学号"
         min-width="100"
         fixed
+        sortable='custom'
         align="center"
         prop="xuehao"
       />
@@ -148,8 +150,8 @@
         align="center"
         prop="xh"
       />
-      <el-table-column label="班级" align="center" prop="bj" />
-      <el-table-column label="姓名" min-width="100" align="center" prop="xm" />
+      <el-table-column label="班级" sortable='custom' min-width="100" align="center" prop="bj" />
+      <el-table-column label="姓名" sortable='custom' min-width="100" align="center" prop="xm" />
       <el-table-column
         label="考生号"
         min-width="135"
@@ -167,7 +169,7 @@
         label="创建时间"
         align="center"
         prop="createTime"
-        sortable
+        sortable='custom'
         min-width="120"
         :show-overflow-tooltip="true"
       >
@@ -290,6 +292,8 @@ const data = reactive({
   queryParams: {
     pageNum: 1,
     pageSize: 10,
+    orderByColumn: "id",
+    isAsc: "desc",
     xuehao: null,
     xh: null,
     bj: null,
@@ -358,6 +362,13 @@ function handleSelectionChange(selection) {
   ids.value = selection.map((item) => item.id);
   single.value = selection.length != 1;
   multiple.value = !selection.length;
+}
+
+/** 排序触发事件 */
+function handleSortChange(column, prop, order) {
+  queryParams.value.orderByColumn = column.prop;
+  queryParams.value.isAsc = column.order;
+  getList();
 }
 
 /** 新增按钮操作 */

@@ -171,11 +171,23 @@
       v-loading="loading"
       :data="emsList"
       @selection-change="handleSelectionChange"
+      @sort-change="handleSortChange"
     >
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="ID" align="center" prop="id" />
-      <el-table-column label="快递序号" min-width="100" sortable align="center" prop="xh" />
-      <el-table-column label="快递单号" min-width="130" align="center" prop="kddh" />
+      <el-table-column
+        label="快递序号"
+        min-width="100"
+        sortable
+        align="center"
+        prop="xh"
+      />
+      <el-table-column
+        label="快递单号"
+        min-width="130"
+        align="center"
+        prop="kddh"
+      />
       <el-table-column label="签收验证" align="center" prop="qsyz">
         <template #default="scope">
           <dict-tag :options="ems_validated" :value="scope.row.qsyz" />
@@ -186,8 +198,19 @@
           <dict-tag :options="in_archives_ems_danan" :value="scope.row.sfda" />
         </template>
       </el-table-column>
-      <el-table-column label="姓名" min-width="100" align="center" prop="xm" />
-      <el-table-column label="考生号" min-width="135" align="center" prop="ksh" />
+      <el-table-column
+        label="姓名"
+        min-width="100"
+        sortable="custom"
+        align="center"
+        prop="xm"
+      />
+      <el-table-column
+        label="考生号"
+        min-width="135"
+        align="center"
+        prop="ksh"
+      />
       <!-- <el-table-column label="身份证号" align="center" prop="sfzh" /> -->
       <el-table-column label="数据状态" align="center" prop="status">
         <template #default="scope">
@@ -199,7 +222,7 @@
         label="更新时间"
         align="center"
         prop="updateTime"
-        sortable
+        sortable='custom'
         min-width="120"
         :show-overflow-tooltip="true"
       >
@@ -211,7 +234,7 @@
         label="创建时间"
         align="center"
         prop="createTime"
-        sortable
+        sortable='custom'
         min-width="120"
         :show-overflow-tooltip="true"
       >
@@ -629,6 +652,8 @@ const data = reactive({
   queryParams: {
     pageNum: 1,
     pageSize: 10,
+    orderByColumn: "id",
+    isAsc: "desc",
     kddh: null,
     qsyz: null,
     sfda: null,
@@ -708,6 +733,13 @@ function handleSelectionChange(selection) {
   ids.value = selection.map((item) => item.id);
   single.value = selection.length != 1;
   multiple.value = !selection.length;
+}
+
+/** 排序触发事件 */
+function handleSortChange(column, prop, order) {
+  queryParams.value.orderByColumn = column.prop;
+  queryParams.value.isAsc = column.order;
+  getList();
 }
 
 /** 新增按钮操作 */

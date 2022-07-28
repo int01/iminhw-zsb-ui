@@ -164,18 +164,37 @@
       v-loading="loading"
       :data="classList"
       @selection-change="handleSelectionChange"
+      @sort-change="handleSortChange"
     >
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="学号" min-width="100" fixed align="center" prop="xuehao" />
-      <el-table-column label="档案序号" min-width="100" fixed sortable align="center" prop="xh" />
-      <el-table-column label="班级" align="center" prop="bj" />
-      <el-table-column label="姓名" min-width="100" align="center" prop="xm" />
+      <el-table-column
+        label="学号"
+        min-width="100"
+        fixed
+        align="center"
+        sortable='custom'
+        prop="xuehao"
+      />
+      <el-table-column
+        label="档案序号"
+        min-width="90"
+        fixed
+        align="center"
+        prop="xh"
+      />
+      <el-table-column label="班级" sortable='custom' min-width="100" align="center" prop="bj" />
+      <el-table-column label="姓名" sortable='custom' min-width="100" align="center" prop="xm" />
       <el-table-column label="档案状态" align="center" prop="dazt">
         <template #default="scope">
           <dict-tag :options="archives_class_status" :value="scope.row.dazt" />
         </template>
       </el-table-column>
-      <el-table-column label="考生号" min-width="135" align="center" prop="ksh" />
+      <el-table-column
+        label="考生号"
+        min-width="135"
+        align="center"
+        prop="ksh"
+      />
       <!-- <el-table-column label="身份证号" align="center" prop="sfzh" /> -->
       <el-table-column label="数据状态" align="center" prop="status">
         <template #default="scope">
@@ -335,12 +354,11 @@
       show-close
       center
     >
-    
       学号：
       <el-button type="primary" @click="innerVisible = true"
-          >open the inner Dialog</el-button
-        >
-       <el-dialog
+        >open the inner Dialog</el-button
+      >
+      <el-dialog
         draggable
         v-model="innerVisible"
         width="30%"
@@ -355,7 +373,6 @@
         </div>
       </template>
     </el-dialog>
-
   </div>
 </template>
 
@@ -387,13 +404,15 @@ const total = ref(0);
 const title = ref("");
 const addFlag = ref(false);
 
-const innerVisible = ref(false)
+const innerVisible = ref(false);
 
 const data = reactive({
   form: {},
   queryParams: {
     pageNum: 1,
     pageSize: 10,
+    orderByColumn: "create_time",
+    isAsc: "desc",
     xuehao: null,
     bj: null,
     xm: null,
@@ -490,6 +509,13 @@ function handleSelectionChange(selection) {
   multiple.value = !selection.length;
 }
 
+/** 排序触发事件 */
+function handleSortChange(column, prop, order) {
+  queryParams.value.orderByColumn = column.prop;
+  queryParams.value.isAsc = column.order;
+  getList();
+}
+
 /** 新增按钮操作 */
 function handleAdd() {
   reset();
@@ -557,7 +583,6 @@ function handleExport() {
   );
 }
 
-
 /** 导入按钮操作 */
 function handleImport() {
   upload.title = "档案收集情况导入";
@@ -598,10 +623,9 @@ function submitFileForm() {
 }
 
 /** 打开档案收集框 */
-function handleCollect(){
+function handleCollect() {
   collect.open = true;
 }
-
 
 getList();
 </script>

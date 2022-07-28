@@ -109,13 +109,13 @@
       ></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="matviewList">
+    <el-table v-loading="loading" :data="matviewList" @sort-change="handleSortChange">
       <!-- <el-table-column type="selection" width="55" align="center" /> -->
       <el-table-column
         label="序号"
         fixed
         min-width="105"
-        sortable
+        sortable='custom'
         align="center"
         prop="xh"
       />
@@ -123,7 +123,7 @@
         label="姓名"
         min-width="100"
         fixed
-        sortable
+        sortable='custom'
         align="center"
         prop="xm"
       />
@@ -142,21 +142,21 @@
       <el-table-column
         label="录取专业"
         min-width="160"
-        sortable
+        sortable='custom'
         align="center"
         prop="zy"
       />
       <el-table-column
         label="学院"
         min-width="130"
-        sortable
+        sortable='custom'
         align="center"
         prop="xy"
       />
       <el-table-column
         label="地区"
         min-width="90"
-        sortable
+        sortable='custom'
         align="center"
         prop="dq"
       />
@@ -164,6 +164,7 @@
         label="创建时间"
         align="center"
         prop="createTime"
+        sortable='custom'
         min-width="180"
       >
         <template #default="scope">
@@ -198,6 +199,8 @@ const data = reactive({
   queryParams: {
     pageNum: 1,
     pageSize: 10,
+    orderByColumn: "create_time",
+    isAsc: "desc",
     xh: null,
     ksh: null,
     sfzh: null,
@@ -255,6 +258,13 @@ function handleExport() {
 function handleClose() {
   const obj = { path: "/stu/matriculate" };
   proxy.$tab.closeOpenPage(obj);
+}
+
+/** 排序触发事件 */
+function handleSortChange(column, prop, order) {
+  queryParams.value.orderByColumn = column.prop;
+  queryParams.value.isAsc = column.order;
+  getList();
 }
 
 getList();
