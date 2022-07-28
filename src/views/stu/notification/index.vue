@@ -5,7 +5,7 @@
       ref="queryRef"
       :inline="true"
       v-show="showSearch"
-      label-width="68px"
+      label-width="70px"
     >
       <el-form-item label="考生号" prop="ksh">
         <el-input
@@ -176,7 +176,7 @@
       <el-table-column
         label="操作"
         fixed="right"
-        min-width="140"
+        min-width="150"
         align="center"
         class-name="small-padding fixed-width"
       >

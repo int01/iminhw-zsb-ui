@@ -27,7 +27,7 @@
       </el-col>
       <!--用户数据-->
       <el-col :span="20" :xs="24">
-        <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
+        <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="70px">
           <el-form-item label="用户账号" prop="userName">
             <el-input
                 v-model="queryParams.userName"

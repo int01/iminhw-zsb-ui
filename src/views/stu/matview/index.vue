@@ -5,7 +5,7 @@
       ref="queryRef"
       :inline="true"
       v-show="showSearch"
-      label-width="68px"
+      label-width="70px"
     >
       <el-form-item label="序号" prop="xh">
         <el-input
@@ -141,14 +141,14 @@
       />
       <el-table-column
         label="录取专业"
-        min-width="160"
+        min-width="200"
         sortable='custom'
         align="center"
         prop="zy"
       />
       <el-table-column
         label="学院"
-        min-width="130"
+        min-width="150"
         sortable='custom'
         align="center"
         prop="xy"

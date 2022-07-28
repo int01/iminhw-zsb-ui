@@ -5,7 +5,7 @@
       ref="queryRef"
       :inline="true"
       v-show="showSearch"
-      label-width="68px"
+      label-width="70px"
     >
       <el-form-item label="考生号" prop="ksh">
         <el-input
@@ -176,7 +176,7 @@
       />
       <el-table-column
         label="录取专业"
-        min-width="160"
+        min-width="200"
         sortable='custom'
         align="center"
         prop="zy"
@@ -208,7 +208,7 @@
       <el-table-column
         label="操作"
         fixed="right"
-        min-width="140"
+        min-width="150"
         align="center"
         class-name="small-padding fixed-width"
       >
@@ -390,7 +390,7 @@ const data = reactive({
     xm: null,
     zy: null,
     dq: null,
-    status: 0,
+    status: null,
     createTime: null,
   },
   rules: {
@@ -451,7 +451,7 @@ function reset() {
     lxdh: null,
     dz: null,
     dq: null,
-    status: null,
+    status: 0,
     createBy: null,
     updateBy: null,
     remark: null,

@@ -1,6 +1,6 @@
 <template>
    <div class="app-container">
-      <el-form :model="queryParams" ref="queryRef" :inline="true" label-width="68px">
+      <el-form :model="queryParams" ref="queryRef" :inline="true" label-width="70px">
          <el-form-item label="登录IP" prop="ipaddr">
             <el-input
                v-model="queryParams.ipaddr"

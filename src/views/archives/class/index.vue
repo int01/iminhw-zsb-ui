@@ -5,7 +5,7 @@
       ref="queryRef"
       :inline="true"
       v-show="showSearch"
-      label-width="68px"
+      label-width="70px"
     >
       <el-form-item label="学号" prop="xuehao">
         <el-input
@@ -154,6 +154,9 @@
           >现场收集</el-button
         >
       </el-col>
+      <div id="printTable"></div>
+
+      <div @click="bindPrint">打印</div>
       <right-toolbar
         v-model:showSearch="showSearch"
         @queryTable="getList"
@@ -172,7 +175,7 @@
         min-width="100"
         fixed
         align="center"
-        sortable='custom'
+        sortable="custom"
         prop="xuehao"
       />
       <el-table-column
@@ -182,8 +185,20 @@
         align="center"
         prop="xh"
       />
-      <el-table-column label="班级" sortable='custom' min-width="100" align="center" prop="bj" />
-      <el-table-column label="姓名" sortable='custom' min-width="100" align="center" prop="xm" />
+      <el-table-column
+        label="班级"
+        sortable="custom"
+        min-width="100"
+        align="center"
+        prop="bj"
+      />
+      <el-table-column
+        label="姓名"
+        sortable="custom"
+        min-width="100"
+        align="center"
+        prop="xm"
+      />
       <el-table-column label="档案状态" align="center" prop="dazt">
         <template #default="scope">
           <dict-tag :options="archives_class_status" :value="scope.row.dazt" />
@@ -205,7 +220,7 @@
       <el-table-column
         label="操作"
         fixed="right"
-        min-width="140"
+        min-width="150"
         align="center"
         class-name="small-padding fixed-width"
       >
@@ -384,8 +399,10 @@ import {
   addClass,
   updateClass,
 } from "@/api/archives/class";
+import print from "print-js";
 
 import { getToken } from "@/utils/auth";
+import printJS from "print-js";
 
 const { proxy } = getCurrentInstance();
 const { data_status, archives_class_status } = proxy.useDict(
@@ -625,6 +642,38 @@ function submitFileForm() {
 /** 打开档案收集框 */
 function handleCollect() {
   collect.open = true;
+}
+
+function bindPrint() {
+  const  someJSONdata = [
+    {
+       name: 'John Doe',
+       email: 'john@doe.com',
+       phone: '111-111-1111'
+    },
+    {
+       name: 'Barry Allen',
+       email: 'barry@flash.com',
+       phone: '222-222-2222'
+    },
+    {
+       name: 'Cool Dude',
+       email: 'cool@dude.com',
+       phone: '333-333-3333'
+    }
+ ];
+  // printJS({
+  //   printable: "printTable",
+  //   type: "html",
+  //   header: null,
+  //   targetStyles: ["*"],
+  //   style: "@page {margin:0 10mm}",
+  // });
+  printJS({
+    printable: someJSONdata,
+    properties: ["name", "email", "phone"],
+    type: "json",
+  });
 }
 
 getList();
