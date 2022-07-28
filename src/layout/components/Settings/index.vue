@@ -1,7 +1,7 @@
 <template>
   <el-drawer v-model="showSettings" :withHeader="false" direction="rtl" size="300px">
     <div class="setting-drawer-title">
-      <h3 class="drawer-title">主题风格设置</h3>
+      <h3 class="drawer-title">个性化主题风格设置</h3>
     </div>
     <div class="setting-drawer-block-checbox">
       <div class="setting-drawer-block-checbox-item" @click="handleTheme('theme-dark')">
@@ -33,7 +33,7 @@
     </div>
     <el-divider />
 
-    <h3 class="drawer-title">系统布局配置</h3>
+    <h3 class="drawer-title">布局配置</h3>
 
     <div class="drawer-item">
       <span>开启 TopNav</span>
@@ -81,7 +81,7 @@
 <script setup>
 import variables from '@/assets/styles/variables.module.scss'
 import originElementPlus from 'element-plus/theme-chalk/index.css'
-import axios from 'axios'
+// import axios from 'axios'
 import { ElLoading, ElMessage } from 'element-plus'
 import { useDynamicTitle } from '@/utils/dynamicTitle'
 import useAppStore from '@/store/modules/app'

@@ -1,6 +1,7 @@
 import { login, logout, getInfo } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import defAva from '@/assets/images/profile.jpg'
+import { use } from 'echarts'
 
 const useUserStore = defineStore(
   'user',
@@ -9,6 +10,7 @@ const useUserStore = defineStore(
       token: getToken(),
       name: '',
       avatar: '',
+      nickName: '',
       roles: [],
       permissions: []
     }),
@@ -42,7 +44,8 @@ const useUserStore = defineStore(
             } else {
               this.roles = ['ROLE_DEFAULT']
             }
-            this.name = user.userName
+            this.name = user.userName;
+            this.nickName = user.nickName;
             this.avatar = avatar;
             resolve(res)
           }).catch(error => {
