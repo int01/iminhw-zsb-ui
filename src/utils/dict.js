@@ -1,4 +1,4 @@
-import { getDicts } from '@/api/system/dict/data'
+import { getDicts } from "@/api/system/dict/data";
 
 /**
  * 获取字典数据
@@ -8,10 +8,28 @@ export function useDict(...args) {
   return (() => {
     args.forEach((d, index) => {
       res.value[d] = [];
-      getDicts(d).then(resp => {
-        res.value[d] = resp.data.map(p => ({ label: p.dictLabel, value: p.dictValue, elTagType: p.listClass, elTagClass: p.cssClass }))
-      })
-    })
+      getDicts(d).then((resp) => {
+        res.value[d] = resp.data.map((p) => ({
+          label: p.dictLabel,
+          value: p.dictValue,
+          elTagType: p.listClass,
+          elTagClass: p.cssClass,
+        }));
+      });
+    });
     return toRefs(res.value);
-  })()
+  })();
+}
+
+export function dictTagFun(options, key) {
+  if(key == null) {
+    return "";
+  }
+  const items = options.value;
+  for (const index in items) {
+    if(items[index].value == key) {
+      return items[index].label;
+    }
+  }
+  return key;
 }

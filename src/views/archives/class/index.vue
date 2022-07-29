@@ -150,13 +150,22 @@
           plain
           icon="Postcard"
           @click="handleCollect"
-          v-hasPermi="['archives:class:']"
+          v-hasPermi="['archives:class:gather']"
           >现场收集</el-button
         >
       </el-col>
-      <div id="printTable"></div>
+      <el-col :span="1.5">
+        <el-button
+          type="info"
+          plain
+          icon="Printer"
+          v-hasPermi="['archives:class:print']"
+          @click="handlePrintDialog"
+          >打印</el-button
+        >
+      </el-col>
+      <!-- <div id="printTable"></div> -->
 
-      <div @click="bindPrint">打印</div>
       <right-toolbar
         v-model:showSearch="showSearch"
         @queryTable="getList"
@@ -360,6 +369,36 @@
       </template>
     </el-dialog>
 
+    <!-- 打印小工具 -->
+    <el-dialog
+      :title="print.title"
+      v-model="print.open"
+      width="300px"
+      append-to-body
+    >
+      <el-form ref="printRef" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="班级" prop="bj">
+          <el-input v-model="form.bj" placeholder="请输入班级" />
+        </el-form-item>
+        <el-form-item label="数据状态" prop="status">
+          <el-select v-model="form.status" placeholder="请选择数据状态">
+            <el-option
+              v-for="dict in data_status"
+              :key="dict.value"
+              :label="dict.label"
+              :value="parseInt(dict.value)"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="handlePrint">确 定</el-button>
+          <el-button @click="print.open = false">取 消</el-button>
+        </div>
+      </template>
+    </el-dialog>
+
     <el-dialog
       :title="collect.title"
       v-model="collect.open"
@@ -398,11 +437,11 @@ import {
   delClass,
   addClass,
   updateClass,
+  getClassListByBj,
 } from "@/api/archives/class";
-import print from "print-js";
 
 import { getToken } from "@/utils/auth";
-import printJS from "print-js";
+import printJS from "@/utils/print";
 
 const { proxy } = getCurrentInstance();
 const { data_status, archives_class_status } = proxy.useDict(
@@ -469,6 +508,11 @@ const upload = reactive({
 const collect = reactive({
   open: false,
   title: "",
+});
+
+const print = reactive({
+  open: false,
+  title: "打印辅助小工具",
 });
 
 /** 查询档案收集列表 */
@@ -644,24 +688,63 @@ function handleCollect() {
   collect.open = true;
 }
 
-function bindPrint() {
-  const  someJSONdata = [
-    {
-       name: 'John Doe',
-       email: 'john@doe.com',
-       phone: '111-111-1111'
-    },
-    {
-       name: 'Barry Allen',
-       email: 'barry@flash.com',
-       phone: '222-222-2222'
-    },
-    {
-       name: 'Cool Dude',
-       email: 'cool@dude.com',
-       phone: '333-333-3333'
+function handlePrintDialog() {
+  reset();
+  print.open = true;
+}
+
+function handlePrint() {
+  proxy.$refs["printRef"].validate((valid) => {
+    if (valid) {
+      getClassListByBj(form.value).then((response) => {
+        const someJSONdata = response.data || [];
+        // 如果不用翻译和不在意打印出来的是null，可直接使用 JSONdata
+        // const someJSONdata = [];
+        // for (const index in JSONdata) {
+        //   console.log(index);
+        //   someJSONdata.push({
+        //     xh: JSONdata[index].xh,
+        //     xm: JSONdata[index].xm,
+        //     dazt: 0,//archives_class_status
+        //     // sfzh: JSONdata[index].sfzhm,
+        //     remark: JSONdata[index].remark,
+        //   })
+        // }
+        const bj = form.value.bj;
+
+        printJS({
+          printable: someJSONdata,
+          // columnSize: '10%'
+          properties: [
+            { field: "xh", displayName: "序号", columnSize: "5%" },
+            { field: "xm", displayName: "姓名", columnSize: "20%" },
+            {
+              field: "dazt",
+              displayName: "档案提交情况",
+              columnSize: "15%",
+              dictOptions: archives_class_status,
+            },
+            // { field: "sfzh", displayName: "身份证号" },
+            { field: "remark", displayName: "备注" },
+          ],
+          type: "json",
+          header: `<div style="width: 100%; text-align: center;">
+                        <div style="font-size:14px">${bj}班入学档案提交情况</div>
+                        <div style="float: right; font-size: 10px;">总份数: _______________</div>
+                    </div>`,
+          documentTitle: `${bj}班入学档案提交情况`,
+          gridHeaderStyle:
+            "border: 1px solid #A8ABB2;text-align:center; font-family: '宋体'; font-size: 10px;",
+          gridStyle:
+            "border: 1px solid #A8ABB2;text-align:center; font-family: '宋体'; font-size: 8px;",
+          style: "@page {}",
+          font_size: "5px",
+        });
+      });
     }
- ];
+  });
+  // 谷歌浏览器的最小字体是12px，目前没有好的方案，禁止使用 -webkit-transform:scale(0.8); 或类似方案。
+  // 如果变成两张纸的情况，更换浏览器即可。
   // printJS({
   //   printable: "printTable",
   //   type: "html",
@@ -669,11 +752,6 @@ function bindPrint() {
   //   targetStyles: ["*"],
   //   style: "@page {margin:0 10mm}",
   // });
-  printJS({
-    printable: someJSONdata,
-    properties: ["name", "email", "phone"],
-    type: "json",
-  });
 }
 
 getList();
