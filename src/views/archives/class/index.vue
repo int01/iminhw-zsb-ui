@@ -128,21 +128,20 @@
       </el-col>
       <!-- 导入数据（主要导入分班数据） -->
       <el-col :span="1.5">
-        <el-tooltip
-          class="box-item"
-          effect="dark"
-          content="主要使用场景是导入分班数据"
-          placement="top"
-        >
-          <el-button
-            type="danger"
-            plain
-            icon="Upload"
-            @click="handleImport"
-            v-hasPermi="['archives:class:import']"
+        <el-button
+          type="danger"
+          plain
+          icon="Upload"
+          @click="handleImport"
+          v-hasPermi="['archives:class:import']"
+          ><el-tooltip
+            class="box-item"
+            effect="dark"
+            content="主要使用场景是导入分班数据"
+            placement="top"
             >导入
-          </el-button>
-        </el-tooltip>
+          </el-tooltip>
+        </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -161,7 +160,13 @@
           icon="Printer"
           v-hasPermi="['archives:class:print']"
           @click="handlePrintDialog"
-          >打印</el-button
+          ><el-tooltip
+            class="box-item"
+            effect="dark"
+            content="当变成两页时请更换其他浏览器，原因：谷歌浏览器最小字体为12px"
+            placement="top"
+            >打印
+          </el-tooltip></el-button
         >
       </el-col>
       <!-- <div id="printTable"></div> -->
@@ -718,6 +723,7 @@ function handlePrint() {
           properties: [
             { field: "xh", displayName: "序号", columnSize: "5%" },
             { field: "xm", displayName: "姓名", columnSize: "20%" },
+            { field: "xuehao", displayName: "学号" },
             {
               field: "dazt",
               displayName: "档案提交情况",
@@ -730,14 +736,14 @@ function handlePrint() {
           type: "json",
           header: `<div style="width: 100%; text-align: center;">
                         <div style="font-size:14px">${bj}班入学档案提交情况</div>
-                        <div style="float: right; font-size: 10px;">总份数: _______________</div>
+                        <div style="float: right; font-size: 12px; margin-bottom: 2px">总份数: _______________</div>
                     </div>`,
           documentTitle: `${bj}班入学档案提交情况`,
           gridHeaderStyle:
-            "border: 1px solid #A8ABB2;text-align:center; font-family: '宋体'; font-size: 10px;",
+            "border: 1px solid #A8ABB2;text-align:center; font-family: '宋体'; font-size: 12px;",
           gridStyle:
-            "border: 1px solid #A8ABB2;text-align:center; font-family: '宋体'; font-size: 8px;",
-          style: "@page {}",
+            "border: 1px solid #A8ABB2;text-align:center; font-family: '宋体'; font-size: 12px;",
+          style: "@page {margin:5mm 10mm}",
           font_size: "5px",
         });
       });
@@ -745,6 +751,7 @@ function handlePrint() {
   });
   // 谷歌浏览器的最小字体是12px，目前没有好的方案，禁止使用 -webkit-transform:scale(0.8); 或类似方案。
   // 如果变成两张纸的情况，更换浏览器即可。
+  // 直接打印html的方法
   // printJS({
   //   printable: "printTable",
   //   type: "html",
