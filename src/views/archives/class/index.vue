@@ -380,6 +380,7 @@
       v-model="print.open"
       width="300px"
       append-to-body
+      draggable
     >
       <el-form ref="printRef" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="班级" prop="bj">
@@ -736,7 +737,7 @@ function handlePrint() {
           type: "json",
           header: `<div style="width: 100%; text-align: center;">
                         <div style="font-size:14px">${bj}班入学档案提交情况</div>
-                        <div style="float: right; font-size: 12px; margin-bottom: 2px">总份数: _______________</div>
+                        <div style="float: right; font-size: 12px; margin-bottom: 2px; margin-top: -6px">总份数: _______________</div>
                     </div>`,
           documentTitle: `${bj}班入学档案提交情况`,
           gridHeaderStyle:
