@@ -148,7 +148,15 @@
           icon="Flag"
           @click="handleVerify"
           v-hasPermi="['archives:ems:verify']"
-          >签收验证
+          ><el-tooltip
+            class="box-item"
+            effect="dark"
+            content="当前版本仅一人可操作，多人会出现序号冲突"
+            placement="top"
+          >
+            签收验证
+          </el-tooltip>
+          <!-- （） -->
         </el-button>
       </el-col>
       <!-- handleUnpack -->
@@ -222,7 +230,7 @@
         label="更新时间"
         align="center"
         prop="updateTime"
-        sortable='custom'
+        sortable="custom"
         min-width="120"
         :show-overflow-tooltip="true"
       >
@@ -234,7 +242,7 @@
         label="创建时间"
         align="center"
         prop="createTime"
-        sortable='custom'
+        sortable="custom"
         min-width="120"
         :show-overflow-tooltip="true"
       >
@@ -522,7 +530,7 @@
           />
         </el-form-item>
         <el-form-item
-          label="是否更新班级档案的档案状态？"
+          label="是否更新班级档案的档案状态且查询出班级等信息？"
           :style="`display: ${unpack.showSwitch ? '' : 'none'};`"
         >
           <el-switch
@@ -532,7 +540,7 @@
             inactive-text="否"
           />
         </el-form-item>
-        <el-form-item
+        <!-- <el-form-item
           label="是否查询出班级等信息？"
           :style="`display: ${unpack.showSwitch ? '' : 'none'};`"
         >
@@ -542,16 +550,24 @@
             active-text="是"
             inactive-text="否"
           />
-        </el-form-item>
+        </el-form-item> -->
         <el-alert
           :closable="false"
           :title="unpack.classMsg"
           :type="unpack.classMsgType"
           center
           :style="`margin-bottom: 16px; display: ${
-            !unpack.getClassShow ? 'none' : ''
+            !unpack.updateClassSwitch ? 'none' : ''
           };`"
         />
+        <!-- <el-form-item label="情况时明" prop="remark">
+          <el-input
+            v-model="unpackForm.remark"
+            type="textarea"
+            placeholder="请记得描述实际情况。如：没有档案的情况里面是什么（仅团籍），档案是已经被拆封的（拆封）"
+            clearable
+          />
+        </el-form-item> -->
         <el-form-item
           label="考生号"
           prop="ksh"
@@ -642,7 +658,7 @@ const unpack = reactive({
   classMsgType: "info",
   getMatUpDateEmsSwitch: false,
   updateClassSwitch: false,
-  getClassShow: false,
+  // getClassShow: false,
 });
 
 const data = reactive({
@@ -896,21 +912,21 @@ function handleRadioChange(e) {
     unpack.showSwitch = false;
     unpack.getMatUpDateEmsSwitch = false;
     unpack.updateClassSwitch = false;
-    unpack.getClassShow = false;
+    // unpack.getClassShow = false;
   } else {
     unpack.showSwitch = true;
     unpackForm.value.ksh = null;
     unpack.getMatUpDateEmsSwitch = true;
     unpack.updateClassSwitch = true;
-    unpack.getClassShow = true;
+    // unpack.getClassShow = true;updateClassSwitch
   }
 }
 
 function submitUnpackForm() {
   proxy.$refs["unpackRef"].validate((valid) => {
-    console.log(valid);
+    // console.log(valid);
     if (valid) {
-      console.log(unpackForm.value);
+      // console.log(unpackForm.value);
       let formPm = {};
       // 如果直接 unpackForm.value.ksh = null; 触发表单验证！
       if (!unpack.showSwitch) {
@@ -922,13 +938,11 @@ function submitUnpackForm() {
       formPm.params["getMatUpDateEmsSwitch"] = unpack.getMatUpDateEmsSwitch;
       formPm.params["updateClassSwitch"] = unpack.updateClassSwitch;
       formPm.params["showSwitch"] = unpack.showSwitch;
-      console.log(formPm);
       unpackEms(formPm).then((response) => {
-        console.log(response);
         const resData = response.data;
         if (unpack.showSwitch) {
           // classEntity
-          if (unpack.getClassShow) {
+          if (unpack.updateClassSwitch) {
             if (resData.classEntity) {
               unpack.classMsgType = "success";
               unpack.classMsg =
@@ -944,18 +958,22 @@ function submitUnpackForm() {
               unpack.classMsgType = "error";
               unpack.classMsg = "找不到该考生号对应的分班数据";
             }
-          }
-          if (unpack.updateClassSwitch) {
-            resData.updateClassState > 0
+                 resData.updateClass
               ? ElMessage.success("更新档案提交情况成功")
               : ElMessage.error("更新档案提交情况失败");
           }
+          // if (unpack.updateClassSwitch) {
+          //   resData.updateClass
+          //     ? ElMessage.success("更新档案提交情况成功")
+          //     : ElMessage.error("更新档案提交情况失败");
+          // }
         }
         setTimeout(() => {
           resData.unpackState > 0
             ? ElMessage.success("更新EMS邮寄档案数据成功")
             : ElMessage.error("更新EMS邮寄档案数据失败");
         }, 500);
+        unpackForm.value.kddh = null;
       });
     }
   });

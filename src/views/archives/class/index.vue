@@ -149,7 +149,7 @@
           plain
           icon="Postcard"
           @click="handleCollect"
-          v-hasPermi="['archives:class:gather']"
+          v-hasPermi="['archives:class:collect']"
           >现场收集</el-button
         >
       </el-col>
@@ -411,24 +411,114 @@
       width="40%"
       fullscreen
       append-to-body
-      show-close
-      center
     >
-      学号：
-      <el-button type="primary" @click="innerVisible = true"
-        >open the inner Dialog</el-button
+      <el-form
+        ref="collectQueryRef"
+        :model="queryParams"
+        :inline="true"
+        label-width="70px"
+      >
+        <el-form-item label="学号" prop="xuehao">
+          <el-input
+            v-model="queryParams.xuehao"
+            placeholder="请输入学号"
+            clearable
+            @keyup.enter="handleGetInfoBycollect"
+          />
+        </el-form-item>
+        <el-form-item label="考生号" prop="ksh">
+          <el-input
+            v-model="queryParams.ksh"
+            placeholder="请输入考生号"
+            clearable
+            @keyup.enter="handleGetInfoBycollect"
+          />
+        </el-form-item>
+        <el-form-item label="身份证号" prop="sfzh">
+          <el-input
+            v-model="queryParams.sfzh"
+            placeholder="请输入身份证号"
+            clearable
+            @keyup.enter="handleGetInfoBycollect"
+          />
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            type="primary"
+            icon="Search"
+            @click="handleGetInfoBycollect"
+            >搜索</el-button
+          >
+          <!-- <el-button icon="Refresh" @click="proxy.resetForm('collectQueryRef')">一键清空</el-button> -->
+        </el-form-item>
+      </el-form>
+      <el-button @click="collect.innerOpen = true"
+        >打开最近的一个查询</el-button
       >
       <el-dialog
-        draggable
-        v-model="innerVisible"
-        width="30%"
-        title="Inner Dialog"
+        v-model="collect.innerOpen"
+        width="600px"
         append-to-body
-      />
+        draggable
+        title="基本信息"
+      >
+        <el-form :model="form" label-width="100px">
+          <el-row>
+            <!-- <el-col :span="8">
+              <img
+                :src="defAva"
+                alt=""
+                style="height: 32mm; width: 26mm; margin-left: 60px"
+              />
+            </el-col> -->
+            <el-col :span="8">
+              <el-form-item label="姓名:">{{ form.xm }}</el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="班级:"
+                ><el-tag>{{ form.bj }}</el-tag></el-form-item
+              >
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="档案序号:"
+                ><el-tag>{{ form.xh }}</el-tag></el-form-item
+              >
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="学号:">{{ form.xuehao }}</el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="考生号:">{{ form.ksh }}</el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="身份证号:">{{ form.sfzh }}</el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+        <template #footer>
+          <div class="dialog-footer">
+            <el-tooltip
+              class="box-item"
+              effect="dark"
+              content="仅修改班级档案里面的档案提交为“已提交”"
+              placement="top"
+            >
+              <el-button type="primary" @click="">确 定</el-button>
+            </el-tooltip>
+            <el-tooltip
+              class="box-item"
+              effect="dark"
+              content="修改班级档案里面的档案提交为“已提交”，并放入缓存供查阅"
+              placement="top"
+            >
+              <el-button type="warning" @click="">暂 缓</el-button>
+            </el-tooltip>
+            <el-button @click="collect.innerOpen = false">关 闭</el-button>
+          </div></template
+        >
+      </el-dialog>
       <template #footer>
         <div class="dialog-footer">
-          <el-button type="primary" @click="">确 定</el-button>
-          <el-button type="warning" @click="">暂 缓</el-button>
           <el-button @click="collect.open = false">关 闭</el-button>
         </div>
       </template>
@@ -444,8 +534,9 @@ import {
   addClass,
   updateClass,
   getClassListByBj,
+  getClassBycollect,
 } from "@/api/archives/class";
-
+import defAva from "@/assets/images/profile.jpg";
 import { getToken } from "@/utils/auth";
 import printJS from "@/utils/print";
 
@@ -465,8 +556,6 @@ const multiple = ref(true);
 const total = ref(0);
 const title = ref("");
 const addFlag = ref(false);
-
-const innerVisible = ref(false);
 
 const data = reactive({
   form: {},
@@ -488,7 +577,7 @@ const data = reactive({
     xh: [{ required: true, message: "档案序号不能为空", trigger: "blur" }],
     xm: [{ required: true, message: "姓名不能为空", trigger: "blur" }],
     bj: [{ required: true, message: "班级不能为空", trigger: "blur" }],
-    ksh: [{ required: true, message: "考生号不能为空", trigger: "blur" }],
+    // ksh: [{ required: true, message: "考生号不能为空", trigger: "blur" }],
     dazt: { required: true, trigger: "change", message: "请选择档案状态" },
   },
 });
@@ -513,6 +602,7 @@ const upload = reactive({
 
 const collect = reactive({
   open: false,
+  innerOpen: false,
   title: "",
 });
 
@@ -760,6 +850,23 @@ function handlePrint() {
   //   targetStyles: ["*"],
   //   style: "@page {margin:0 10mm}",
   // });
+}
+
+function handleGetInfoBycollect() {
+  proxy.$refs["collectQueryRef"].validate(() => {
+    const serchFrom = queryParams.value;
+    if (
+      serchFrom.ksh != null ||
+      serchFrom.xuehao != null ||
+      serchFrom.sfzh != null
+    ) {
+      getClassBycollect(serchFrom).then((response) => {
+        form.value = response.data;
+        collect.innerOpen = true;
+        proxy.resetForm("collectQueryRef");
+      });
+    }
+  });
 }
 
 getList();

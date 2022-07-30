@@ -16,10 +16,18 @@ export function getClass(xuehao) {
     method: 'get'
   })
 }
-// 查询档案收集详细
+
 export function getClassListByBj(query) {
   return request({
     url: '/archives/class/bj',
+    method: 'get',
+    params: query,
+  })
+}
+
+export function getClassBycollect(query) {
+  return request({
+    url: '/archives/class/collect',
     method: 'get',
     params: query,
   })
