@@ -133,7 +133,7 @@
       @sort-change="handleSortChange"
     >
       <el-table-column type="selection" width="55" align="center" />
-      <!-- <el-table-column label="id" align="center" prop="id" /> -->
+      <el-table-column label="编号" align="center" prop="id" />
       <el-table-column
         label="学号"
         min-width="100"

@@ -408,10 +408,11 @@
     <el-dialog
       :title="collect.title"
       v-model="collect.open"
-      width="40%"
       fullscreen
       append-to-body
     >
+      <!-- 
+       width="60%" -->
       <el-form
         ref="collectQueryRef"
         :model="queryParams"
@@ -500,18 +501,20 @@
             <el-tooltip
               class="box-item"
               effect="dark"
-              content="仅修改班级档案里面的档案提交为“已提交”"
+              content="仅修改班级档案里面的档案状态为“已提交”"
               placement="top"
             >
-              <el-button type="primary" @click="">确 定</el-button>
+              <el-button type="primary" @click="updateClassDazt"
+                >确 定</el-button
+              >
             </el-tooltip>
             <el-tooltip
               class="box-item"
               effect="dark"
-              content="修改班级档案里面的档案提交为“已提交”，并放入缓存供查阅"
+              content="修改班级档案里面的档案状态为“已提交”，并放入缓存供查阅"
               placement="top"
             >
-              <el-button type="warning" @click="">暂 缓</el-button>
+              <el-button type="warning" @click="addClassTemp">暂 缓</el-button>
             </el-tooltip>
             <el-button @click="collect.innerOpen = false">关 闭</el-button>
           </div></template
@@ -536,9 +539,11 @@ import {
   getClassListByBj,
   getClassBycollect,
 } from "@/api/archives/class";
+import { addClasstemp } from "@/api/archives/classtemp";
 import defAva from "@/assets/images/profile.jpg";
 import { getToken } from "@/utils/auth";
 import printJS from "@/utils/print";
+import { ElMessage } from "element-plus";
 
 const { proxy } = getCurrentInstance();
 const { data_status, archives_class_status } = proxy.useDict(
@@ -865,7 +870,28 @@ function handleGetInfoBycollect() {
         collect.innerOpen = true;
         proxy.resetForm("collectQueryRef");
       });
+    } else {
+      ElMessage.error("没有任何输入");
     }
+  });
+}
+
+function updateClassDazt() {
+  const updateForm = form.value;
+  updateForm.dazt = 1;
+  updateForm.remark = "现场收集";
+  updateClass(updateForm).then((response) => {
+    proxy.$modal.msgSuccess("修改档案状态成功");
+    collect.innerOpen = false
+  });
+}
+
+function addClassTemp() {
+  updateClassDazt();
+  const updateForm = form.value;
+  updateForm.dazt = 1;
+  addClasstemp(updateForm).then((response) => {
+    proxy.$modal.msgSuccess("新增到缓存成功");
   });
 }
 
