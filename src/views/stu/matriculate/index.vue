@@ -31,6 +31,16 @@
           @keyup.enter="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="性别" prop="xb">
+        <el-select v-model="queryParams.xb" placeholder="请选择性别" clearable>
+          <el-option
+            v-for="dict in sys_user_sex"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item label="录取专业" prop="zy">
         <el-input
           v-model="queryParams.zy"
@@ -39,10 +49,38 @@
           @keyup.enter="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="学籍地区" prop="dq">
+      <el-form-item label="省份" prop="dq">
         <el-input
-          v-model="queryParams.zy"
-          placeholder="请输入学籍地区"
+          v-model="queryParams.dq"
+          placeholder="请输入省份"
+          clearable
+          @keyup.enter="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="批次" prop="pc">
+        <el-select v-model="queryParams.pc" placeholder="请选择批次" clearable>
+          <el-option
+            v-for="dict in matriculate_pc"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="科类" prop="kl">
+        <el-select v-model="queryParams.kl" placeholder="请选择科类" clearable>
+          <el-option
+            v-for="dict in matriculate_kl"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="中学名称" prop="zxmc">
+        <el-input
+          v-model="queryParams.zxmc"
+          placeholder="请输入中学名称"
           clearable
           @keyup.enter="handleQuery"
         />
@@ -164,7 +202,7 @@
         label="姓名"
         fixed
         min-width="100"
-        sortable='custom'
+        sortable="custom"
         align="center"
         prop="xm"
       />
@@ -177,17 +215,35 @@
       <el-table-column
         label="录取专业"
         min-width="200"
-        sortable='custom'
+        sortable="custom"
         align="center"
         prop="zy"
       />
       <el-table-column
-        label="联系电话"
+        label="录取电话"
         min-width="110"
         align="center"
         prop="lxdh"
       />
-      <el-table-column label="学籍地区" align="center" min-width="100" sortable='custom' prop="dq" />
+      <el-table-column
+        label="学籍省份"
+        align="center"
+        min-width="100"
+        sortable="custom"
+        prop="dq"
+      />
+      <!-- <el-table-column label="批次" align="center" prop="pc">
+        <template #default="scope">
+          <dict-tag :options="matriculate_pc" :value="scope.row.pc" />
+        </template>
+      </el-table-column>
+      <el-table-column label="科类" align="center" prop="kl">
+        <template #default="scope">
+          <dict-tag :options="matriculate_kl" :value="scope.row.kl" />
+        </template>
+      </el-table-column>
+      <el-table-column label="中学名称" align="center" prop="zxmc" />
+      <el-table-column label="投档成绩" align="center" prop="tdcj" /> -->
       <el-table-column label="数据状态" align="center" prop="status">
         <template #default="scope">
           <dict-tag :options="data_status" :value="scope.row.status" />
@@ -197,7 +253,7 @@
         label="创建时间"
         align="center"
         prop="createTime"
-        sortable='custom'
+        sortable="custom"
         min-width="120"
         :show-overflow-tooltip="true"
       >
@@ -260,17 +316,57 @@
         <el-form-item label="姓名" prop="xm">
           <el-input v-model="form.xm" placeholder="请输入姓名" />
         </el-form-item>
+        <el-form-item label="性别" prop="xb">
+          <el-radio-group v-model="form.xb">
+            <el-radio
+              v-for="dict in sys_user_sex"
+              :key="dict.value"
+              :label="parseInt(dict.value)"
+              >{{ dict.label }}</el-radio
+            >
+          </el-radio-group>
+        </el-form-item>
         <el-form-item label="录取专业" prop="zy">
           <el-input v-model="form.zy" placeholder="请输入录取专业" />
         </el-form-item>
-        <el-form-item label="联系电话" prop="lxdh">
-          <el-input v-model="form.lxdh" placeholder="请输入联系电话" />
+        <el-form-item label="录取电话" prop="lxdh">
+          <el-input v-model="form.lxdh" placeholder="请输入录取电话" />
         </el-form-item>
-        <el-form-item label="学籍地区" prop="dq">
-          <el-input v-model="form.dq" placeholder="请输入考生学籍地区" />
+        <el-form-item label="省份" prop="dq">
+          <el-input v-model="form.dq" placeholder="请输入考生学籍省份" />
         </el-form-item>
-        <el-form-item label="地址" prop="dz">
-          <el-input v-model="form.dz" placeholder="请输入地址" />
+        <el-form-item label="批次" prop="pc">
+          <el-select v-model="form.pc" placeholder="请选择批次">
+            <el-option
+              v-for="dict in matriculate_pc"
+              :key="dict.value"
+              :label="dict.label"
+              :value="parseInt(dict.value)"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="科类" prop="kl">
+          <el-select v-model="form.kl" placeholder="请选择科类">
+            <el-option
+              v-for="dict in matriculate_kl"
+              :key="dict.value"
+              :label="dict.label"
+              :value="parseInt(dict.value)"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="中学名称" prop="zxmc">
+          <el-input v-model="form.zxmc" placeholder="请输入中学名称" />
+        </el-form-item>
+        <el-form-item label="投档成绩" prop="tdcj">
+          <el-input
+            type="number"
+            v-model="form.tdcj"
+            placeholder="请输入投档成绩"
+          />
+        </el-form-item>
+        <el-form-item label="邮寄地址" prop="dz">
+          <el-input v-model="form.dz" placeholder="请输入邮寄地址" />
         </el-form-item>
         <el-form-item label="序号" prop="xh">
           <el-input v-model="form.xh" placeholder="请输入录取流水号" />
@@ -364,7 +460,13 @@ import router from "@/router";
 import { getToken } from "@/utils/auth";
 
 const { proxy } = getCurrentInstance();
-const { data_status } = proxy.useDict("data_status");
+const { data_status, sys_user_sex, matriculate_pc, matriculate_kl } =
+  proxy.useDict(
+    "data_status",
+    "sys_user_sex",
+    "matriculate_pc",
+    "matriculate_kl"
+  );
 
 const matriculateList = ref([]);
 const open = ref(false);
@@ -388,8 +490,12 @@ const data = reactive({
     ksh: null,
     sfzh: null,
     xm: null,
+    xb: null,
     zy: null,
     dq: null,
+    pc: null,
+    kl: null,
+    zxmc: null,
     status: null,
     createTime: null,
   },
@@ -398,7 +504,13 @@ const data = reactive({
     sfzh: [{ required: true, message: "身份证号不能为空", trigger: "blur" }],
     xm: [{ required: true, message: "姓名不能为空", trigger: "blur" }],
     zy: [{ required: true, message: "录取专业不能为空", trigger: "blur" }],
-    lxdh: [{ required: true, message: "联系电话不能为空", trigger: "blur" }],
+    lxdh: [{ required: true, message: "录取电话不能为空", trigger: "blur" }],
+    xb: { required: true, trigger: "change", message: "请选择性别" },
+    dq: [{ required: true, message: "省份不能为空", trigger: "blur" }],
+    pc: [{ required: true, message: "批次不能为空", trigger: "change" }],
+    kl: [{ required: true, message: "科类不能为空", trigger: "change" }],
+    zxmc: [{ required: true, message: "中学名称不能为空", trigger: "blur" }],
+    tdcj: [{ required: true, message: "录取分数不能为空", trigger: "blur" }],
   },
 });
 
@@ -447,10 +559,16 @@ function reset() {
     ksh: null,
     sfzh: null,
     xm: null,
+    xb: 0,
     zy: null,
     lxdh: null,
     dz: null,
+    xh: null,
     dq: null,
+    pc: null,
+    kl: null,
+    zxmc: null,
+    tdcj: null,
     status: 0,
     createBy: null,
     updateBy: null,
@@ -597,7 +715,7 @@ function submitFileForm() {
 function handleDwoMatExcl() {
   const obj = { path: "/stu/matview" };
   ElMessageBox.confirm(
-    "即将进入“通知书数据”。输入查询条件点击查询，点击导出即可导出指定数据（默认导出全部数据），你会了吗？",
+    "即将进入“通知书数据”。输入查询条件点击查询，点击导出即可导出指定数据（默认导出全部数据）。",
     "温馨提示",
     {
       confirmButtonText: "知道了",

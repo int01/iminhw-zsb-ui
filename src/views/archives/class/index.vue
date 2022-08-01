@@ -582,7 +582,7 @@ const data = reactive({
     xh: [{ required: true, message: "档案序号不能为空", trigger: "blur" }],
     xm: [{ required: true, message: "姓名不能为空", trigger: "blur" }],
     bj: [{ required: true, message: "班级不能为空", trigger: "blur" }],
-    // ksh: [{ required: true, message: "考生号不能为空", trigger: "blur" }],
+    ksh: [{ required: true, message: "考生号不能为空", trigger: "blur" }],
     dazt: { required: true, trigger: "change", message: "请选择档案状态" },
   },
 });
