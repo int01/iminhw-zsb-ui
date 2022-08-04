@@ -8,14 +8,21 @@
       label-width="70px"
     >
       <el-form-item label="统计字段" prop="analysisType">
-        <el-checkbox-group v-model="analysisType" @change="proxy.resetForm('queryRef')" @keyup.enter="handleQuery">
+        <el-checkbox-group
+          v-model="analysisType"
+          @keyup.enter="handleQuery"
+        >
           <!--@change="handleAnalysisTypeChange"  :min="1" -->
-          <el-checkbox label="年度" name="analysisType" />
-          <el-checkbox label="省份" name="analysisType" />
-          <el-checkbox label="批次" name="analysisType" />
-          <el-checkbox label="科类" name="analysisType" />
-          <el-checkbox label="录取专业" name="analysisType" />
-          <el-checkbox label="中学名称" name="analysisType" />
+          <el-checkbox
+            label="年度"
+            name="analysisType"
+            @change="e ? '' : queryParams.nd = null"
+          />
+          <el-checkbox label="省份" name="analysisType" @change="e ? '' : queryParams.dq = null"/>
+          <el-checkbox label="批次" name="analysisType" @change="e ? '' : queryParams.pc = null"/>
+          <el-checkbox label="科类" name="analysisType" @change="e ? '' : queryParams.kl = null"/>
+          <el-checkbox label="录取专业" name="analysisType" @change="e ? '' : queryParams.zy = null"/>
+          <el-checkbox label="中学名称" name="analysisType" @change="e ? '' : queryParams.zxmc = null"/>
         </el-checkbox-group>
       </el-form-item>
       <el-form-item
@@ -125,12 +132,13 @@
       ></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="matriculateList">
+    <el-table v-loading="loading" :data="matriculateList" @sort-change="handleSortChange">
       <el-table-column
         label="年度"
         align="center"
         min-width="100"
         prop="nd"
+        sortable="custom"
         v-if="analysisType.indexOf('年度') > -1"
       />
       <el-table-column
@@ -138,6 +146,7 @@
         align="center"
         min-width="100"
         prop="dq"
+        sortable="custom"
         v-if="analysisType.indexOf('省份') > -1"
       />
       <el-table-column
@@ -154,6 +163,7 @@
         label="科类"
         align="center"
         prop="kl"
+        sortable="custom"
         v-if="analysisType.indexOf('科类') > -1"
       >
         <template #default="scope">
@@ -171,12 +181,13 @@
         min-width="100"
         align="center"
         prop="zy"
+        sortable="custom"
         v-if="analysisType.indexOf('录取专业') > -1"
       />
-      <el-table-column label="最高分" align="center" prop="maxTdcj" />
-      <el-table-column label="最低分" align="center" prop="minTdcj" />
-      <el-table-column label="平均分" align="center" prop="avgTdcj" />
-      <el-table-column label="人数" align="center" prop="countNum" />
+      <el-table-column label="最高分" sortable="custom" align="center" prop="maxtdcj" />
+      <el-table-column label="最低分" sortable="custom" align="center" prop="mintdcj" />
+      <el-table-column label="平均分" sortable="custom" align="center" prop="avgtdcj" />
+      <el-table-column label="人数" sortable="custom" align="center" prop="countnum" />
     </el-table>
 
     <pagination
@@ -270,7 +281,6 @@ function getList() {
       queryParams.value.params["zy"] = 1;
     }
   });
-  console.log(queryParams.value)
   listMatriculate(queryParams.value).then((response) => {
     matriculateList.value = response.rows;
     total.value = response.total;
@@ -289,6 +299,13 @@ function resetQuery() {
   proxy.resetForm("queryRef");
   analysisType.value = [];
   handleQuery();
+}
+
+/** 排序触发事件 */
+function handleSortChange(column, prop, order) {
+  queryParams.value.orderByColumn = column.prop;
+  queryParams.value.isAsc = column.order;
+  getList();
 }
 
 /** 导出按钮操作 */
