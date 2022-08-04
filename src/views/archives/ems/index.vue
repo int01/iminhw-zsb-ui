@@ -425,6 +425,7 @@
             readonly
             disabled
             format="YYYY"
+            value-format="YYYY"
           />
         </el-form-item>
         <el-form-item label="签收验证" prop="qsyz">
@@ -965,7 +966,7 @@ function submitUnpackForm() {
               unpack.classMsgType = "error";
               unpack.classMsg = "找不到该考生号对应的分班数据";
             }
-                 resData.updateClass
+            resData.updateClass
               ? ElMessage.success("更新档案提交情况成功")
               : ElMessage.error("更新档案提交情况失败");
           }

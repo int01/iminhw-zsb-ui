@@ -8,7 +8,7 @@
       label-width="70px"
     >
       <el-form-item label="统计字段" prop="analysisType">
-        <el-checkbox-group v-model="analysisType" @keyup.enter="handleQuery">
+        <el-checkbox-group v-model="analysisType" @change="proxy.resetForm('queryRef')" @keyup.enter="handleQuery">
           <!--@change="handleAnalysisTypeChange"  :min="1" -->
           <el-checkbox label="年度" name="analysisType" />
           <el-checkbox label="省份" name="analysisType" />
@@ -17,6 +17,20 @@
           <el-checkbox label="录取专业" name="analysisType" />
           <el-checkbox label="中学名称" name="analysisType" />
         </el-checkbox-group>
+      </el-form-item>
+      <el-form-item
+        label="年度"
+        prop="nd"
+        :style="`display: ${analysisType.indexOf('年度') > -1 ? '' : 'none'};`"
+      >
+        <el-date-picker
+          v-model="queryParams.nd"
+          type="year"
+          placeholder="请选择查询年"
+          clearable
+          format="YYYY"
+          value-format="YYYY"
+        />
       </el-form-item>
       <el-form-item
         label="省份"
@@ -190,9 +204,19 @@ const loading = ref(true);
 const showSearch = ref(true);
 const total = ref(0);
 const analysisType = ref([]);
+const year = ref();
 
 const data = reactive({
-  queryParams: {},
+  queryParams: {
+    pageNum: 1,
+    pageSize: 10,
+    dq: null,
+    nd: null,
+    kl: null,
+    pc: null,
+    zy: null,
+    zxmc: null,
+  },
 });
 
 const { queryParams } = toRefs(data);
@@ -246,6 +270,7 @@ function getList() {
       queryParams.value.params["zy"] = 1;
     }
   });
+  console.log(queryParams.value)
   listMatriculate(queryParams.value).then((response) => {
     matriculateList.value = response.rows;
     total.value = response.total;
