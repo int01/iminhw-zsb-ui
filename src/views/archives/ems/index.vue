@@ -501,11 +501,18 @@
         :model="unpackForm"
         :rules="unpackRules"
       >
-        <el-form-item label="快递单号" prop="kddh">
+        <!-- <el-form-item label="快递单号" prop="kddh">
           <el-input
             v-model="unpackForm.kddh"
             clearable
             placeholder="请输入快递单号"
+          />
+        </el-form-item> -->
+        <el-form-item label="快递序号" prop="xh">
+          <el-input
+            v-model="unpackForm.xh"
+            clearable
+            placeholder="请输入快递序号"
           />
         </el-form-item>
         <el-form-item label="是否档案" prop="sfda">
@@ -686,7 +693,8 @@ const data = reactive({
     year: { required: true, trigger: "change", message: "请选择验证数据年份" },
   },
   unpackRules: {
-    kddh: { required: true, trigger: "blur", message: "请输入快递单号" },
+    // kddh: { required: true, trigger: "blur", message: "请输入快递单号" },
+    xh: { required: true, trigger: "blur", message: "请输入快递序号" },
     // year: { required: true, trigger: "change", message: "请选择验证数据年份" },
     sfda: { required: true, trigger: "change", message: "请选择是否存在档案" },
     ksh: { required: true, trigger: "blur", message: "请输入考生号" },
@@ -922,11 +930,10 @@ function handleRadioChange(e) {
   }
 }
 
+/** 拆袋辅助提交 */
 function submitUnpackForm() {
   proxy.$refs["unpackRef"].validate((valid) => {
-    // console.log(valid);
     if (valid) {
-      // console.log(unpackForm.value);
       let formPm = {};
       // 如果直接 unpackForm.value.ksh = null; 触发表单验证！
       if (!unpack.showSwitch) {
@@ -973,7 +980,7 @@ function submitUnpackForm() {
             ? ElMessage.success("更新EMS邮寄档案数据成功")
             : ElMessage.error("更新EMS邮寄档案数据失败");
         }, 500);
-        unpackForm.value.kddh = null;
+        // unpackForm.value.xh = null;
       });
     }
   });
