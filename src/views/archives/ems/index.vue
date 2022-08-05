@@ -833,7 +833,6 @@ function handleExport() {
 }
 
 function getMaxXhEmsElm() {
-  // console.log(year.value)
   // const year = !verifyFrom.value.year ? new Date().getFullYear() : verifyFrom.value.year;
   const _year = new Date().getFullYear();
   getMaxXhEms(_year).then((response) => {
@@ -895,7 +894,6 @@ function submitFileForm() {
 function submitVerifyForm() {
   proxy.$refs["verifyRef"].validate((valid) => {
     if (valid) {
-      // console.log(verifyFrom.value.year);
       const yearStr = new Date().getFullYear();
       const params = { yearStr };
       verifyKddh({ ...verifyFrom.value, params }).then((response) => {
@@ -915,7 +913,6 @@ function submitVerifyForm() {
 }
 
 function handleRadioChange(e) {
-  // console.log(e);
   if (e != 1) {
     unpackForm.value.ksh = "1";
     unpack.showSwitch = false;

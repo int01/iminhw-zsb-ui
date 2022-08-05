@@ -802,7 +802,6 @@ function handlePrint() {
         // 如果不用翻译和不在意打印出来的是null，可直接使用 JSONdata
         // const someJSONdata = [];
         // for (const index in JSONdata) {
-        //   console.log(index);
         //   someJSONdata.push({
         //     xh: JSONdata[index].xh,
         //     xm: JSONdata[index].xm,
