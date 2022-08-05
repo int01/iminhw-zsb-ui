@@ -1,6 +1,6 @@
 const useDictStore = defineStore("dict", {
   state: () => ({
-    dict: new Array(),
+    dict: {},
   }),
   actions: {
     // 获取字典
@@ -8,43 +8,30 @@ const useDictStore = defineStore("dict", {
       if (_key == null && _key == "") {
         return null;
       }
-      try {
-        for (let i = 0; i < this.dict.length; i++) {
-          if (this.dict[i].key == _key) {
-            return this.dict[i].value;
-          }
-        }
-      } catch (e) {
+      if (!!this.dict[_key]) {
+        return this.dict[_key];
+      } else {
         return null;
       }
     },
     // 设置字典
     setDict(_key, value) {
       if (_key !== null && _key !== "") {
-        this.dict.push({
-          key: _key,
-          value: value,
-        });
+        this.dict[_key] = value;
       }
     },
     // 删除字典
     removeDict(_key) {
-      var bln = false;
-      try {
-        for (let i = 0; i < this.dict.length; i++) {
-          if (this.dict[i].key == _key) {
-            this.dict.splice(i, 1);
-            return true;
-          }
-        }
-      } catch (e) {
-        bln = false;
+      if (!!this.dict[_key]) {
+        delete this.dict[_key];
+        return true;
+      } else {
+        return false;
       }
-      return bln;
     },
     // 清空字典
     cleanDict() {
-      this.dict = new Array();
+      this.dict = {};
     },
     // 初始字典
     initDict() {},
