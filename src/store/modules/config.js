@@ -1,6 +1,6 @@
 const useConfigStore = defineStore("config", {
     state: () => ({
-      config: new Array(),
+      config: {},
     }),
     actions: {
       // 获取
@@ -8,48 +8,35 @@ const useConfigStore = defineStore("config", {
         if (_key == null && _key == "") {
           return null;
         }
-        try {
-          for (let i = 0; i < this.config.length; i++) {
-            if (this.config[i].key == _key) {
-              return this.config[i].value;
-            }
-          }
-        } catch (e) {
+        if (!!this.config[_key]) {
+          return this.config[_key];
+        } else {
           return null;
         }
       },
       // 设置
       setConfig(_key, value) {
         if (_key !== null && _key !== "") {
-          this.config.push({
-            key: _key,
-            value: value,
-          });
+          this.config[_key] = value;
         }
       },
       // 删除
       removeConfig(_key) {
-        var bln = false;
-        try {
-          for (let i = 0; i < this.config.length; i++) {
-            if (this.config[i].key == _key) {
-              this.config.splice(i, 1);
-              return true;
-            }
-          }
-        } catch (e) {
-          bln = false;
+        if (!!this.config[_key]) {
+          delete this.config[_key];
+          return true;
+        } else {
+          return false;
         }
-        return bln;
       },
-      // 清空字典
+      // 清空
       cleanConfig() {
-        this.config = new Array();
+        this.config = {};
       },
-      // 初始字典
+      // 初始化
       initConfig() {},
     },
   });
   
-  export default useDictStore;
+  export default useConfigStore;
   

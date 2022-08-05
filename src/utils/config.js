@@ -7,19 +7,17 @@ import useConfigStore from "@/store/modules/config";
 export function useConfig(...args) {
   const res = ref({});
   return (() => {
-    args.forEach((configType, index) => {
+    args.forEach((configType) => {
+      console.log(configType)
       res.value[configType] = [];
-      const dicts = useConfigStore().getConfig(config);
-      if (dicts) {
-        res.value[configType] = dicts;
+      const configs = useConfigStore().getConfig(configType);
+      console.log(configs);
+      if (configs) {
+        res.value[configType] = configs;
       } else {
         getConfigKey(configType).then((resp) => {
-          res.value[configType] = resp.data.map((p) => ({
-            label: p.dictLabel,
-            value: p.dictValue,
-            elTagType: p.listClass,
-            elTagClass: p.cssClass,
-          }));
+          res.value[configType] = resp.msg;
+          console.log(res.value[configType]);
           useConfigStore().setConfig(configType, res.value[configType]);
         });
       }

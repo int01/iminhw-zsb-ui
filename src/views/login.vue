@@ -1,6 +1,11 @@
 <template>
   <div class="login">
-    <el-form ref="loginRef" :model="loginForm" :rules="loginRules" class="login-form">
+    <el-form
+      ref="loginRef"
+      :model="loginForm"
+      :rules="loginRules"
+      class="login-form"
+    >
       <h3 class="title">招生办管理系统</h3>
       <el-form-item prop="username">
         <el-input
@@ -10,7 +15,9 @@
           auto-complete="off"
           placeholder="账号"
         >
-          <template #prefix><svg-icon icon-class="user" class="el-input__icon input-icon" /></template>
+          <template #prefix
+            ><svg-icon icon-class="user" class="el-input__icon input-icon"
+          /></template>
         </el-input>
       </el-form-item>
       <el-form-item prop="password">
@@ -22,10 +29,12 @@
           placeholder="密码"
           @keyup.enter="handleLogin"
         >
-          <template #prefix><svg-icon icon-class="password" class="el-input__icon input-icon" /></template>
+          <template #prefix
+            ><svg-icon icon-class="password" class="el-input__icon input-icon"
+          /></template>
         </el-input>
       </el-form-item>
-      <el-form-item prop="code" v-if="captchaOnOff">
+      <el-form-item prop="code" v-if="sys_account_captchaOnOff == 'true'">
         <el-input
           v-model="loginForm.code"
           size="large"
@@ -34,26 +43,34 @@
           style="width: 63%"
           @keyup.enter="handleLogin"
         >
-          <template #prefix><svg-icon icon-class="validCode" class="el-input__icon input-icon" /></template>
+          <template #prefix
+            ><svg-icon icon-class="validCode" class="el-input__icon input-icon"
+          /></template>
         </el-input>
         <div class="login-code">
-          <img :src="codeUrl" @click="getCode" class="login-code-img"/>
+          <img :src="codeUrl" @click="getCode" class="login-code-img" />
         </div>
       </el-form-item>
-      <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">记住密码</el-checkbox>
-      <el-form-item style="width:100%;">
+      <el-checkbox
+        v-model="loginForm.rememberMe"
+        style="margin: 0px 0px 25px 0px"
+        >记住密码</el-checkbox
+      >
+      <el-form-item style="width: 100%">
         <el-button
           :loading="loading"
           size="large"
           type="primary"
-          style="width:100%;"
+          style="width: 100%"
           @click.prevent="handleLogin"
         >
           <span v-if="!loading">登 录</span>
           <span v-else>登 录 中...</span>
         </el-button>
-        <div style="float: right;" v-if="register">
-          <router-link class="link-type" :to="'/register'">立即注册</router-link>
+        <div style="float: right" v-if="sys_account_registerUser == 'true'">
+          <router-link class="link-type" :to="'/register'"
+            >立即注册</router-link
+          >
         </div>
       </el-form-item>
     </el-form>
@@ -68,42 +85,46 @@
 import { getCodeImg } from "@/api/login";
 import Cookies from "js-cookie";
 import { encrypt, decrypt } from "@/utils/jsencrypt";
-import useUserStore from '@/store/modules/user'
+import useUserStore from "@/store/modules/user";
 
-const userStore = useUserStore()
+const userStore = useUserStore();
 const router = useRouter();
 const { proxy } = getCurrentInstance();
+
+const { sys_account_registerUser, sys_account_captchaOnOff } = proxy.useConfig(
+  "sys_account_registerUser",
+  "sys_account_captchaOnOff"
+);
 
 const loginForm = ref({
   username: "",
   password: "",
   rememberMe: false,
   code: "",
-  uuid: ""
+  uuid: "",
 });
 
 const loginRules = {
   username: [{ required: true, trigger: "blur", message: "请输入您的账号" }],
   password: [{ required: true, trigger: "blur", message: "请输入您的密码" }],
-  code: [{ required: true, trigger: "change", message: "请输入验证码" }]
+  code: [{ required: true, trigger: "change", message: "请输入验证码" }],
 };
 
 const codeUrl = ref("");
 const loading = ref(false);
-// 验证码开关
-const captchaOnOff = ref(true);
-// 注册开关
-const register = ref(false);
+
 const redirect = ref(undefined);
 
 function handleLogin() {
-  proxy.$refs.loginRef.validate(valid => {
+  proxy.$refs.loginRef.validate((valid) => {
     if (valid) {
       loading.value = true;
       // 勾选了需要记住密码设置在 cookie 中设置记住用户名和密码
       if (loginForm.value.rememberMe) {
         Cookies.set("username", loginForm.value.username, { expires: 30 });
-        Cookies.set("password", encrypt(loginForm.value.password), { expires: 30 });
+        Cookies.set("password", encrypt(loginForm.value.password), {
+          expires: 30,
+        });
         Cookies.set("rememberMe", loginForm.value.rememberMe, { expires: 30 });
       } else {
         // 否则移除
@@ -112,23 +133,30 @@ function handleLogin() {
         Cookies.remove("rememberMe");
       }
       // 调用action的登录方法
-      userStore.login(loginForm.value).then(() => {
-        router.push({ path: redirect.value || "/" });
-      }).catch(() => {
-        loading.value = false;
-        // 重新获取验证码
-        if (captchaOnOff.value) {
-          getCode();
-        }
-      });
+      userStore
+        .login(loginForm.value)
+        .then(() => {
+          router.push({ path: redirect.value || "/" });
+        })
+        .catch(() => {
+          loading.value = false;
+          // 重新获取验证码
+          if (sys_account_captchaOnOff == "true") {
+            getCode();
+          }
+        });
     }
   });
 }
 
 function getCode() {
-  getCodeImg().then(res => {
-    captchaOnOff.value = res.captchaOnOff === undefined ? true : res.captchaOnOff;
-    if (captchaOnOff.value) {
+  getCodeImg().then((res) => {
+    if (
+      res.captchaOnOff === undefined
+        ? true
+        : res.captchaOnOff
+        //  && sys_account_registerUser == "true"
+    ) {
       codeUrl.value = "data:image/gif;base64," + res.img;
       loginForm.value.uuid = res.uuid;
     }
@@ -141,8 +169,9 @@ function getCookie() {
   const rememberMe = Cookies.get("rememberMe");
   loginForm.value = {
     username: username === undefined ? loginForm.value.username : username,
-    password: password === undefined ? loginForm.value.password : decrypt(password),
-    rememberMe: rememberMe === undefined ? false : Boolean(rememberMe)
+    password:
+      password === undefined ? loginForm.value.password : decrypt(password),
+    rememberMe: rememberMe === undefined ? false : Boolean(rememberMe),
   };
 }
 
@@ -150,7 +179,7 @@ getCode();
 getCookie();
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .login {
   display: flex;
   justify-content: center;
@@ -167,7 +196,7 @@ getCookie();
 
 .login-form {
   border-radius: 6px;
-  background: rgba($color: #FFF, $alpha: .7);
+  background: rgba($color: #fff, $alpha: 0.7);
   width: 400px;
   padding: 25px 25px 5px 25px;
   .el-input {
