@@ -1,10 +1,10 @@
 <template>
    <div class="app-container">
       <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="70px">
-         <el-form-item label="登录地址" prop="ipaddr">
+         <el-form-item label="登录主机" prop="ipaddr">
             <el-input
                v-model="queryParams.ipaddr"
-               placeholder="请输入登录地址"
+               placeholder="请输入登录主机"
                clearable
                style="width: 240px;"
                @keyup.enter="handleQuery"
@@ -19,10 +19,10 @@
                @keyup.enter="handleQuery"
             />
          </el-form-item>
-         <el-form-item label="状态" prop="status">
+         <el-form-item label="登录状态" prop="status">
             <el-select
                v-model="queryParams.status"
-               placeholder="登录状态"
+               placeholder="请选择登录状态"
                clearable
                style="width: 240px"
             >
@@ -86,7 +86,7 @@
          <el-table-column type="selection" width="55" align="center" />
          <el-table-column label="访问编号" align="center" prop="infoId" />
          <el-table-column label="用户账号" align="center" prop="userName" :show-overflow-tooltip="true" sortable="custom" :sort-orders="['descending', 'ascending']" />
-         <el-table-column label="地址" align="center" prop="ipaddr" :show-overflow-tooltip="true" />
+         <el-table-column label="登录主机" align="center" prop="ipaddr" :show-overflow-tooltip="true" />
          <el-table-column label="登录地点" align="center" prop="loginLocation" :show-overflow-tooltip="true" />
          <el-table-column label="操作系统" align="center" prop="os" :show-overflow-tooltip="true" />
          <el-table-column label="浏览器" align="center" prop="browser" :show-overflow-tooltip="true" />

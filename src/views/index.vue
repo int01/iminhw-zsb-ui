@@ -2,6 +2,14 @@
   <div class="app-container home">
     <el-avatar :size="70" :src="userStore.avatar" />
     <h1>你好，{{ userStore.nickName }}</h1>
+        <div>
+      最后登陆ip
+      {{ userStore.loginIp }}
+    </div>
+    <div>
+      最后登陆时间
+      {{ parseTime(userStore.loginDate) }}
+    </div>
     <el-card class="box-card">
       <h1>等待开发中。。。</h1>
     </el-card>

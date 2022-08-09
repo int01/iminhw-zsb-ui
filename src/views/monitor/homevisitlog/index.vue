@@ -10,10 +10,19 @@
                @keyup.enter="handleQuery"
             />
          </el-form-item>
+         <el-form-item label="访问主机" prop="visitIp">
+            <el-input
+               v-model="queryParams.visitIp"
+               placeholder="请输入访问主机"
+               clearable
+               style="width: 240px;"
+               @keyup.enter="handleQuery"
+            />
+         </el-form-item>
          <el-form-item label="业务类型" prop="businessType">
             <el-select
                v-model="queryParams.businessType"
-               placeholder="业务类型"
+               placeholder="请选择业务类型"
                clearable
                style="width: 240px"
             >
@@ -25,10 +34,10 @@
                />
             </el-select>
          </el-form-item>
-         <el-form-item label="状态" prop="status">
+         <el-form-item label="访问状态" prop="status">
             <el-select
                v-model="queryParams.status"
-               placeholder="访问状态"
+               placeholder="请选择访问状态"
                clearable
                style="width: 240px"
             >
@@ -197,10 +206,10 @@ const data = reactive({
   queryParams: {
     pageNum: 1,
     pageSize: 10,
-    title: undefined,
-   //  operName: undefined,
-    businessType: undefined,
-    status: undefined
+    title: null,
+    visitIp: null,
+    businessType: null,
+    status: null
   }
 });
 

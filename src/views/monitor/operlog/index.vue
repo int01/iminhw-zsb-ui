@@ -19,10 +19,10 @@
                @keyup.enter="handleQuery"
             />
          </el-form-item>
-         <el-form-item label="类型" prop="businessType">
+         <el-form-item label="操作类型" prop="businessType">
             <el-select
                v-model="queryParams.businessType"
-               placeholder="操作类型"
+               placeholder="请选择操作类型"
                clearable
                style="width: 240px"
             >
@@ -34,10 +34,10 @@
                />
             </el-select>
          </el-form-item>
-         <el-form-item label="状态" prop="status">
+         <el-form-item label="操作状态" prop="status">
             <el-select
                v-model="queryParams.status"
-               placeholder="操作状态"
+               placeholder="请选择操作状态"
                clearable
                style="width: 240px"
             >

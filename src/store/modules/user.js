@@ -11,6 +11,8 @@ const useUserStore = defineStore(
       name: '',
       avatar: '',
       nickName: '',
+      loginDate: '',
+      loginIp: '',
       roles: [],
       permissions: []
     }),
@@ -46,6 +48,8 @@ const useUserStore = defineStore(
             }
             this.name = user.userName;
             this.nickName = user.nickName;
+            this.loginDate = user.loginDate;
+            this.loginIp = user.loginIp;
             this.avatar = avatar;
             resolve(res)
           }).catch(error => {
