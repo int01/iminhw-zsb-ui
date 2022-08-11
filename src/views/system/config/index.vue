@@ -161,6 +161,7 @@
         label="操作"
         align="center"
         width="150"
+        v-hasPermi="['system:config:edit', 'system:config:remove']"
         class-name="small-padding fixed-width"
       >
         <template #default="scope">

@@ -254,6 +254,7 @@
         label="操作"
         fixed="right"
         min-width="150"
+        v-hasPermi="['archives:ems:remove','archives:ems:edit']"
         align="center"
         class-name="small-padding fixed-width"
       >

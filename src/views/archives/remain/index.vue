@@ -176,6 +176,7 @@
         fixed="right"
         min-width="150"
         align="center"
+        v-hasPermi="['archives:remain:edit', 'archives:remain:remove']"
         class-name="small-padding fixed-width"
       >
         <template #default="scope">

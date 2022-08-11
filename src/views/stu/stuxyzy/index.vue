@@ -101,8 +101,20 @@
       @sort-change="handleSortChange"
     >
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="专业" min-width="160" sortable='custom' align="center" prop="zy" />
-      <el-table-column label="学院" min-width="130" sortable='custom' align="center" prop="xy" />
+      <el-table-column
+        label="专业"
+        min-width="160"
+        sortable="custom"
+        align="center"
+        prop="zy"
+      />
+      <el-table-column
+        label="学院"
+        min-width="130"
+        sortable="custom"
+        align="center"
+        prop="xy"
+      />
       <el-table-column label="数据状态" align="center" prop="status">
         <template #default="scope">
           <dict-tag :options="data_status" :value="scope.row.status" />
@@ -113,14 +125,12 @@
         label="创建时间"
         align="center"
         prop="createTime"
-        sortable='custom'
+        sortable="custom"
         min-width="120"
         :show-overflow-tooltip="true"
       >
         <template #default="scope">
-          <span>{{
-            parseTime(scope.row.createTime)
-          }}</span>
+          <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -128,6 +138,7 @@
         fixed="right"
         min-width="150"
         align="center"
+        v-hasPermi="['stu:stuxyzy:edit', 'stu:stuxyzy:remove']"
         class-name="small-padding fixed-width"
       >
         <template #default="scope">

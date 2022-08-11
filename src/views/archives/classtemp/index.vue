@@ -182,6 +182,7 @@
         fixed="right"
         min-width="150"
         align="center"
+        v-hasPermi="['archives:classtemp:edit', 'archives:classtemp:remove']"
         class-name="small-padding fixed-width"
       >
         <template #default="scope">

@@ -178,6 +178,7 @@
         fixed="right"
         min-width="150"
         align="center"
+        v-hasPermi="['stu:notification:edit','stu:notification:remove']"
         class-name="small-padding fixed-width"
       >
         <template #default="scope">

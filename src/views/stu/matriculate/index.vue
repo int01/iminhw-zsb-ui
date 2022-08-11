@@ -266,6 +266,7 @@
         fixed="right"
         min-width="150"
         align="center"
+        v-hasPermi="['stu:matriculate:edit','stu:matriculate:remove']"
         class-name="small-padding fixed-width"
       >
         <template #default="scope">
