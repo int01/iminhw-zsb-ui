@@ -99,7 +99,7 @@
 
       <el-table ref="operlogRef" v-loading="loading" :data="operlogList" @selection-change="handleSelectionChange" :default-sort="defaultSort" @sort-change="handleSortChange">
          <el-table-column type="selection" width="55" align="center" />
-         <el-table-column label="日志编号" align="center" prop="visitId" />
+         <el-table-column label="日志编号"  sortable="custom" align="center" prop="visitId" />
          <el-table-column label="前台模块" align="center" prop="title" />
          <el-table-column label="业务类型" align="center" prop="businessType">
             <template #default="scope">
@@ -107,14 +107,14 @@
             </template>
          </el-table-column>
          <el-table-column label="请求方式" align="center" prop="requestMethod" />
-         <el-table-column label="访问主机" align="center" prop="visitIp" width="130" :show-overflow-tooltip="true" />
+         <el-table-column label="访问主机" sortable="custom" align="center" prop="visitIp" width="130" :show-overflow-tooltip="true" />
          <el-table-column label="主机地址" align="center" prop="visitLocation" width="140" :show-overflow-tooltip="true" />
          <el-table-column label="访问状态" align="center" prop="status">
             <template #default="scope">
                <dict-tag :options="sys_common_status" :value="scope.row.status" />
             </template>
          </el-table-column>
-         <el-table-column label="访问日期" align="center" prop="visitTime" sortable="custom" :sort-orders="['descending', 'ascending']" width="180">
+         <el-table-column label="访问日期" sortable="custom" align="center" prop="visitTime" sortable="custom" :sort-orders="['descending', 'ascending']" width="180">
             <template #default="scope">
                <span>{{ parseTime(scope.row.visitTime) }}</span>
             </template>
