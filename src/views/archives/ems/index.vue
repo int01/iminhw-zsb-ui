@@ -528,7 +528,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item
-          label="是否按录取数据更新其他基本信息？"
+          label="是否按录取数据补全其他基本信息？"
           :style="`display: ${unpack.showSwitch ? '' : 'none'};`"
         >
           <el-switch
