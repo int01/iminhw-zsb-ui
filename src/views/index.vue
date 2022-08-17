@@ -101,7 +101,6 @@ function goTarget(url) {
   window.open(url, "__blank");
 }
 
-
 function matYearBarFun(data = []) {
   const matYearBarEchartInstance = echarts.init(matYearBar.value);
   /** 数据处理 start  */
@@ -124,7 +123,15 @@ function matYearBarFun(data = []) {
       dimensions, // 近三年的年份
       source: data,
     },
-    xAxis: { type: "category" },
+    xAxis: {
+      type: "category",
+      axisLabel: {
+        //x轴文字的配置
+        show: true,
+        interval: 0,
+        rotate: 48,
+      },
+    },
     yAxis: {}, // name: "录取人数"
     // Declare several bar series, each will be mapped
     // to a column of dataset.source by default.
@@ -173,7 +180,7 @@ getStuMatBythreeYearNumP().then((response) => {
     let itemObj = {};
     if (resIndex != -1) {
       itemObj = resArr[resIndex];
-      resArr.splice(resIndex, 1)
+      resArr.splice(resIndex, 1);
       itemObj[item.year] = item.value;
     } else {
       itemObj["dq"] = item.dq;
