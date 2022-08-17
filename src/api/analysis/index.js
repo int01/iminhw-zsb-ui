@@ -7,4 +7,10 @@ export function getHongPageCount() {
     method: 'get',
   })
 }
-
+// smbynp
+export function getStuMatBythreeYearNumP() {
+  return request({
+    url: '/analysis/index/smbynp',
+    method: 'get',
+  })
+}

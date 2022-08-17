@@ -30,38 +30,10 @@
         <el-col :xs="24" :span="16">
           <el-card class="box-card">
             <template #header>
-              <span>待办事项</span>
+              <span>外省近三年录取人数</span>
             </template>
-            <div>
-              <span
-                >I sit at my window this morning where the world like a
-                passer-by stops for a moment, nods to me and goes.</span
-              >
-              <el-divider />
-              <span
-                >There little thoughts are the rustle of leaves; they have their
-                whisper of joy in my mind.</span
-              >
-              <el-divider />
-              <span
-                >What you are you do not see, what you see is your shadow.
-              </span>
-              <el-divider content-position="left"
-                >Rabindranath Tagore</el-divider
-              >
-              <span
-                >My wishes are fools, they shout across thy song, my Master. Let
-                me but listen.</span
-              >
-              <span>I cannot choose the best. The best chooses me.</span>
-              <el-divider content-position="right"
-                >Rabindranath Tagore</el-divider
-              >
-               <span
-                >My wishes are fools, they shout across thy song, my Master. Let
-                me but listen.</span
-              >
-               <el-divider />
+            <div v-hasPermi="['analysis:index:smnp']">
+              <div ref="matYearBar" style="height: 460px; width: 100%" />
             </div>
           </el-card>
         </el-col>
@@ -115,18 +87,52 @@
 import useUserStore from "@/store/modules/user";
 import * as echarts from "echarts";
 
-import { getHongPageCount } from "@/api/analysis/index";
+import {
+  getHongPageCount,
+  getStuMatBythreeYearNumP,
+} from "@/api/analysis/index";
 
 const userStore = useUserStore();
 
 const hpvCount = ref(null);
+const matYearBar = ref(null);
 
 function goTarget(url) {
   window.open(url, "__blank");
 }
 
+
+function matYearBarFun(data = []) {
+  const matYearBarEchartInstance = echarts.init(matYearBar.value);
+  /** 数据处理 start  */
+  const dimensions = ["dq"]; // 近三年的年份
+  const nowYear = new Date().getFullYear();
+  dimensions.push(nowYear - 2);
+  dimensions.push(nowYear - 1);
+  dimensions.push(nowYear);
+
+  /** 数据处理 end  */
+  matYearBarEchartInstance.setOption({
+    tooltip: {
+      trigger: "axis",
+      axisPointer: {
+        type: "shadow",
+      },
+    },
+    legend: {},
+    dataset: {
+      dimensions, // 近三年的年份
+      source: data,
+    },
+    xAxis: { type: "category" },
+    yAxis: {}, // name: "录取人数"
+    // Declare several bar series, each will be mapped
+    // to a column of dataset.source by default.
+    series: [{ type: "bar" }, { type: "bar" }, { type: "bar" }],
+  });
+}
+
 getHongPageCount().then((response) => {
-  console.log("response", response);
   const commandstatsIntance = echarts.init(hpvCount.value, "macarons");
   commandstatsIntance.setOption({
     title: {
@@ -157,6 +163,25 @@ getHongPageCount().then((response) => {
       },
     ],
   });
+});
+getStuMatBythreeYearNumP().then((response) => {
+  const resArr = [];
+  response.data.forEach((item) => {
+    const resIndex = resArr.findIndex((v) => {
+      return v.dq == item.dq;
+    });
+    let itemObj = {};
+    if (resIndex != -1) {
+      itemObj = resArr[resIndex];
+      resArr.splice(resIndex, 1)
+      itemObj[item.year] = item.value;
+    } else {
+      itemObj["dq"] = item.dq;
+      itemObj[item.year] = item.value;
+    }
+    resArr.push(itemObj);
+  });
+  matYearBarFun(resArr);
 });
 </script>
 
