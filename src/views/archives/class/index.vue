@@ -541,7 +541,7 @@ import {
   getClassBycollect,
 } from "@/api/archives/class";
 import { addClasstemp } from "@/api/archives/classtemp";
-import defAva from "@/assets/images/profile.jpg";
+// import defAva from "@/assets/images/profile.jpg";
 import { getToken } from "@/utils/auth";
 import printJS from "@/utils/print";
 import { ElMessage } from "element-plus";

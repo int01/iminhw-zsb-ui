@@ -200,9 +200,9 @@
   </div>
 </template>
 
-<script setup name="AnalysisMatriculate">
+<script setup name="Anamatriculate">
 import { listMatriculate } from "@/api/analysis/matriculate";
-import { ElMessage, ElMessageBox } from "element-plus";
+// import { ElMessage, ElMessageBox } from "element-plus";
 
 const { proxy } = getCurrentInstance();
 const { matriculate_pc, matriculate_kl } = proxy.useDict(
