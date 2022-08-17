@@ -20,7 +20,7 @@ import { isExternal } from "@/utils/validate";
 const props = defineProps({
   src: {
     type: String,
-    required: true
+    required: ""
   },
   width: {
     type: [Number, String],
