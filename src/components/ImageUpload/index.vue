@@ -1,21 +1,21 @@
 <template>
   <div class="component-upload-image">
     <el-upload
-      multiple
-      :action="uploadImgUrl"
-      list-type="picture-card"
-      :on-success="handleUploadSuccess"
-      :before-upload="handleBeforeUpload"
-      :limit="limit"
-      :on-error="handleUploadError"
-      :on-exceed="handleExceed"
-      name="file"
-      :on-remove="handleRemove"
-      :show-file-list="true"
-      :headers="headers"
-      :file-list="fileList"
-      :on-preview="handlePictureCardPreview"
-      :class="{ hide: fileList.length >= limit }"
+        multiple
+        :action="uploadImgUrl"
+        list-type="picture-card"
+        :on-success="handleUploadSuccess"
+        :before-upload="handleBeforeUpload"
+        :limit="limit"
+        :on-error="handleUploadError"
+        :on-exceed="handleExceed"
+        ref="imageUpload"
+        :before-remove="handleDelete"
+        :show-file-list="true"
+        :headers="headers"
+        :file-list="fileList"
+        :on-preview="handlePictureCardPreview"
+        :class="{ hide: fileList.length >= limit }"
     >
       <el-icon class="avatar-uploader-icon"><plus /></el-icon>
     </el-upload>
@@ -32,14 +32,14 @@
     </div>
 
     <el-dialog
-      v-model="dialogVisible"
-      title="预览"
-      width="800px"
-      append-to-body
+        v-model="dialogVisible"
+        title="预览"
+        width="800px"
+        append-to-body
     >
       <img
-        :src="dialogImageUrl"
-        style="display: block; max-width: 100%; margin: 0 auto"
+          :src="dialogImageUrl"
+          style="display: block; max-width: 100%; margin: 0 auto"
       />
     </el-dialog>
   </div>
@@ -83,7 +83,7 @@ const uploadImgUrl = ref(import.meta.env.VITE_APP_BASE_API + "/common/upload"); 
 const headers = ref({ Authorization: "Bearer " + getToken() });
 const fileList = ref([]);
 const showTip = computed(
-  () => props.isShowTip && (props.fileType || props.fileSize)
+    () => props.isShowTip && (props.fileType || props.fileSize)
 );
 
 watch(() => props.modelValue, val => {
@@ -107,23 +107,6 @@ watch(() => props.modelValue, val => {
   }
 },{ deep: true, immediate: true });
 
-// 删除图片
-function handleRemove(file, files) {
-  emit("update:modelValue", listToString(fileList.value));
-}
-
-// 上传成功回调
-function handleUploadSuccess(res) {
-  uploadList.value.push({ name: res.fileName, url: res.fileName });
-  if (uploadList.value.length === number.value) {
-    fileList.value = fileList.value.filter(f => f.url !== undefined).concat(uploadList.value);
-    uploadList.value = [];
-    number.value = 0;
-    emit("update:modelValue", listToString(fileList.value));
-    proxy.$modal.closeLoading();
-  }
-}
-
 // 上传前loading加载
 function handleBeforeUpload(file) {
   let isImg = false;
@@ -142,7 +125,7 @@ function handleBeforeUpload(file) {
   }
   if (!isImg) {
     proxy.$modal.msgError(
-      `文件格式不正确, 请上传${props.fileType.join("/")}图片格式文件!`
+        `文件格式不正确, 请上传${props.fileType.join("/")}图片格式文件!`
     );
     return false;
   }
@@ -160,6 +143,41 @@ function handleBeforeUpload(file) {
 // 文件个数超出
 function handleExceed() {
   proxy.$modal.msgError(`上传文件数量不能超过 ${props.limit} 个!`);
+}
+
+// 上传成功回调
+function handleUploadSuccess(res, file) {
+  if (res.code === 200) {
+    uploadList.value.push({ name: res.fileName, url: res.fileName });
+    uploadedSuccessfully();
+  } else {
+    number.value--;
+    proxy.$modal.closeLoading();
+    proxy.$modal.msgError(res.msg);
+    proxy.$refs.imageUpload.handleRemove(file);
+    uploadedSuccessfully();
+  }
+}
+
+// 删除图片
+function handleDelete(file) {
+  const findex = fileList.value.map(f => f.name).indexOf(file.name);
+  if (findex > -1 && uploadList.value.length === number.value) {
+    fileList.value.splice(findex, 1);
+    emit("update:modelValue", listToString(fileList.value));
+    return false;
+  }
+}
+
+// 上传结束处理
+function uploadedSuccessfully() {
+  if (number.value > 0 && uploadList.value.length === number.value) {
+    fileList.value = fileList.value.filter(f => f.url !== undefined).concat(uploadList.value);
+    uploadList.value = [];
+    number.value = 0;
+    emit("update:modelValue", listToString(fileList.value));
+    proxy.$modal.closeLoading();
+  }
 }
 
 // 上传失败
@@ -190,6 +208,6 @@ function listToString(list, separator) {
 <style scoped lang="scss">
 // .el-upload--picture-card 控制加号部分
 :deep(.hide .el-upload--picture-card) {
-    display: none;
+  display: none;
 }
 </style>
