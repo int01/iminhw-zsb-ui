@@ -151,7 +151,7 @@
           ><el-tooltip
             class="box-item"
             effect="dark"
-            content="当前版本仅一人可操作，多人会出现序号冲突"
+            content="此功能当前版本仅一台机器可操作，多台同时操作会出现序号冲突"
             placement="top"
           >
             签收验证
@@ -417,18 +417,16 @@
         :rules="rules"
         label-width="100px"
       >
-        <el-form-item label="数据导入年">
-          <el-date-picker
-            v-model="year"
-            type="year"
-            placeholder="请选择数据导入年"
-            clearable
-            readonly
-            disabled
-            format="YYYY"
-            value-format="YYYY"
-          />
-        </el-form-item>
+<!--        <el-form-item label="数据导入年">-->
+<!--          <el-date-picker-->
+<!--            v-model="verifyFrom.year"-->
+<!--            type="year"-->
+<!--            placeholder="请选择数据导入年"-->
+<!--            clearable-->
+<!--            format="YYYY"-->
+<!--            value-format="YYYY"-->
+<!--          />-->
+<!--        </el-form-item>-->
         <el-form-item label="签收验证" prop="qsyz">
           <el-select
             v-model="verifyFrom.qsyz"
@@ -615,9 +613,10 @@ import { getToken } from "@/utils/auth";
 import { ElMessage } from "element-plus";
 
 const { proxy } = getCurrentInstance();
-const { data_status, in_archives_ems_danan, ems_validated } = proxy.useDict(
+const { data_status, in_archives_ems_danan, ems_validated, class_file_cover_status } = proxy.useDict(
   "data_status",
   "in_archives_ems_danan",
+  "class_file_cover_status",
   "ems_validated"
 );
 
@@ -630,7 +629,6 @@ const single = ref(true);
 const multiple = ref(true);
 const total = ref(0);
 const title = ref("");
-const year = ref(new Date());
 
 /*** 导入参数 */
 const upload = reactive({
