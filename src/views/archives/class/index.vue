@@ -1,83 +1,94 @@
 <template>
   <div class="app-container">
     <el-form
-      :model="queryParams"
-      ref="queryRef"
-      :inline="true"
-      v-show="showSearch"
-      label-width="70px"
+        :model="queryParams"
+        ref="queryRef"
+        :inline="true"
+        v-show="showSearch"
+        label-width="70px"
     >
       <el-form-item label="学号" prop="xuehao">
         <el-input
-          v-model="queryParams.xuehao"
-          placeholder="请输入学号"
-          clearable
-          @keyup.enter="handleQuery"
+            v-model="queryParams.xuehao"
+            placeholder="请输入学号"
+            clearable
+            @keyup.enter="handleQuery"
         />
       </el-form-item>
       <el-form-item label="班级" prop="bj">
         <el-input
-          v-model="queryParams.bj"
-          placeholder="请输入班级"
-          clearable
-          @keyup.enter="handleQuery"
+            v-model="queryParams.bj"
+            placeholder="请输入班级"
+            clearable
+            @keyup.enter="handleQuery"
         />
       </el-form-item>
       <el-form-item label="姓名" prop="xm">
         <el-input
-          v-model="queryParams.xm"
-          placeholder="请输入姓名"
-          clearable
-          @keyup.enter="handleQuery"
+            v-model="queryParams.xm"
+            placeholder="请输入姓名"
+            clearable
+            @keyup.enter="handleQuery"
         />
       </el-form-item>
       <el-form-item label="档案状态" prop="dazt">
         <el-select
-          v-model="queryParams.dazt"
-          placeholder="请选择档案状态"
-          clearable
+            v-model="queryParams.dazt"
+            placeholder="请选择档案状态"
+            clearable
         >
           <el-option
-            v-for="dict in archives_class_status"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
+              v-for="dict in archives_class_status"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
           />
         </el-select>
       </el-form-item>
       <el-form-item label="考生号" prop="ksh">
         <el-input
-          v-model="queryParams.ksh"
-          placeholder="请输入考生号"
-          clearable
-          @keyup.enter="handleQuery"
+            v-model="queryParams.ksh"
+            placeholder="请输入考生号"
+            clearable
+            @keyup.enter="handleQuery"
         />
       </el-form-item>
       <el-form-item label="身份证号" prop="sfzh">
         <el-input
-          v-model="queryParams.sfzh"
-          placeholder="请输入身份证号"
-          clearable
-          @keyup.enter="handleQuery"
+            v-model="queryParams.sfzh"
+            placeholder="请输入身份证号"
+            clearable
+            @keyup.enter="handleQuery"
         />
+      </el-form-item>
+      <el-form-item label="档案袋" prop="dadqk">
+        <el-select v-model="queryParams.dadqk" placeholder="请选择档案袋" clearable>
+          <el-option
+              v-for="dict in class_file_cover_status"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="数据状态" prop="status">
         <el-select
-          v-model="queryParams.status"
-          placeholder="请选择数据状态"
-          clearable
+            v-model="queryParams.status"
+            placeholder="请选择数据状态"
+            clearable
         >
           <el-option
-            v-for="dict in data_status"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
+              v-for="dict in data_status"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
           />
         </el-select>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery"
-          >搜索</el-button
+        >搜索
+        </el-button
         >
         <el-button icon="Refresh" @click="resetQuery">重置</el-button>
       </el-form-item>
@@ -86,184 +97,194 @@
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
-          type="primary"
-          plain
-          icon="Plus"
-          @click="handleAdd"
-          v-hasPermi="['archives:class:add']"
-          >新增</el-button
+            type="primary"
+            plain
+            icon="Plus"
+            @click="handleAdd"
+            v-hasPermi="['archives:class:add']"
+        >新增
+        </el-button
         >
       </el-col>
       <el-col :span="1.5">
         <el-button
-          type="success"
-          plain
-          icon="Edit"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['archives:class:edit']"
-          >修改</el-button
+            type="success"
+            plain
+            icon="Edit"
+            :disabled="single"
+            @click="handleUpdate"
+            v-hasPermi="['archives:class:edit']"
+        >修改
+        </el-button
         >
       </el-col>
       <el-col :span="1.5">
         <el-button
-          type="danger"
-          plain
-          icon="Delete"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['archives:class:remove']"
-          >删除</el-button
+            type="danger"
+            plain
+            icon="Delete"
+            :disabled="multiple"
+            @click="handleDelete"
+            v-hasPermi="['archives:class:remove']"
+        >删除
+        </el-button
         >
       </el-col>
       <el-col :span="1.5">
         <el-button
-          type="warning"
-          plain
-          icon="Download"
-          @click="handleExport"
-          v-hasPermi="['archives:class:export']"
-          >导出</el-button
+            type="warning"
+            plain
+            icon="Download"
+            @click="handleExport"
+            v-hasPermi="['archives:class:export']"
+        >导出
+        </el-button
         >
       </el-col>
       <!-- 导入数据（主要导入分班数据） -->
       <el-col :span="1.5">
         <el-button
-          type="danger"
-          plain
-          icon="Upload"
-          @click="handleImport"
-          v-hasPermi="['archives:class:import']"
-          ><el-tooltip
-            class="box-item"
-            effect="dark"
-            content="主要使用场景是导入分班数据"
-            placement="top"
-            >导入
+            type="danger"
+            plain
+            icon="Upload"
+            @click="handleImport"
+            v-hasPermi="['archives:class:import']"
+        >
+          <el-tooltip
+              class="box-item"
+              effect="dark"
+              content="主要使用场景是导入分班数据"
+              placement="top"
+          >导入
           </el-tooltip>
         </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
-          type="warning"
-          plain
-          icon="Postcard"
-          @click="handleCollect"
-          v-hasPermi="['archives:class:collect']"
-          >现场收集</el-button
+            type="warning"
+            plain
+            icon="Postcard"
+            @click="handleCollect"
+            v-hasPermi="['archives:class:collect']"
+        >现场收集
+        </el-button
         >
       </el-col>
       <el-col :span="1.5">
         <el-button
-          type="info"
-          plain
-          icon="Printer"
-          v-hasPermi="['archives:class:print']"
-          @click="handlePrintDialog"
-          ><el-tooltip
-            class="box-item"
-            effect="dark"
-            content="当变成两页时请更换其他浏览器，原因：谷歌浏览器最小字体为12px"
-            placement="top"
-            >打印
-          </el-tooltip></el-button
+            type="info"
+            plain
+            icon="Printer"
+            v-hasPermi="['archives:class:print']"
+            @click="handlePrintDialog"
+        >
+          <el-tooltip
+              class="box-item"
+              effect="dark"
+              content="当变成两页时请更换其他浏览器，原因：谷歌浏览器最小字体为12px"
+              placement="top"
+          >打印
+          </el-tooltip>
+        </el-button
         >
       </el-col>
       <!-- <div id="printTable"></div> -->
 
       <right-toolbar
-        v-model:showSearch="showSearch"
-        @queryTable="getList"
+          v-model:showSearch="showSearch"
+          @queryTable="getList"
       ></right-toolbar>
     </el-row>
 
     <el-table
-      v-loading="loading"
-      :data="classList"
-      @selection-change="handleSelectionChange"
-      @sort-change="handleSortChange"
+        v-loading="loading"
+        :data="classList"
+        @selection-change="handleSelectionChange"
+        @sort-change="handleSortChange"
     >
-      <el-table-column type="selection" width="55" align="center" />
+      <el-table-column type="selection" width="55" align="center"/>
       <el-table-column
-        label="学号"
-        min-width="100"
-        fixed
-        align="center"
-        sortable="custom"
-        prop="xuehao"
+          label="学号"
+          min-width="100"
+          fixed
+          align="center"
+          sortable="custom"
+          prop="xuehao"
       />
       <el-table-column
-        label="档案序号"
-        min-width="90"
-        fixed
-        align="center"
-        prop="xh"
+          label="档案序号"
+          min-width="90"
+          fixed
+          align="center"
+          prop="xh"
       />
       <el-table-column
-        label="班级"
-        sortable="custom"
-        min-width="100"
-        align="center"
-        prop="bj"
+          label="班级"
+          sortable="custom"
+          min-width="100"
+          align="center"
+          prop="bj"
       />
       <el-table-column
-        label="姓名"
-        sortable="custom"
-        min-width="100"
-        align="center"
-        prop="xm"
+          label="姓名"
+          sortable="custom"
+          min-width="100"
+          align="center"
+          prop="xm"
       />
       <el-table-column label="档案状态" align="center" prop="dazt">
         <template #default="scope">
-          <dict-tag :options="archives_class_status" :value="scope.row.dazt" />
+          <dict-tag :options="archives_class_status" :value="scope.row.dazt"/>
         </template>
       </el-table-column>
       <el-table-column
-        label="考生号"
-        min-width="135"
-        align="center"
-        prop="ksh"
+          label="考生号"
+          min-width="135"
+          align="center"
+          prop="ksh"
       />
       <!-- <el-table-column label="身份证号" align="center" prop="sfzh" /> -->
       <el-table-column label="数据状态" align="center" prop="status">
         <template #default="scope">
-          <dict-tag :options="data_status" :value="scope.row.status" />
+          <dict-tag :options="data_status" :value="scope.row.status"/>
         </template>
       </el-table-column>
       <!-- <el-table-column label="备注" align="center" prop="remark" /> -->
       <el-table-column
-        label="操作"
-        fixed="right"
-        min-width="150"
-        align="center"
-        v-hasPermi="['archives:class:edit', 'archives:class:remove']"
-        class-name="small-padding fixed-width"
+          label="操作"
+          fixed="right"
+          min-width="150"
+          align="center"
+          v-hasPermi="['archives:class:edit', 'archives:class:remove']"
+          class-name="small-padding fixed-width"
       >
         <template #default="scope">
           <el-button
-            type="text"
-            icon="Edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['archives:class:edit']"
-            >修改</el-button
+              type="text"
+              icon="Edit"
+              @click="handleUpdate(scope.row)"
+              v-hasPermi="['archives:class:edit']"
+          >修改
+          </el-button
           >
           <el-button
-            type="text"
-            icon="Delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['archives:class:remove']"
-            >删除</el-button
+              type="text"
+              icon="Delete"
+              @click="handleDelete(scope.row)"
+              v-hasPermi="['archives:class:remove']"
+          >删除
+          </el-button
           >
         </template>
       </el-table-column>
     </el-table>
 
     <pagination
-      v-show="total > 0"
-      :total="total"
-      v-model:page="queryParams.pageNum"
-      v-model:limit="queryParams.pageSize"
-      @pagination="getList"
+        v-show="total > 0"
+        :total="total"
+        v-model:page="queryParams.pageNum"
+        v-model:limit="queryParams.pageSize"
+        @pagination="getList"
     />
 
     <!-- 添加或修改档案收集对话框 -->
@@ -271,51 +292,62 @@
       <el-form ref="classRef" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="学号" prop="xuehao">
           <el-input
-            v-model="form.xuehao"
-            v-bind:disabled="!addFlag"
-            placeholder="请输入学号"
+              v-model="form.xuehao"
+              v-bind:disabled="!addFlag"
+              placeholder="请输入学号"
           />
         </el-form-item>
         <el-form-item label="档案序号" prop="xh">
-          <el-input v-model="form.xh" placeholder="请输入档案序号" />
+          <el-input v-model="form.xh" placeholder="请输入档案序号"/>
         </el-form-item>
         <el-form-item label="班级" prop="bj">
-          <el-input v-model="form.bj" placeholder="请输入班级" />
+          <el-input v-model="form.bj" placeholder="请输入班级"/>
         </el-form-item>
         <el-form-item label="姓名" prop="xm">
-          <el-input v-model="form.xm" placeholder="请输入姓名" />
+          <el-input v-model="form.xm" placeholder="请输入姓名"/>
         </el-form-item>
         <el-form-item label="考生号" prop="ksh">
-          <el-input v-model="form.ksh" placeholder="请输入考生号" />
+          <el-input v-model="form.ksh" placeholder="请输入考生号"/>
         </el-form-item>
         <el-form-item label="档案状态" prop="dazt">
           <el-radio-group v-model="form.dazt">
             <el-radio
-              v-for="dict in archives_class_status"
-              :key="dict.value"
-              :label="parseInt(dict.value)"
-              >{{ dict.label }}</el-radio
+                v-for="dict in archives_class_status"
+                :key="dict.value"
+                :label="parseInt(dict.value)"
+            >{{ dict.label }}
+            </el-radio
             >
           </el-radio-group>
         </el-form-item>
         <el-form-item label="身份证号" prop="sfzh">
-          <el-input v-model="form.sfzh" placeholder="请输入身份证号" />
+          <el-input v-model="form.sfzh" placeholder="请输入身份证号"/>
+        </el-form-item>
+        <el-form-item label="档案袋" prop="dadqk">
+          <el-select v-model="form.dadqk" placeholder="请选择档案袋情况">
+            <el-option
+                v-for="dict in class_file_cover_status"
+                :key="dict.value"
+                :label="dict.label"
+                :value="parseInt(dict.value)"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="数据状态" prop="status">
           <el-select v-model="form.status" placeholder="请选择数据状态">
             <el-option
-              v-for="dict in data_status"
-              :key="dict.value"
-              :label="dict.label"
-              :value="parseInt(dict.value)"
+                v-for="dict in data_status"
+                :key="dict.value"
+                :label="dict.label"
+                :value="parseInt(dict.value)"
             ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="备注">
           <el-input
-            v-model="form.remark"
-            type="textarea"
-            placeholder="请输入备注"
+              v-model="form.remark"
+              type="textarea"
+              placeholder="请输入备注"
           />
         </el-form-item>
       </el-form>
@@ -329,40 +361,40 @@
 
     <!-- 数据导入对话框 -->
     <el-dialog
-      :title="upload.title"
-      v-model="upload.open"
-      width="400px"
-      append-to-body
+        :title="upload.title"
+        v-model="upload.open"
+        width="400px"
+        append-to-body
     >
       <el-upload
-        ref="uploadRef"
-        :limit="1"
-        accept=".xlsx, .xls"
-        :headers="upload.headers"
-        :action="upload.url + '?updateSupport=' + upload.updateSupport"
-        :disabled="upload.isUploading"
-        :on-progress="handleFileUploadProgress"
-        :on-success="handleFileSuccess"
-        :auto-upload="false"
-        drag
+          ref="uploadRef"
+          :limit="1"
+          accept=".xlsx, .xls"
+          :headers="upload.headers"
+          :action="upload.url + '?updateSupport=' + upload.updateSupport"
+          :disabled="upload.isUploading"
+          :on-progress="handleFileUploadProgress"
+          :on-success="handleFileSuccess"
+          :auto-upload="false"
+          drag
       >
         <el-icon class="el-icon--upload">
-          <upload-filled />
+          <upload-filled/>
         </el-icon>
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
         <template #tip>
           <div class="el-upload__tip text-center">
             <div class="el-upload__tip">
-              <el-checkbox v-model="upload.updateSupport" />
+              <el-checkbox v-model="upload.updateSupport"/>
               是否更新已经存在的数据
             </div>
             <span>仅允许导入xls、xlsx格式文件。</span>
             <el-link
-              type="primary"
-              :underline="false"
-              style="font-size: 12px; vertical-align: baseline"
-              @click="importTemplate"
-              >下载模板
+                type="primary"
+                :underline="false"
+                style="font-size: 12px; vertical-align: baseline"
+                @click="importTemplate"
+            >下载模板
             </el-link>
           </div>
         </template>
@@ -377,23 +409,23 @@
 
     <!-- 打印小工具 -->
     <el-dialog
-      :title="print.title"
-      v-model="print.open"
-      width="300px"
-      append-to-body
-      draggable
+        :title="print.title"
+        v-model="print.open"
+        width="300px"
+        append-to-body
+        draggable
     >
       <el-form ref="printRef" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="班级" prop="bj">
-          <el-input v-model="form.bj" placeholder="请输入班级" />
+          <el-input v-model="form.bj" placeholder="请输入班级"/>
         </el-form-item>
         <el-form-item label="数据状态" prop="status">
           <el-select v-model="form.status" placeholder="请选择数据状态">
             <el-option
-              v-for="dict in data_status"
-              :key="dict.value"
-              :label="dict.label"
-              :value="parseInt(dict.value)"
+                v-for="dict in data_status"
+                :key="dict.value"
+                :label="dict.label"
+                :value="parseInt(dict.value)"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -407,64 +439,66 @@
     </el-dialog>
 
     <el-dialog
-      :title="collect.title"
-      v-model="collect.open"
-      fullscreen
-      append-to-body
+        :title="collect.title"
+        v-model="collect.open"
+        fullscreen
+        append-to-body
     >
       <!-- 
        width="60%" -->
       <el-form
-        ref="collectQueryRef"
-        :model="queryParams"
-        :inline="true"
-        label-width="70px"
+          ref="collectQueryRef"
+          :model="queryParams"
+          :inline="true"
+          label-width="70px"
       >
         <el-form-item label="学号" prop="xuehao">
           <el-input
-            v-model="queryParams.xuehao"
-            placeholder="请输入学号"
-            clearable
-            @keyup.enter="handleGetInfoBycollect"
+              v-model="queryParams.xuehao"
+              placeholder="请输入学号"
+              clearable
+              @keyup.enter="handleGetInfoBycollect"
           />
         </el-form-item>
         <el-form-item label="考生号" prop="ksh">
           <el-input
-            v-model="queryParams.ksh"
-            placeholder="请输入考生号"
-            clearable
-            @keyup.enter="handleGetInfoBycollect"
+              v-model="queryParams.ksh"
+              placeholder="请输入考生号"
+              clearable
+              @keyup.enter="handleGetInfoBycollect"
           />
         </el-form-item>
         <el-form-item label="身份证号" prop="sfzh">
           <el-input
-            v-model="queryParams.sfzh"
-            placeholder="请输入身份证号"
-            clearable
-            @keyup.enter="handleGetInfoBycollect"
+              v-model="queryParams.sfzh"
+              placeholder="请输入身份证号"
+              clearable
+              @keyup.enter="handleGetInfoBycollect"
           />
         </el-form-item>
         <el-form-item>
           <el-button
-            type="primary"
-            icon="Search"
-            @click="handleGetInfoBycollect"
-            >搜索</el-button
+              type="primary"
+              icon="Search"
+              @click="handleGetInfoBycollect"
+          >搜索
+          </el-button
           >
           <!-- <el-button icon="Refresh" @click="proxy.resetForm('collectQueryRef')">一键清空</el-button> -->
         </el-form-item>
       </el-form>
       <el-button @click="collect.innerOpen = true"
-        >打开最近的一个查询</el-button
+      >打开最近的一个查询
+      </el-button
       >
       <el-dialog
-        v-model="collect.innerOpen"
-        width="600px"
-        append-to-body
-        draggable
-        title="基本信息"
+          v-model="collect.innerOpen"
+          width="600px"
+          append-to-body
+          draggable
+          title="基本信息"
       >
-        <el-form :model="form" label-width="100px">
+        <el-form :model="form" ref="sceneRef" :rules="rules" label-width="100px">
           <el-row>
             <!-- <el-col :span="8">
               <img
@@ -478,12 +512,16 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="班级:"
-                ><el-tag>{{ form.bj }}</el-tag></el-form-item
+              >
+                <el-tag>{{ form.bj }}</el-tag>
+              </el-form-item
               >
             </el-col>
             <el-col :span="8">
               <el-form-item label="档案序号:"
-                ><el-tag>{{ form.xh }}</el-tag></el-form-item
+              >
+                <el-tag>{{ form.xh }}</el-tag>
+              </el-form-item
               >
             </el-col>
             <el-col :span="12">
@@ -495,30 +533,53 @@
             <el-col :span="12">
               <el-form-item label="身份证号:">{{ form.sfzh }}</el-form-item>
             </el-col>
+            <el-col :span="12">
+              <el-form-item label="档案袋" prop="dadqk">
+                <el-select v-model="form.dadqk" placeholder="请选择档案袋情况">
+                  <el-option
+                      v-for="dict in class_file_cover_status"
+                      :key="dict.value"
+                      :label="dict.label"
+                      :value="parseInt(dict.value)"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24">
+              <el-form-item label="备注">
+                <el-input
+                    v-model="form.remark"
+                    type="textarea"
+                    placeholder="请输入备注"
+                />
+              </el-form-item>
+            </el-col>
           </el-row>
         </el-form>
         <template #footer>
           <div class="dialog-footer">
             <el-tooltip
-              class="box-item"
-              effect="dark"
-              content="仅修改班级档案里面的档案状态为“已提交”"
-              placement="top"
+                class="box-item"
+                effect="dark"
+                content="仅修改班级档案里面的档案状态为“已提交”"
+                placement="top"
             >
               <el-button type="primary" @click="updateClassDazt"
-                >确 定</el-button
+              >确 定
+              </el-button
               >
             </el-tooltip>
             <el-tooltip
-              class="box-item"
-              effect="dark"
-              content="修改班级档案里面的档案状态为“已提交”，并放入缓存供查阅"
-              placement="top"
+                class="box-item"
+                effect="dark"
+                content="修改班级档案里面的档案状态为“已提交”，并放入缓存供查阅"
+                placement="top"
             >
               <el-button type="warning" @click="addClassTemp">暂 缓</el-button>
             </el-tooltip>
             <el-button @click="collect.innerOpen = false">关 闭</el-button>
-          </div></template
+          </div>
+        </template
         >
       </el-dialog>
       <template #footer>
@@ -540,16 +601,17 @@ import {
   getClassListByBj,
   getClassBycollect,
 } from "@/api/archives/class";
-import { addClasstemp } from "@/api/archives/classtemp";
+import {addClasstemp} from "@/api/archives/classtemp";
 // import defAva from "@/assets/images/profile.jpg";
-import { getToken } from "@/utils/auth";
+import {getToken} from "@/utils/auth";
 import printJS from "@/utils/print";
-import { ElMessage } from "element-plus";
+import {ElMessage} from "element-plus";
 
-const { proxy } = getCurrentInstance();
-const { data_status, archives_class_status } = proxy.useDict(
-  "data_status",
-  "archives_class_status"
+const {proxy} = getCurrentInstance();
+const {data_status, archives_class_status, class_file_cover_status} = proxy.useDict(
+    "data_status",
+    "archives_class_status",
+    "class_file_cover_status"
 );
 
 const classList = ref([]);
@@ -576,19 +638,21 @@ const data = reactive({
     dazt: null,
     ksh: null,
     sfzh: null,
+    dadqk: null,
     status: null,
   },
   rules: {
-    xuehao: [{ required: true, message: "学号不能为空", trigger: "blur" }],
-    xh: [{ required: true, message: "档案序号不能为空", trigger: "blur" }],
-    xm: [{ required: true, message: "姓名不能为空", trigger: "blur" }],
-    bj: [{ required: true, message: "班级不能为空", trigger: "blur" }],
-    ksh: [{ required: true, message: "考生号不能为空", trigger: "blur" }],
-    dazt: { required: true, trigger: "change", message: "请选择档案状态" },
+    xuehao: [{required: true, message: "学号不能为空", trigger: "blur"}],
+    xh: [{required: true, message: "档案序号不能为空", trigger: "blur"}],
+    xm: [{required: true, message: "姓名不能为空", trigger: "blur"}],
+    bj: [{required: true, message: "班级不能为空", trigger: "blur"}],
+    ksh: [{required: true, message: "考生号不能为空", trigger: "blur"}],
+    dazt: {required: true, trigger: "change", message: "请选择档案状态"},
+    dadqk: {required: true, trigger: "change", message: "请选择档案袋情况"},
   },
 });
 
-const { queryParams, form, rules } = toRefs(data);
+const {queryParams, form, rules} = toRefs(data);
 
 /*** 导入参数 */
 const upload = reactive({
@@ -601,7 +665,7 @@ const upload = reactive({
   // 是否更新已经存在的用户数据
   updateSupport: 0,
   // 设置上传的请求头部
-  headers: { Authorization: "Bearer " + getToken() },
+  headers: {Authorization: "Bearer " + getToken()},
   // 上传的地址
   url: import.meta.env.VITE_APP_BASE_API + "/archives/class/importData",
 });
@@ -643,6 +707,7 @@ function reset() {
     dazt: null,
     ksh: null,
     sfzh: null,
+    dadqk: 1,
     status: 0,
     createBy: null,
     updateBy: null,
@@ -724,25 +789,26 @@ function submitForm() {
 function handleDelete(row) {
   const xuehaos = row.xuehao || ids.value;
   proxy.$modal
-    .confirm('是否确认删除档案学号为"' + xuehaos + '"的数据项？')
-    .then(function () {
-      return delClass(xuehaos);
-    })
-    .then(() => {
-      getList();
-      proxy.$modal.msgSuccess("删除成功");
-    })
-    .catch(() => {});
+      .confirm('是否确认删除档案学号为"' + xuehaos + '"的数据项？')
+      .then(function () {
+        return delClass(xuehaos);
+      })
+      .then(() => {
+        getList();
+        proxy.$modal.msgSuccess("删除成功");
+      })
+      .catch(() => {
+      });
 }
 
 /** 导出按钮操作 */
 function handleExport() {
   proxy.download(
-    "archives/class/export",
-    {
-      ...queryParams.value,
-    },
-    `class_${new Date().getTime()}.xlsx`
+      "archives/class/export",
+      {
+        ...queryParams.value,
+      },
+      `class_${new Date().getTime()}.xlsx`
   );
 }
 
@@ -755,9 +821,9 @@ function handleImport() {
 /** 下载模板操作 */
 function importTemplate() {
   proxy.download(
-    "/archives/class/importTemplate",
-    {},
-    `class_${new Date().getTime()}.xlsx`
+      "/archives/class/importTemplate",
+      {},
+      `class_${new Date().getTime()}.xlsx`
   );
 }
 
@@ -771,11 +837,11 @@ const handleFileSuccess = (response, file, fileList) => {
   upload.isUploading = false;
   proxy.$refs["uploadRef"].handleRemove(file);
   proxy.$alert(
-    "<div style='overflow: auto;overflow-x: hidden;max-height: 70vh;padding: 10px 20px 0;'>" +
+      "<div style='overflow: auto;overflow-x: hidden;max-height: 70vh;padding: 10px 20px 0;'>" +
       response.msg +
       "</div>",
-    "导入结果",
-    { dangerouslyUseHTMLString: true }
+      "导入结果",
+      {dangerouslyUseHTMLString: true}
   );
   getList();
 };
@@ -817,9 +883,9 @@ function handlePrint() {
           printable: someJSONdata,
           // columnSize: '10%'
           properties: [
-            { field: "xh", displayName: "序号", columnSize: "5%" },
-            { field: "xm", displayName: "姓名", columnSize: "20%" },
-            { field: "xuehao", displayName: "学号" },
+            {field: "xh", displayName: "序号", columnSize: "5%"},
+            {field: "xm", displayName: "姓名", columnSize: "20%"},
+            {field: "xuehao", displayName: "学号"},
             {
               field: "dazt",
               displayName: "档案提交情况",
@@ -827,7 +893,7 @@ function handlePrint() {
               dictOptions: archives_class_status,
             },
             // { field: "sfzh", displayName: "身份证号" },
-            { field: "remark", displayName: "备注" },
+            {field: "remark", displayName: "备注"},
           ],
           type: "json",
           header: `<div style="width: 100%; text-align: center;">
@@ -836,9 +902,9 @@ function handlePrint() {
                     </div>`,
           documentTitle: `${bj}班入学档案提交情况`,
           gridHeaderStyle:
-            "border: 1px solid #A8ABB2;text-align:center; font-family: '宋体'; font-size: 12px;",
+              "border: 1px solid #A8ABB2;text-align:center; font-family: '宋体'; font-size: 12px;",
           gridStyle:
-            "border: 1px solid #A8ABB2;text-align:center; font-family: '宋体'; font-size: 12px;",
+              "border: 1px solid #A8ABB2;text-align:center; font-family: '宋体'; font-size: 12px;",
           style: "@page {margin:5mm 10mm}",
           font_size: "5px",
         });
@@ -861,9 +927,9 @@ function handleGetInfoBycollect() {
   proxy.$refs["collectQueryRef"].validate(() => {
     const serchFrom = queryParams.value;
     if (
-      serchFrom.ksh != null ||
-      serchFrom.xuehao != null ||
-      serchFrom.sfzh != null
+        serchFrom.ksh != null ||
+        serchFrom.xuehao != null ||
+        serchFrom.sfzh != null
     ) {
       getClassBycollect(serchFrom).then((response) => {
         form.value = response.data;
@@ -877,12 +943,17 @@ function handleGetInfoBycollect() {
 }
 
 function updateClassDazt() {
-  const updateForm = form.value;
-  updateForm.dazt = 1;
-  updateForm.remark = "现场收集";
-  updateClass(updateForm).then((response) => {
-    proxy.$modal.msgSuccess("修改档案状态成功");
-    collect.innerOpen = false
+  proxy.$refs["sceneRef"].validate((valid) => {
+    if (valid) {
+      const updateForm = form.value;
+      updateForm.dazt = 1;
+      const remkTemp = updateForm.remark;
+      updateForm.remark = `${remkTemp}，现场收集`;
+      updateClass(updateForm).then((response) => {
+        proxy.$modal.msgSuccess("修改档案状态成功");
+        collect.innerOpen = false
+      });
+    }
   });
 }
 

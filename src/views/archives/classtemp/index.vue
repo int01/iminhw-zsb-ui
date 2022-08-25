@@ -15,7 +15,7 @@
           @keyup.enter="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="序号" prop="xh">
+      <el-form-item label="档案序号" prop="xh">
         <el-input
           v-model="queryParams.xh"
           placeholder="请输入序号"
@@ -223,7 +223,7 @@
         <el-form-item label="学号" prop="xuehao">
           <el-input v-model="form.xuehao" placeholder="请输入学号" />
         </el-form-item>
-        <el-form-item label="序号" prop="xh">
+        <el-form-item label="档案序号" prop="xh">
           <el-input v-model="form.xh" placeholder="请输入序号" />
         </el-form-item>
         <el-form-item label="班级" prop="bj">
