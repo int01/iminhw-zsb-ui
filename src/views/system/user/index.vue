@@ -142,7 +142,8 @@
                            :show-overflow-tooltip="true"/>
           <el-table-column label="部门" align="center" key="deptName" prop="dept.deptName" v-if="columns[3].visible"
                            :show-overflow-tooltip="true"/>
-          <el-table-column label="手机号码" align="center" key="phonenumber" prop="phonenumber" v-if="columns[4].visible"
+          <el-table-column label="手机号码" align="center" key="phonenumber" prop="phonenumber"
+                           v-if="columns[4].visible"
                            width="120"/>
           <el-table-column label="状态" align="center" key="status" v-if="columns[5].visible">
             <template #default="scope">
@@ -160,8 +161,8 @@
             </template>
           </el-table-column>
           <el-table-column label="操作"
-          v-hasPermi="['system:user:edit', 'system:user:remove','system:user:resetPwd']"
-          align="center" width="150" class-name="small-padding fixed-width">
+                           v-hasPermi="['system:user:edit', 'system:user:remove','system:user:resetPwd']"
+                           align="center" width="150" class-name="small-padding fixed-width">
             <template #default="scope">
               <el-tooltip content="修改" placement="top" v-if="scope.row.userId !== 1">
                 <el-button
@@ -250,7 +251,8 @@
           </el-col>
           <el-col :span="12">
             <el-form-item v-if="form.userId == undefined" label="用户密码" prop="password">
-              <el-input v-model="form.password" placeholder="请输入用户密码" type="password" maxlength="20" show-password/>
+              <el-input v-model="form.password" placeholder="请输入用户密码" type="password" maxlength="20"
+                        show-password/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -367,7 +369,16 @@
 
 <script setup name="User">
 import {getToken} from "@/utils/auth";
-import {changeUserStatus, listUser, resetUserPwd, delUser, getUser, updateUser, addUser} from "@/api/system/user";
+import {
+  changeUserStatus,
+  listUser,
+  resetUserPwd,
+  delUser,
+  getUser,
+  updateUser,
+  addUser,
+  deptTreeSelect,
+} from "@/api/system/user";
 
 const router = useRouter();
 const {proxy} = getCurrentInstance();
