@@ -2,15 +2,15 @@
   <div id="tags-view-container" class="tags-view-container">
     <scroll-pane ref="scrollPaneRef" class="tags-view-wrapper" @scroll="handleScroll">
       <router-link
-        v-for="tag in visitedViews"
-        :key="tag.path"
-        :data-path="tag.path"
-        :class="isActive(tag) ? 'active' : ''"
-        :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }"
-        class="tags-view-item"
-        :style="activeStyle(tag)"
-        @click.middle="!isAffix(tag) ? closeSelectedTag(tag) : ''"
-        @contextmenu.prevent="openMenu(tag, $event)"
+          v-for="tag in visitedViews"
+          :key="tag.path"
+          :data-path="tag.path"
+          :class="isActive(tag) ? 'active' : ''"
+          :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }"
+          class="tags-view-item"
+          :style="activeStyle(tag)"
+          @click.middle="!isAffix(tag) ? closeSelectedTag(tag) : ''"
+          @contextmenu.prevent="openMenu(tag, $event)"
       >
         {{ tag.title }}
         <span v-if="!isAffix(tag)" @click.prevent.stop="closeSelectedTag(tag)">
@@ -133,7 +133,7 @@ function initTags() {
   for (const tag of res) {
     // Must have tag name
     if (tag.name) {
-       useTagsViewStore().addVisitedView(tag)
+      useTagsViewStore().addVisitedView(tag)
     }
   }
 }
@@ -141,6 +141,9 @@ function addTags() {
   const { name } = route
   if (name) {
     useTagsViewStore().addView(route)
+    if (route.meta.link) {
+      useTagsViewStore().addIframeView(route);
+    }
   }
   return false
 }
@@ -159,6 +162,9 @@ function moveToCurrentTag() {
 }
 function refreshSelectedTag(view) {
   proxy.$tab.refreshPage(view);
+  if (route.meta.link) {
+    useTagsViewStore().delIframeView(route);
+  }
 }
 function closeSelectedTag(view) {
   proxy.$tab.closePage(view).then(({ visitedViews }) => {
