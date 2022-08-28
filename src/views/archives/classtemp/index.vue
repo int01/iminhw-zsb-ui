@@ -133,7 +133,6 @@
       @sort-change="handleSortChange"
     >
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="编号" align="center" prop="id" />
       <el-table-column
         label="学号"
         min-width="100"
@@ -151,6 +150,7 @@
         prop="xh"
       />
       <el-table-column label="班级" sortable='custom' min-width="100" align="center" prop="bj" />
+      <el-table-column label="编号" align="center" prop="id" />
       <el-table-column label="姓名" sortable='custom' min-width="100" align="center" prop="xm" />
       <el-table-column
         label="考生号"

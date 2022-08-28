@@ -948,7 +948,11 @@ function updateClassDazt() {
       const updateForm = form.value;
       updateForm.dazt = 1;
       const remkTemp = updateForm.remark;
-      updateForm.remark = `${remkTemp}，现场收集`;
+      if (remkTemp == null || remkTemp == "现场收集") {
+        updateForm.remark = `现场收集`;
+      } else {
+        updateForm.remark = `${remkTemp}，现场收集`;
+      }
       updateClass(updateForm).then((response) => {
         proxy.$modal.msgSuccess("修改档案状态成功");
         collect.innerOpen = false
