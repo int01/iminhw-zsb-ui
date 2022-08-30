@@ -948,10 +948,10 @@ function updateClassDazt() {
       const updateForm = form.value;
       updateForm.dazt = 1;
       const remkTemp = updateForm.remark;
-      if (remkTemp == null || remkTemp == "现场收集") {
-        updateForm.remark = `现场收集`;
+      if (remkTemp == null || remkTemp == "现场录入") {
+        updateForm.remark = `现场录入`;
       } else {
-        updateForm.remark = `${remkTemp}，现场收集`;
+        updateForm.remark = `${remkTemp}，现场录入`;
       }
       updateClass(updateForm).then((response) => {
         proxy.$modal.msgSuccess("修改档案状态成功");
