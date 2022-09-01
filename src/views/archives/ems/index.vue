@@ -568,14 +568,19 @@
             !unpack.updateClassSwitch ? 'none' : ''
           };`"
         />
-        <!-- <el-form-item label="情况时明" prop="remark">
-          <el-input
-            v-model="unpackForm.remark"
-            type="textarea"
-            placeholder="请记得描述实际情况。如：没有档案的情况里面是什么（仅团籍），档案是已经被拆封的（拆封）"
-            clearable
-          />
-        </el-form-item> -->
+        <el-form-item
+            label="档案袋"
+            prop="dadqk"
+            :style="`display: ${unpack.showSwitch ? '' : 'none'};`">
+          <el-select v-model="unpackForm.dadqk" placeholder="请选择档案袋情况">
+            <el-option
+                v-for="dict in class_file_cover_status"
+                :key="dict.value"
+                :label="dict.label"
+                :value="parseInt(dict.value)"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item
             label="考生号"
             prop="ksh"
@@ -588,11 +593,19 @@
               clearable
           />
         </el-form-item>
+        <!-- <el-form-item label="情况时明" prop="remark">
+  <el-input
+    v-model="unpackForm.remark"
+    type="textarea"
+    placeholder="请记得描述实际情况。如：没有档案的情况里面是什么（仅团籍），档案是已经被拆封的（拆封）"
+    clearable
+  />
+</el-form-item> -->
         <el-form-item label="简要说明" prop="remark" >
           <el-input
               v-model="unpackForm.remark"
               type="textarea"
-              placeholder="请输入备注"
+              placeholder="请输入备注（此备注是邮寄档案里面的备注）"
           />
         </el-form-item>
       </el-form>
@@ -705,6 +718,7 @@ const data = reactive({
     xh: {required: true, trigger: "blur", message: "请输入快递序号"},
     // year: { required: true, trigger: "change", message: "请选择验证数据年份" },
     sfda: {required: true, trigger: "change", message: "请选择是否存在档案"},
+    dadqk: {required: true, trigger: "change", message: "请选择档案袋破损情况"},
     ksh: {required: true, trigger: "blur", message: "请输入考生号"},
   },
 });
@@ -922,17 +936,20 @@ function submitVerifyForm() {
 
 function handleRadioChange(e) {
   if (e != 1) {
+    /** 不是档案的情况 */
     unpackForm.value.ksh = "1";
     unpack.showSwitch = false;
     unpack.getMatUpDateEmsSwitch = false;
     unpack.updateClassSwitch = false;
     // unpack.getClassShow = false;
+    unpackForm.value.dadqk = -1;
   } else {
     unpack.showSwitch = true;
     unpackForm.value.ksh = null;
     unpack.getMatUpDateEmsSwitch = true;
     unpack.updateClassSwitch = true;
     // unpack.getClassShow = true;updateClassSwitch
+    unpackForm.value.dadqk = 1;
   }
 }
 
@@ -941,6 +958,7 @@ function submitUnpackForm() {
   proxy.$refs["unpackRef"].validate((valid) => {
     if (valid) {
       let formPm = {};
+      console.log(unpackForm.value)
       // 如果直接 unpackForm.value.ksh = null; 触发表单验证！
       if (!unpack.showSwitch) {
         formPm = {...unpackForm.value, ksh: ""};
@@ -951,6 +969,9 @@ function submitUnpackForm() {
       formPm.params["getMatUpDateEmsSwitch"] = unpack.getMatUpDateEmsSwitch;
       formPm.params["updateClassSwitch"] = unpack.updateClassSwitch;
       formPm.params["showSwitch"] = unpack.showSwitch;
+      //档案袋情况。
+      formPm.params["dadqk"] = unpackForm.value.dadqk;
+      console.log(formPm);
       unpackEms(formPm).then((response) => {
         const resData = response.data;
         if (unpack.showSwitch) {
@@ -980,6 +1001,7 @@ function submitUnpackForm() {
           //     ? ElMessage.success("更新档案提交情况成功")
           //     : ElMessage.error("更新档案提交情况失败");
           // }
+          unpackForm.value.ksh = null;
         }
         setTimeout(() => {
           resData.unpackState > 0
@@ -988,7 +1010,6 @@ function submitUnpackForm() {
         }, 500);
         unpackForm.value.remark = null;
         unpackForm.value.xh = null;
-        unpackForm.value.ksh = null;
       });
     }
   });
