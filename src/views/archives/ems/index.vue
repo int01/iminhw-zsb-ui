@@ -170,6 +170,15 @@
         >拆袋录入
         </el-button>
       </el-col>
+      <el-col :span="1.5">
+        <el-button
+            plain
+            icon="Warning"
+            @click="handleUnpackUnusual"
+            v-hasPermi="['archives:ems:unpack']"
+        >待拆袋或异常
+        </el-button>
+      </el-col>
       <right-toolbar
           v-model:showSearch="showSearch"
           @queryTable="getList"
@@ -616,6 +625,87 @@
         </div>
       </template>
     </el-dialog>
+<!--  待拆袋或异常单号  -->
+    <el-dialog v-model="unusual.open" @close="handleUnpackUnusualClose" width="960px" title="待拆袋或异常数据">
+      <el-table
+          :data="emsUnpackUnusualList"
+      >
+        <el-table-column label="ID" align="center" prop="id"/>
+        <el-table-column
+            label="快递序号"
+            min-width="100"
+            align="center"
+            prop="xh"
+        />
+        <el-table-column
+            label="快递单号"
+            min-width="130"
+            align="center"
+            prop="kddh"
+        />
+        <el-table-column label="签收验证" align="center" prop="qsyz">
+          <template #default="scope">
+            <dict-tag :options="ems_validated" :value="scope.row.qsyz"/>
+          </template>
+        </el-table-column>
+        <el-table-column label="是否档案" align="center" prop="sfda">
+          <template #default="scope">
+            <dict-tag :options="in_archives_ems_danan" :value="scope.row.sfda"/>
+          </template>
+        </el-table-column>
+        <el-table-column
+            label="姓名"
+            min-width="100"
+            sortable="custom"
+            align="center"
+            prop="xm"
+        />
+        <el-table-column
+            label="考生号"
+            min-width="135"
+            align="center"
+            prop="ksh"
+        />
+        <!-- <el-table-column label="身份证号" align="center" prop="sfzh" /> -->
+        <el-table-column label="数据状态" align="center" prop="status">
+          <template #default="scope">
+            <dict-tag :options="data_status" :value="scope.row.status"/>
+          </template>
+        </el-table-column>
+        <!-- <el-table-column label="备注" align="center" prop="remark" /> -->
+        <el-table-column
+            label="更新时间"
+            align="center"
+            prop="updateTime"
+            sortable="custom"
+            min-width="120"
+            :show-overflow-tooltip="true"
+        >
+          <template #default="scope">
+            <span>{{ parseTime(scope.row.updateTime) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+            label="创建时间"
+            align="center"
+            prop="createTime"
+            sortable="custom"
+            min-width="120"
+            :show-overflow-tooltip="true"
+        >
+          <template #default="scope">
+            <span>{{ parseTime(scope.row.createTime) }}</span>
+          </template>
+        </el-table-column>
+      </el-table>
+      <pagination
+          v-show="unusualTotal > 0"
+          :total="unusualTotal"
+          v-model:page="unusualParams.pageNum"
+          v-model:limit="unusualParams.pageSize"
+          @pagination="getUnpackUnusual"
+      />
+    </el-dialog>
   </div>
 </template>
 
@@ -629,6 +719,7 @@ import {
   verifyKddh,
   getMaxXhEms,
   unpackEms,
+  unpackUnusual
 } from "@/api/archives/ems";
 import {getToken} from "@/utils/auth";
 import {ElMessage} from "element-plus";
@@ -642,6 +733,7 @@ const {data_status, in_archives_ems_danan, ems_validated, class_file_cover_statu
 );
 
 const emsList = ref([]);
+const emsUnpackUnusualList = ref([]);
 const open = ref(false);
 const loading = ref(true);
 const showSearch = ref(true);
@@ -649,6 +741,7 @@ const ids = ref([]);
 const single = ref(true);
 const multiple = ref(true);
 const total = ref(0);
+const unusualTotal = ref(0);
 const title = ref("");
 
 /*** 导入参数 */
@@ -689,6 +782,11 @@ const unpack = reactive({
   // getClassShow: false,
 });
 
+const unusual =  reactive({
+  open: false,
+  title: "",
+});
+
 const data = reactive({
   form: {},
   verifyFrom: {},
@@ -705,6 +803,12 @@ const data = reactive({
     ksh: null,
     sfzh: null,
     status: null,
+  },
+  unusualParams: {
+    pageNum: 1,
+    pageSize: 10,
+    orderByColumn: "id",
+    isAsc: "desc",
   },
   rules: {
     kddh: {required: true, trigger: "blur", message: "请输入快递单号"},
@@ -723,7 +827,7 @@ const data = reactive({
   },
 });
 
-const {queryParams, form, verifyFrom, unpackForm, rules, unpackRules} =
+const {queryParams, unusualParams, form, verifyFrom, unpackForm, rules, unpackRules} =
     toRefs(data);
 
 /** 查询邮寄档案列表 */
@@ -1013,6 +1117,25 @@ function submitUnpackForm() {
       });
     }
   });
+}
+
+function handleUnpackUnusual(){
+  unusual.open = true;
+  getUnpackUnusual();
+}
+
+function getUnpackUnusual(){
+  unpackUnusual(unusualParams.value).then((response) => {
+    emsUnpackUnusualList.value = response.rows;
+    unusualTotal.value = response.total;
+    // loading.value = false;
+  });
+}
+
+function handleUnpackUnusualClose(){
+  unusual.open = false;
+  emsUnpackUnusualList.value = null;
+  unusualTotal.value = 0;
 }
 
 /** 辅助操作 关闭model回调 */

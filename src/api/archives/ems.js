@@ -61,6 +61,15 @@ export function unpackEms(data){
   })
 }
 
+// unpackUnusual
+export function unpackUnusual(query){
+  return request({
+    url: '/archives/ems/unpack/unusual',
+    method: 'get',
+    params: query
+  })
+}
+
 // 查询邮寄档案详细
 export function getMaxXhEms(yearStr) {
   return request({
